@@ -3,21 +3,50 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="mx-auto h-10 w-auto" />
+      <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Create an account</h2>
+    </div>
 
-    <h1>Register</h1>
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <!-- Form -->
+      {{ form_errors(registrationForm) }}
 
-    {{ form_errors(registrationForm) }}
+      {{ form_start(registrationForm, {
+        attr: { class: 'space-y-4' }
+      }) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
+        {{ form_row(registrationForm.email, {
+          label_attr: { class: 'block text-sm font-medium text-gray-300' },
+          attr: {
+            class: 'mt-1 block w-full rounded-md bg-gray-800 border border-gray-700 text-white focus:ring-blue-500 focus:border-blue-500'
+          }
         }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        {{ form_row(registrationForm.plainPassword, {
+          label: 'Password',
+          label_attr: { class: 'block text-sm font-medium text-gray-300' },
+          attr: {
+            class: 'mt-1 block w-full rounded-md bg-gray-800 border border-gray-700 text-white focus:ring-blue-500 focus:border-blue-500'
+          }
+        }) }}
+
+        {{ form_row(registrationForm.agreeTerms, {
+          row_attr: { class: 'flex items-center gap-2' },
+          label_attr: { class: 'text-sm text-gray-300' },
+          attr: { class: 'rounded border-gray-700 bg-gray-800' }
+        }) }}
+
+        <button
+          type="submit"
+          class="w-full mt-4 rounded-md bg-blue-600 px-4 py-2 text-white font-semibold hover:bg-blue-700 transition"
+        >
+          Register
+        </button>
+
+      {{ form_end(registrationForm) }}
+      <!-- End Form -->
+    </div>
+  </div>
 {% endblock %}
