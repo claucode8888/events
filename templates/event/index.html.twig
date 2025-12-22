@@ -1,0 +1,53 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block content %}
+
+  <div>
+    <h1>Total Events: ({{ events | length }}) </h1>
+    <div>
+      {{ dump(app.user) }}
+    </div>
+  </div>
+
+    <h1>Event index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>StartAt</th>
+                <th>EndAt</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.name }}</td>
+                <td>{{ event.description }}</td>
+                <td>{{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event.endAt ? event.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event.capacity }}</td>
+                <td>{{ event.status }}</td>
+                <td>
+                    <a href="{{ path('app_admin_event_show', {'id': event.id}) }}">show</a>
+                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_event_new') }}">Create new</a>
+{% endblock %}

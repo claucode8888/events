@@ -3,5 +3,8 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
+  <div>
+    <h1>Total Events: ({{ events | length }}) </h1>
+  </div>
   {{ dump(app.user) }}
 {% endblock %}
