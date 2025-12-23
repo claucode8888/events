@@ -1,53 +1,66 @@
+
 {% extends 'layout.html.twig' %}
 
 {% block title %}Event index{% endblock %}
 
 {% block content %}
+    <section class="mx-auto max-w-7xl px-6 py-6">
+      <h1 class="mb-6 text-xl font-semibold text-gray-800">
+        Events: ({{ events | length }})
+      </h1>
 
-  <div>
-    <h1>Total Events: ({{ events | length }}) </h1>
-    <div>
-      {{ dump(app.user) }}
-    </div>
-  </div>
+      <!-- Create button -->
+      <div class="flex justify-end">
+        <a href="{{ path('app_admin_event_new') }}" class="rounded-md bg-blue-900 px-3 py-1.5 text-white hover:bg-blue-700">Create new</a>
+      </div>
+      <!-- End create button -->
 
-    <h1>Event index</h1>
-
-    <table class="table">
-        <thead>
+      <div class="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm m-2">
+        <table class="min-w-[900px] w-full whitespace-nowrap text-sm">
+          <!-- Head -->
+          <thead class="bg-gray-100 text-xs uppercase text-gray-600">
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>StartAt</th>
-                <th>EndAt</th>
-                <th>Capacity</th>
-                <th>Status</th>
-                <th>actions</th>
+              <th class="px-4 py-3 text-left">ID</th>
+              <th class="px-4 py-3 text-left">Title</th>
+              <th class="px-4 py-3 text-left md:table-cell">Capacity</th>
+              <th class="px-4 py-3 text-left lg:table-cell">Status</th>
+              <th class="px-4 py-3 text-left hidden xl:table-cell">Created</th>
+              <th class="px-4 py-3 text-left hidden xl:table-cell">StartAt</th>
+              <th class="px-4 py-3 text-right">Actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for event in events %}
-            <tr>
-                <td>{{ event.id }}</td>
-                <td>{{ event.name }}</td>
-                <td>{{ event.description }}</td>
-                <td>{{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ event.endAt ? event.endAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ event.capacity }}</td>
-                <td>{{ event.status }}</td>
-                <td>
-                    <a href="{{ path('app_admin_event_show', {'id': event.id}) }}">show</a>
-                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}">edit</a>
+          </thead>
+          <!-- Head -->
+          <!-- Body -->
+          <tbody class="divide-y divide-gray-200 text-gray-700">
+            {% for event in events %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">{{ event.id }}</td>
+                <td class="px-4 py-3">{{ event.name }}</td>
+                <td class="px-4 py-3 md:table-cell">{{ event.capacity }}</td>
+                <td class="px-4 py-3 lg:table-cell">
+                  <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+                    {{ event.status }}
+                  </span>
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                <td class="px-4 py-3 hidden xl:table-cell">{{ event.startAt ? event.startAt | date('Y-m-d H:i:s') : '' }}</td>
+                <td class="px-4 py-3 hidden xl:table-cell">{{ event.startAt ? event.startAt | date('Y-m-d H:i:s') : '' }}</td>
+                <td class="px-4 py-3 text-right">
+                  <div class="inline-flex gap-2">
+                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}" class="rounded-md bg-blue-600 px-3 py-1.5 text-white hover:bg-blue-700">Edit</a>
+                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}" class="rounded-md bg-red-600 px-3 py-1.5 text-white hover:bg-red-700">Delete</a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <!-- Body -->
+        </table>
+      </div>
 
-    <a href="{{ path('app_admin_event_new') }}">Create new</a>
+      <!-- Create button -->
+      <div class="flex justify-end">
+        <a href="{{ path('app_admin_event_new') }}" class="rounded-md bg-blue-900 px-3 py-1.5 text-white hover:bg-blue-700">Create new</a>
+      </div>
+      <!-- End create button -->
+    </section>
 {% endblock %}
