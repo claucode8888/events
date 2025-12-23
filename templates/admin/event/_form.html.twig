@@ -1,0 +1,76 @@
+{% set labelClasses = 'block mb-1.5 text-sm font-semibold text-gray-800 ' %}
+{% set inputClasses = 'w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base ' %}
+
+{{ form_start(form, {'attr': {'class': 'max-w-3xl mx-auto'}}) }}
+  
+  <div class="bg-white rounded-xl shadow-lg p-10 space-y-10">
+    <div class="space-y-7">
+      <div class="form-group">
+        <label class="{{labelClasses}}">
+          {{ form_label(form.name) }}
+        </label>
+        {{ form_widget(form.name, {'attr': {'class': inputClasses }}) }}
+      </div>
+
+      <div class="form-group">
+        <label class="{{labelClasses}}">
+          {{ form_label(form.description) }}
+        </label>
+        {{ form_widget(form.description, {'attr': {'class': inputClasses ~ 'min-h-[160px]', 'rows': 6}}) }}
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div class="form-group">
+          <label class="{{labelClasses}}">
+            {{ form_label(form.startAt) }}
+          </label>
+          {{ form_widget(form.startAt, {'attr': {'class': inputClasses }}) }}
+        </div>
+
+        <div class="form-group">
+          <label class="{{labelClasses}}">
+            {{ form_label(form.endAt) }}
+          </label>
+          {{ form_widget(form.endAt, {'attr': {'class': inputClasses }}) }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div class="form-group">
+          <label class="{{labelClasses}}">
+            {{ form_label(form.capacity) }}
+          </label>
+          {{ form_widget(form.capacity, {'attr': {'class': inputClasses }}) }}
+        </div>
+
+        <div class="form-group">
+          <label class="{{labelClasses}}">
+            {{ form_label(form.status) }}
+          </label>
+          {{ form_widget(form.status, {'attr': {'class': inputClasses ~ 'bg-white'}}) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center gap-2">
+
+      <div class="flex">
+        <a href="{{ path('app_admin_events_index') }}" 
+          class="inline-flex items-center gap-2 px-5 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Events
+        </a>
+      </div>
+
+      <div>
+        <button type="submit" class="px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
+          {{ button_label | default('Save') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+{{ form_end(form) }}

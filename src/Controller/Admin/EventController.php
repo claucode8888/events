@@ -11,13 +11,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('admin/events')]
+#[Route('admin/event')]
 final class EventController extends AbstractController
 {
     #[Route(name: 'app_admin_events_index', methods: ['GET'])]
     public function index(EventRepository $eventRepository): Response
     {
-        return $this->render('event/index.html.twig', [
+        return $this->render('admin/event/index.html.twig', [
             'events' => $eventRepository->findAll(),
         ]);
     }
@@ -36,7 +36,7 @@ final class EventController extends AbstractController
             return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('event/new.html.twig', [
+        return $this->render('admin/event/new.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
@@ -62,7 +62,7 @@ final class EventController extends AbstractController
             return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('event/edit.html.twig', [
+        return $this->render('admin/event/edit.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);

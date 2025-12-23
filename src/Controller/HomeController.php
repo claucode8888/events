@@ -11,6 +11,11 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-      return $this->redirectToRoute('app_event_index');
+      if($this->isGranted('ROLE_ADMIN'))
+      {
+        return $this->redirectToRoute('app_admin_events_index');
+      }
+      
+        return $this->redirectToRoute('app_event_index');
     }
 }
