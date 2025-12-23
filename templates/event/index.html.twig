@@ -10,9 +10,11 @@
       </h1>
 
       <!-- Create button -->
+      {% if events | length > 10 %}
       <div class="flex justify-end">
         <a href="{{ path('app_admin_event_new') }}" class="rounded-md bg-blue-900 px-3 py-1.5 text-white hover:bg-blue-700">Create new</a>
       </div>
+      {% endif %}
       <!-- End create button -->
 
       <div class="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm m-2">
@@ -46,8 +48,8 @@
                 <td class="px-4 py-3 hidden xl:table-cell">{{ event.startAt ? event.startAt | date('Y-m-d H:i:s') : '' }}</td>
                 <td class="px-4 py-3 text-right">
                   <div class="inline-flex gap-2">
-                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}" class="rounded-md bg-blue-600 px-3 py-1.5 text-white hover:bg-blue-700">Edit</a>
-                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}" class="rounded-md bg-red-600 px-3 py-1.5 text-white hover:bg-red-700">Delete</a>
+                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}" class="rounded-md bg-blue-600 px-3 py-1 text-white hover:bg-blue-700">Edit</a>
+                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}" class="rounded-md bg-red-600 px-3 py-1 text-white hover:bg-red-700">Delete</a>
                   </div>
                 </td>
               </tr>
