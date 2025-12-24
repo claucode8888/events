@@ -1,53 +1,41 @@
 {% set labelClasses = 'block mb-1.5 text-sm font-semibold text-gray-800 ' %}
 {% set inputClasses = 'w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base ' %}
 
-{{ form_start(form, {'attr': {'class': 'max-w-3xl mx-auto'}}) }}
+{{ form_start(form, { attr: { class: 'max-w-3xl mx-auto' } }) }}
   
   <div class="bg-white rounded-xl shadow-lg p-10 space-y-10">
     <div class="space-y-7">
       <div class="form-group">
-        <label class="{{labelClasses}}">
-          {{ form_label(form.name) }}
-        </label>
-        {{ form_widget(form.name, {'attr': {'class': inputClasses }}) }}
+        {{ form_label(form.name, null, { label_attr: { class: labelClasses } }) }}
+        {{ form_widget(form.name, { attr: { class: inputClasses } }) }}
       </div>
 
       <div class="form-group">
-        <label class="{{labelClasses}}">
-          {{ form_label(form.description) }}
-        </label>
-        {{ form_widget(form.description, {'attr': {'class': inputClasses ~ 'min-h-[160px]', 'rows': 6}}) }}
+        {{ form_label(form.description, null, { label_attr: { class: labelClasses } }) }}
+        {{ form_widget(form.description, { attr: { class: inputClasses ~ 'min-h-[160px]', rows: 6 } }) }}
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div class="form-group">
-          <label class="{{labelClasses}}">
-            {{ form_label(form.startAt) }}
-          </label>
-          {{ form_widget(form.startAt, {'attr': {'class': inputClasses }}) }}
+          {{ form_label(form.startAt, null, { label_attr: { class: labelClasses } }) }}
+          {{ form_widget(form.startAt, { attr: { class: inputClasses } }) }}
         </div>
 
         <div class="form-group">
-          <label class="{{labelClasses}}">
-            {{ form_label(form.endAt) }}
-          </label>
-          {{ form_widget(form.endAt, {'attr': {'class': inputClasses }}) }}
+          {{ form_label(form.endAt, null, { label_attr: { class: labelClasses } }) }}
+          {{ form_widget(form.endAt, { attr: { class: inputClasses } }) }}
         </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div class="form-group">
-          <label class="{{labelClasses}}">
-            {{ form_label(form.capacity) }}
-          </label>
-          {{ form_widget(form.capacity, {'attr': {'class': inputClasses }}) }}
+          {{ form_label(form.capacity, null, { label_attr: { class: labelClasses } }) }}
+          {{ form_widget(form.capacity, { attr: { class: inputClasses } }) }}
         </div>
 
         <div class="form-group">
-          <label class="{{labelClasses}}">
-            {{ form_label(form.status) }}
-          </label>
-          {{ form_widget(form.status, {'attr': {'class': inputClasses ~ 'bg-white'}}) }}
+          {{ form_label(form.status, null, { label_attr: { class: labelClasses } }) }}
+          {{ form_widget(form.status, { attr: { class: inputClasses ~ 'bg-white' } }) }}
         </div>
       </div>
     </div>
