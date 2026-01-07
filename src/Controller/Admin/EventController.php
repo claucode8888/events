@@ -30,6 +30,10 @@ final class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+          if($form->get('imageFile')->getData())
+          {
+            dd('Image saved');
+          }
             $entityManager->persist($event);
             $entityManager->flush();
 

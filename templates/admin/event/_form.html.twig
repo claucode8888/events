@@ -15,6 +15,28 @@
         {{ form_widget(form.description, { attr: { class: inputClasses ~ 'min-h-[160px]', rows: 6 } }) }}
       </div>
 
+      <!-- ________________________________________________________________________________ -->
+      <div class="form-group">
+        {{ form_label(form.imageFile, null, { label_attr: { class: labelClasses } }) }}
+
+        {{ form_widget(form.imageFile, {
+          attr: {
+            class: inputClasses ~ '
+              file:mr-4 
+              file:py-2 file:px-4
+              file:rounded-lg 
+              file:border-0
+              file:bg-blue-600 
+              file:text-white 
+              file:text-sm 
+              file:font-semibold
+              hover:file:bg-blue-700
+              cursor-pointer
+            '
+          }
+        }) }}
+      </div>
+      <!-- ________________________________________________________________________________ -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div class="form-group">
           {{ form_label(form.startAt, null, { label_attr: { class: labelClasses } }) }}

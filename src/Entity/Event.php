@@ -39,6 +39,9 @@ class Event
     #[ORM\OneToMany(targetEntity: TicketCategory::class, mappedBy: 'event')]
     private Collection $ticketCategories;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imgPath = null;
+
     public function __construct()
     {
         $this->ticketCategories = new ArrayCollection();
@@ -147,6 +150,18 @@ class Event
                 $ticketCategory->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImgPath(): ?string
+    {
+        return $this->imgPath;
+    }
+
+    public function setImgPath(?string $imgPath): static
+    {
+        $this->imgPath = $imgPath;
 
         return $this;
     }
