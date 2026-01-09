@@ -19,7 +19,7 @@ final class EventController extends AbstractController
   public function index(EventRepository $eventRepository): Response
   {
     return $this->render('admin/event/index.html.twig', [
-      'events' => $eventRepository->findAll(),
+      'events' => $eventRepository->findBy([], ['startAt' => 'DESC']),
     ]);
   }
 
