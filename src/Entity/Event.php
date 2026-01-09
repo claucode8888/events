@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\EventRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EventRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-class Event
+class Event extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
