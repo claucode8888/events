@@ -1,5 +1,9 @@
 twig:
     file_name_pattern: '*.twig'
+    
+    globals:
+        # Reference the parameter from services.yaml
+        uploads_events: '%uploads_events%'
 
 when@test:
     twig:

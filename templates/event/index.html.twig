@@ -24,7 +24,7 @@
               <div class="relative overflow-hidden rounded-t-xl shadow-md">
                 <img 
                   class="object-cover w-full h-72 transition-transform duration-500 hover:scale-105" 
-                  src="{{ asset('uploads/events/calamaro.jpg.webp') }}" 
+                  src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}"
                   alt="{{ event.name }}"
                 >
                 <div class="absolute inset-0 bg-gradient-to-t from-black/40"></div>
