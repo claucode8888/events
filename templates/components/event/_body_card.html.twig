@@ -1,0 +1,27 @@
+<div class="flex flex-col p-6 leading-normal h-full">
+  <!-- Title -->
+  <div class="mb-1 text-xl font-bold tracking-tight text-gray-900">
+    <h5>{{ event.name }}</h5>
+  </div>
+  <!-- End Title -->
+
+  <!-- DateTime -->
+  <div class="flex items-center text-sm text-gray-500 mb-3">
+    {{ event.startAt | date('M d, Y · H:i') }}
+  </div>
+  <!-- End DateTime -->
+
+  <!-- Description -->
+  <div class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">
+    <p>{{ event.description }}</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dolore non. Totam, deleniti voluptas fugiat pariatur blanditiis tempore, ex, provident nisi ullam dignissimos quam rem at aspernatur quod eaque veniam!
+    Quo modi odit animi dicta harum rerum quas maiores nam? Natus quam vel nisi. Saepe soluta atque, veritatis eligendi dolorum eius similique cumque temporibus iste earum adipisci neque recusandae error.
+    Sunt id minima laudantium nam saepe quasi est cum nobis laboriosam, ipsam itaque perferendis eligendi adipisci cumque quae eveniet nisi! Et officia aliquam itaque exercitationem nulla, excepturi ducimus sint fugiat?
+    Libero porro recusandae hic quod laboriosam veritatis consequuntur magnam, quidem rem animi est labore sit ea nulla enim eaque quas aliquid fuga unde officia iste illum ex aut optio. Atque!
+    Distinctio dolorum ratione incidunt dicta ex, quia explicabo laborum omnis recusandae atque eligendi cum nobis aliquam ea possimus quas similique aperiam exercitationem vitae, labore officia ut. Animi soluta doloremque autem?
+    Facilis repudiandae est inventore aperiam dolor fugiat dolorum rem quasi iure odio ut ipsum qui dolorem a voluptates voluptatum distinctio possimus expedita, perferendis eum. Nihil doloribus modi sapiente ullam illo.
+    Ipsa, aliquid. Culpa et quos accusantium iure. In tempora perspiciatis cum mollitia, obcaecati omnis eveniet sequi hic dignissimos veritatis rem quaerat incidunt blanditiis repellendus eum ipsam! Fuga quae amet quia.
+    Et omnis error sed, quidem tempore illum, obcaecati enim fugit blanditiis in nisi. Magni quidem alias nobis! Repellendus suscipit tempora molestias veniam et. Laborum dicta praesentium excepturi deleniti impedit harum.</p>
+  </div>
+  <!-- End Description -->
+</div>
