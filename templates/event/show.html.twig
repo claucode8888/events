@@ -1,46 +1,115 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block title %}Event{% endblock %}
+{% block title %}{{ event.name }}{% endblock %}
 
-{% block body %}
-    <h1>Event</h1>
+{% block content %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ event.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ event.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ event.description }}</td>
-            </tr>
-            <tr>
-                <th>StartAt</th>
-                <td>{{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EndAt</th>
-                <td>{{ event.endAt ? event.endAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Capacity</th>
-                <td>{{ event.capacity }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ event.status }}</td>
-            </tr>
-        </tbody>
-    </table>
+<!-- HERO -->
+<section class="relative h-[70vh] w-full">
 
-    <a href="{{ path('app_event_index') }}">back to list</a>
+  <img
+    src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}"
+    alt="{{ event.name }}"
+    class="absolute inset-0 w-full h-full object-cover"
+  >
 
-    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}">edit</a>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30"></div>
 
-    {{ include('event/_delete_form.html.twig') }}
+  <div class="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-20">
+    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+      {{ event.name }}
+    </h1>
+
+    <div class="flex flex-wrap gap-6 text-white/90 text-sm md:text-base">
+      <span>📅 {{ event.startAt|date('F d, Y · H:i') }}</span>
+      <span>📍 location  </span>
+      <span>👤 organizer </span>
+    </div>
+  </div>
+
+</section>
+
+<!-- CONTENT -->
+<section class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
+
+  <!-- MAIN -->
+  <div class="lg:col-span-2">
+
+    <h2 class="text-2xl font-semibold mb-6">About this event</h2>
+
+    <div class="prose max-w-none text-gray-700">
+      {{ event.description|nl2br }}
+    </div>
+
+    <!-- EXTRA INFO -->
+    <div class="mt-16 space-y-8">
+
+      <div>
+        <h3 class="font-semibold text-lg mb-2">📍 Location</h3>
+        <p class="text-gray-600">location</p>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-lg mb-2">👤 Organizer</h3>
+        <p class="text-gray-600">Organizer</p>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-lg mb-2">🕒 Date & time</h3>
+        <p class="text-gray-600">
+          {{ event.startAt|date('l, F d, Y') }} · {{ event.startAt|date('H:i') }}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="space-y-8">
+
+    <!-- Buy ticket -->
+    <div class="sticky top-24">
+
+      <div class="border border-gray-200 rounded-xl p-6 space-y-4">
+
+        {% if true %}
+          <div class="text-3xl font-bold text-gray-900">
+            € 80
+          </div>
+        {% else %}
+          <div class="text-2xl font-semibold text-green-600">
+            Free
+          </div>
+        {% endif %}
+
+        {# {% if event.capacity > event.ticketsSold %}
+          <p class="text-sm text-gray-500">
+            {{ event.capacity - event.ticketsSold }} tickets remaining
+          </p>
+        {% else %}
+          <p class="text-sm text-red-600">
+            Sold out
+          </p>
+        {% endif %} #}
+
+        <a
+          href="{{ path('app_login') }}"
+          class="w-full inline-flex justify-center items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+        >
+          Get ticket
+        </a>
+
+        <button class="w-full border border-gray-300 rounded-lg py-3 text-sm hover:bg-gray-100">
+          Save event
+        </button>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+</section>
+
 {% endblock %}
