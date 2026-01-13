@@ -1,137 +1,92 @@
 {% set labelClasses = 'block mb-1.5 text-sm font-semibold text-gray-800 ' %}
-{% set inputClasses = 'w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base ' %}
+{% set inputClasses = 'w-full px-3 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base ' %}
 
 {{ form_start(form, { attr: { class: 'max-w-3xl mx-auto' } }) }}
 
-<div class="bg-white rounded-xl shadow-lg p-10 space-y-10">
+  <div class="bg-white rounded-xl shadow-lg p-10 space-y-10">
 
-  {# Event Name #}
-  <div class="form-group">
-    {{ form_label(form.name, null, { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(form.name, { attr: { class: inputClasses } }) }}
-  </div>
-
-  {# Description #}
-  <div class="form-group">
-    {{ form_label(form.description, null, { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(form.description, { attr: { class: inputClasses ~ ' min-h-[160px]', rows: 6 } }) }}
-  </div>
-
-  {# Image Upload #}
-  <div class="flex flex-col gap-1.5">
+    {# Event Name #}
     <div class="form-group">
-      {{ form_label(form.imageFile, null, { label_attr: { class: labelClasses } }) }}
-      {{ form_widget(form.imageFile, {
-        attr: {
-          class: inputClasses ~ '
-            file:mr-4
-            file:py-2 file:px-4
-            file:rounded-lg
-            file:border-0
-            file:bg-blue-600
-            file:text-white
-            file:text-sm
-            file:font-semibold
-            hover:file:bg-blue-700
-            cursor-pointer
-          '
-        }
-      }) }}
+      {{ form_label(form.name, null, { label_attr: { class: labelClasses } }) }}
+      {{ form_widget(form.name, { attr: { class: inputClasses } }) }}
     </div>
 
-    {% if event.imgPath %}
-      <div>
-        <img src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}" alt="{{ event.name }}" class="w-36 h-auto rounded-lg">
+    {# Description #}
+    <div class="form-group">
+      {{ form_label(form.description, null, { label_attr: { class: labelClasses } }) }}
+      {{ form_widget(form.description, { attr: { class: inputClasses ~ ' min-h-[160px]', rows: 6 } }) }}
+    </div>
+
+    {# Image Upload #}
+    <div class="flex flex-col gap-1.5">
+      <div class="form-group">
+        {{ form_label(form.imageFile, null, { label_attr: { class: labelClasses } }) }}
+        {{ form_widget(form.imageFile, {
+          attr: {
+            class: inputClasses ~ '
+              file:mr-2
+              file:py-2 file:px-4
+              file:rounded-md
+              file:border-0
+              file:bg-blue-900
+              file:text-white
+              file:text-xs
+              file:font-semibold
+              hover:file:bg-blue-700
+              cursor-pointer
+            '
+          }
+        }) }}
       </div>
-    {% endif %}
-  </div>
 
-  {# Date & Time #}
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-    <div class="form-group">
-      {{ form_label(form.startAt, null, { label_attr: { class: labelClasses } }) }}
-      {{ form_widget(form.startAt, { attr: { class: inputClasses } }) }}
-    </div>
-    <div class="form-group">
-      {{ form_label(form.endAt, null, { label_attr: { class: labelClasses } }) }}
-      {{ form_widget(form.endAt, { attr: { class: inputClasses } }) }}
-    </div>
-  </div>
-
-  {# Capacity & Status #}
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-    <div class="form-group">
-      {{ form_label(form.capacity, null, { label_attr: { class: labelClasses } }) }}
-      {{ form_widget(form.capacity, { attr: { class: inputClasses } }) }}
-    </div>
-    <div class="form-group">
-      {{ form_label(form.status, null, { label_attr: { class: labelClasses } }) }}
-      {{ form_widget(form.status, { attr: { class: inputClasses ~ ' bg-white' } }) }}
-    </div>
-  </div>
-
-  {# Ticket Categories #}
-  <div class="space-y-4">
-
-    <label class="{{ labelClasses }}">Ticket categories</label>
-    {{ form_errors(form.ticketCategories) }}
-
-    <div id="ticket-categories-wrapper" class="space-y-4">
-      {% for ticketCategory in form.ticketCategories %}
-        {% include 'admin/event/_ticket_category_row.html.twig' with { form: ticketCategory } %}
-      {% endfor %}
+    {# Image #}
+      {% if event.imgPath %}
+        <div>
+          <img src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}" alt="{{ event.name }}" class="w-36 h-auto rounded-md">
+        </div>
+      {% endif %}
     </div>
 
-    <button 
-      type="button"
-      id="add-ticket-category"
-      class="mt-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-      >
-      Add ticket category
-    </button>
+    {# Date & Time #}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div class="form-group">
+        {{ form_label(form.startAt, null, { label_attr: { class: labelClasses } }) }}
+        {{ form_widget(form.startAt, { attr: { class: inputClasses } }) }}
+      </div>
+      <div class="form-group">
+        {{ form_label(form.endAt, null, { label_attr: { class: labelClasses } }) }}
+        {{ form_widget(form.endAt, { attr: { class: inputClasses } }) }}
+      </div>
+    </div>
+
+    {# Capacity & Status #}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div class="form-group">
+        {{ form_label(form.capacity, null, { label_attr: { class: labelClasses } }) }}
+        {{ form_widget(form.capacity, { attr: { class: inputClasses } }) }}
+      </div>
+      <div class="form-group">
+        {{ form_label(form.status, null, { label_attr: { class: labelClasses } }) }}
+        {{ form_widget(form.status, { attr: { class: inputClasses ~ ' bg-white' } }) }}
+      </div>
+    </div>
+
+    {# Ticket Categories #}
+    {% include 'admin/event/_ticket_category_form.html.twig' %}
+
+    {# Form Actions #}
+    <div class="flex justify-center gap-2">
+      <a href="{{ path('app_admin_events_index') }}" class="inline-flex items-center gap-2 px-4 py-1.5 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Events
+      </a>
+      <button type="submit" class="px-4 py-1.5 bg-blue-900 text-white font-medium rounded-md hover:bg-blue-700 transition">
+        {{ button_label | default('Save') }}
+      </button>
+    </div>
+
   </div>
-
-  {% set ticketCategoryPrototype %}
-    {% include 'admin/event/_ticket_category_row.html.twig' with { form: form.ticketCategories.vars.prototype } %}
-  {% endset %}
-
-  {# Form Actions #}
-  <div class="flex justify-center gap-2">
-    <a href="{{ path('app_admin_events_index') }}" class="inline-flex items-center gap-2 px-5 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-      </svg>
-      Events
-    </a>
-    <button type="submit" class="px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
-      {{ button_label | default('Save') }}
-    </button>
-  </div>
-
-</div>
 
 {{ form_end(form) }}
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const wrapper = document.getElementById('ticket-categories-wrapper');
-  const addButton = document.getElementById('add-ticket-category');
-  const prototype = `{{ ticketCategoryPrototype|e('js') }}`;
-  let index = wrapper.children.length;
-
-  addButton.addEventListener('click', () => {
-    const newForm = prototype.replace(/__name__/g, index);
-    const div = document.createElement('div');
-    div.innerHTML = newForm;
-    wrapper.appendChild(div);
-    index++;
-
-    div.querySelector('.remove-ticket-category')
-      ?.addEventListener('click', () => div.remove());
-  });
-
-  wrapper.querySelectorAll('.remove-ticket-category').forEach(btn => {
-    btn.addEventListener('click', e => e.currentTarget.closest('.ticket-category-row').remove());
-  });
-});
-</script>

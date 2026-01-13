@@ -22,7 +22,9 @@ class TicketCategoryType extends AbstractType
           'placeholder' => 'vip, general, early-bird',
         ]
       ])
-      ->add('price', MoneyType::class)
+      ->add('price', MoneyType::class, [
+        'currency' => false
+      ])
       ->add('quantity', IntegerType::class);
 
     $this->normalizer($builder);

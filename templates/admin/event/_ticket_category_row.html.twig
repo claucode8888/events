@@ -1,37 +1,65 @@
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg items-end relative">
-  <div>
+<div class="grid grid-cols-12 gap-2 p-4 border border-gray-200 rounded-lg">
+
+  <!-- NAME -->
+  <div class="col-span-4">
     {{ form_label(form.name, 'Name', { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(form.name, { attr: { class: inputClasses ~ (form.name.vars.errors|length ? ' border-red-500' : '') } }) }}
+    {{ form_widget(form.name, {
+      attr: { class: inputClasses ~ (form.name.vars.errors|length ? ' border-red-500' : '') }
+    }) }}
     {% if form.name.vars.errors|length %}
-      <p class="text-red-600 text-sm mt-1">
+      <span class="text-red-600 text-xs mt-1">
         {{ form_errors(form.name) }}
-      </p>
+      </span>
     {% endif %}
   </div>
 
-  <div>
+  <!-- PRICE -->
+  <div class="col-span-3">
     {{ form_label(form.price, 'Price', { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(form.price, { attr: { class: inputClasses ~ (form.price.vars.errors|length ? ' border-red-500' : '') } }) }}
+    <div class="relative">
+      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">€</span>
+      {{ form_widget(form.price, {
+        attr: {
+          class: inputClasses ~ ' pl-8 text-right' ~ (form.price.vars.errors|length ? ' border-red-500' : '')
+        }
+      }) }}
+    </div>
+
     {% if form.price.vars.errors|length %}
-      <p class="text-red-600 text-sm mt-1">
+      <span class="text-red-600 text-xs mt-1">
         {{ form_errors(form.price) }}
-      </p>
+      </span>
     {% endif %}
   </div>
 
-  <div>
+  <!-- QUANTITY -->
+  <div class="col-span-3">
     {{ form_label(form.quantity, 'Quantity', { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(form.quantity, { attr: { class: inputClasses ~ (form.quantity.vars.errors|length ? ' border-red-500' : '') } }) }}
+    {{ form_widget(form.quantity, {
+      attr: { class: inputClasses ~ ' text-center' ~ (form.quantity.vars.errors|length ? ' border-red-500' : '') }
+    }) }}
     {% if form.quantity.vars.errors|length %}
-      <p class="text-red-600 text-sm mt-1">
+      <span class="text-red-600 text-xs mt-1">
         {{ form_errors(form.quantity) }}
-      </p>
+      </span>
     {% endif %}
   </div>
 
-  <div class="flex justify-end">
-    <button type="button" class="remove-ticket-category px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-      Remove
-    </button>
+  <!-- TRASH ICON -->
+  <div class="col-span-2 flex items-end justify-center">
+    <a
+      type="button"
+      class="remove-ticket-category hover:text-red-800 hover:bg-red-50 rounded-md transition cursor-pointer mb-2"
+      aria-label="Remove"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5" d="M6 7h12M9 7v10m6-10v10M4 7h16l-1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 7Zm3-3h10a1 1 0 0 1 1 1v2H6V5a1 1 0 0 1 1-1Z"
+        />
+      </svg>
+    </a>
   </div>
+
 </div>

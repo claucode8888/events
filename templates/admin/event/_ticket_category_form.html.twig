@@ -1,0 +1,54 @@
+<div class="space-y-4">
+  <label class="{{ labelClasses }}">Ticket categories</label>
+  {% if form.ticketCategories.vars.errors|length %}
+    <span class="text-red-600 text-xs mt-1">
+      {{ form_errors(form.ticketCategories) }}
+    </span>
+  {% endif %}
+  <div id="ticket-categories-wrapper" class="space-y-4">
+    {% for ticketCategory in form.ticketCategories %}
+      {% include 'admin/event/_ticket_category_row.html.twig' with { form: ticketCategory } %}
+    {% endfor %}
+  </div>
+  <div class="text-right">
+    <button 
+      type="button"
+      id="add-ticket-category"
+      class="mt-2 px-3 py-1.5 bg-blue-900 text-white rounded-md hover:bg-blue-700 transition"
+      >
+      Add ticket category
+    </button>
+  </div>
+</div>
+
+<!-- Ticket Category prototype definition -->
+{% set ticketCategoryPrototype %}
+  {% include 'admin/event/_ticket_category_row.html.twig' with { form: form.ticketCategories.vars.prototype } %}
+{% endset %}
+<!-- End Ticket Category prototype definition -->
+
+<!-- Script prototype -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.getElementById('ticket-categories-wrapper');
+    const addButton = document.getElementById('add-ticket-category');
+    const prototype = `{{ ticketCategoryPrototype|e('js') }}`;
+    let index = wrapper.children.length;
+
+    addButton.addEventListener('click', () => {
+      const newForm = prototype.replace(/__name__/g, index);
+      const div = document.createElement('div');
+      div.innerHTML = newForm;
+      wrapper.appendChild(div);
+      index++;
+
+      div.querySelector('.remove-ticket-category')
+        ?.addEventListener('click', () => div.remove());
+    });
+
+    wrapper.querySelectorAll('.remove-ticket-category').forEach(btn => {
+      btn.addEventListener('click', e => e.currentTarget.closest('.ticket-category-row').remove());
+    });
+  });
+</script>
+<!-- End Script prototype -->
