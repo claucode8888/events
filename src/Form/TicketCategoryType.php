@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class TicketCategoryType extends AbstractType
@@ -17,17 +18,20 @@ class TicketCategoryType extends AbstractType
   public function buildForm(FormBuilderInterface $builder, array $options): void
   {
     $builder
-      ->add('name', TextType::class, [
-        'attr' => [
-          'placeholder' => 'vip, general, early-bird',
-        ]
-      ])
-      ->add('price', MoneyType::class, [
-        'currency' => false
-      ])
-      ->add('quantity', IntegerType::class);
-
-    $this->normalizer($builder);
+      ->add('name', TextType::class)
+      ->add('price', MoneyType::class, ['currency' => false])
+      ->add('quantity', IntegerType::class)
+      ->add('_delete', HiddenType::class, [
+        'mapped' => false,
+        'required' => false,
+      ]);
+      
+    $builder->get('name')->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+      $data = $event->getData();
+      if ($data !== null) {
+        $event->setData(strtolower(trim($data)));
+      }
+    });
   }
 
   public function configureOptions(OptionsResolver $resolver): void
@@ -35,16 +39,5 @@ class TicketCategoryType extends AbstractType
     $resolver->setDefaults([
       'data_class' => TicketCategory::class,
     ]);
-  }
-
-  public function normalizer($builder):void
-  {
-    $builder->get('name')->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-      $data = $event->getData();
-      if ($data !== null) {
-        $data = strtolower(trim($data));
-        $event->setData($data);
-      }
-    });
   }
 }
