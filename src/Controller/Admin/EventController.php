@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Entity\TicketCategory;
 use App\Service\ImageUploader;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,6 +28,7 @@ final class EventController extends AbstractController
   public function new(Request $request, EntityManagerInterface $entityManager, ImageUploader $imageUploader): Response
   {
     $event = new Event();
+    $event->addTicketCategory(new TicketCategory());
     $form = $this->createForm(EventType::class, $event);
     $form->handleRequest($request);
 

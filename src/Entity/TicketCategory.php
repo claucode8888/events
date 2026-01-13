@@ -6,6 +6,7 @@ use App\Repository\TicketCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TicketCategoryRepository::class)]
 class TicketCategory
@@ -19,13 +20,22 @@ class TicketCategory
     #[ORM\JoinColumn(nullable: false)]
     private ?Event $event = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank(message: 'Name is required.')]
+    #[Assert\Regex(
+      pattern: '/^[a-z0-9\-]+$/',
+      message: 'Only lowercase letters, numbers and dashes are allowed.'
+    )]
     private ?string $name = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: 'decimal', nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero(message: 'Price must be positive.')]
     private ?float $price = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: 'Quantity must be greater than 0.')]
     private ?int $quantity = null;
 
     /**
@@ -63,9 +73,8 @@ class TicketCategory
 
     public function setName(string $name): static
     {
-        $this->name = $name;
-
-        return $this;
+      $this->name = $name;
+      return $this;
     }
 
     public function getPrice(): ?float

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\EventRepository;
@@ -37,7 +39,9 @@ class Event extends AbstractEntity
     /**
      * @var Collection<int, TicketCategory>
      */
-    #[ORM\OneToMany(targetEntity: TicketCategory::class, mappedBy: 'event')]
+    #[Assert\Valid]
+    #[Assert\Count(min: 1, minMessage: 'You must add at least one ticket category.')]
+    #[ORM\OneToMany(targetEntity: TicketCategory::class, mappedBy: 'event', cascade: ['persist',  'remove'], orphanRemoval: true)]
     private Collection $ticketCategories;
 
     #[ORM\Column(length: 255, nullable: true)]
