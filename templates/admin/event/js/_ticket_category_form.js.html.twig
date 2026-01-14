@@ -1,43 +1,41 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+
     const wrapper   = document.getElementById('ticket-categories-wrapper');
     const addButton = document.getElementById('add-ticket-category');
 
-    // Symfony prototype (escaped for JS)
+    // Twig-rendered prototype
     const prototype = `{{ ticketCategoryPrototype|e('js') }}`;
 
-    let index = wrapper.children.length;
+    // Correct index even after validation errors
+    let index = wrapper.querySelectorAll('.ticket-category-row').length;
 
-  // Add a new Ticket Category row
+    // ADD
     addButton.addEventListener('click', () => {
       const html = prototype.replace(/__name__/g, index);
-
-      const temp = document.createElement('div');
-      temp.innerHTML = html;
-      const row = temp.firstElementChild;
-      wrapper.appendChild(row);
       index++;
+      console.log('_ADD_FORM_ INDEX =>', index, ' PROTOTYPE => ', prototype);
+      const container = document.createElement('div');
+      container.innerHTML = html;
+
+      const row = container.firstElementChild;
+      wrapper.appendChild(row);
     });
 
-    // Handle deletion of a Ticket Category
-    wrapper.addEventListener('click', function (e) {
-      const deleteButton = e.target.closest('.remove-ticket-category');
-      if (!deleteButton) return;
+    // DELETE (delegated)
+    wrapper.addEventListener('click', e => {
+      const btn = e.target.closest('.remove-ticket-category');
+      if (!btn) return;
 
-      const row = deleteButton.closest('.ticket-category-row');
+      const row = btn.closest('.ticket-category-row');
       if (!row) return;
 
-      const deleteInput = row.querySelector('input[type="hidden"][name$="[_delete]"]');
-      if (!deleteInput) {
-        console.error('Hidden _delete field not found in this row.');
-        return;
+      const input = row.querySelector('input[name$="[_delete]"]');
+
+      if (input) {
+        input.value = 1;          // mark for deletion
+        row.style.display = 'none';
       }
-
-      // Mark this entity for deletion
-      deleteInput.value = '1';
-
-      // Hide it from the UI (but keep it in the form submission)
-      row.style.display = 'none';
     });
 
   });

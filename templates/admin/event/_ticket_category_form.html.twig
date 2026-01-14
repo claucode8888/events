@@ -5,11 +5,14 @@
       {{ form_errors(form.ticketCategories) }}
     </span>
   {% endif %}
+
   <div id="ticket-categories-wrapper" class="space-y-4">
     {% for ticketCategory in form.ticketCategories %}
+      {{ dump(ticketCategory) }}
       {% include 'admin/event/_ticket_category_row.html.twig' with { form: ticketCategory } %}
     {% endfor %}
-  </div>
+  </div>  
+
   <div class="text-right">
     <button 
       type="button"
