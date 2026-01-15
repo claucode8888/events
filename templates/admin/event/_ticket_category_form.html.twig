@@ -8,7 +8,6 @@
 
   <div id="ticket-categories-wrapper" class="space-y-4">
     {% for ticketCategory in form.ticketCategories %}
-      {{ dump(ticketCategory) }}
       {% include 'admin/event/_ticket_category_row.html.twig' with { form: ticketCategory } %}
     {% endfor %}
   </div>  
@@ -23,13 +22,3 @@
     </button>
   </div>
 </div>
-
-<!-- Ticket Category prototype definition -->
-{% set ticketCategoryPrototype %}
-  {% include 'admin/event/_ticket_category_row.html.twig' with { form: form.ticketCategories.vars.prototype } %}
-{% endset %}
-<!-- End Ticket Category prototype definition -->
-
-<!-- Script prototype -->
-  {% include 'admin/event/js/_ticket_category_form.js.html.twig' %}
-<!-- End Script prototype -->

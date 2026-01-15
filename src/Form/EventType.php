@@ -41,22 +41,14 @@ class EventType extends AbstractType
       ])
       // Ticket Categories 
       ->add('ticketCategories', CollectionType::class, [
-          'entry_type'   => TicketCategoryType::class,
-          'entry_options'=> ['label' => false],
-          'allow_add'    => true,
-          'allow_delete' => true,
-          'by_reference' => false,
-          'prototype' => true,
-          'prototype_data' => new TicketCategory(),
+        'entry_type'   => TicketCategoryType::class,
+        'entry_options'=> ['label' => false],
+        'allow_add'    => true,
+        'allow_delete' => true,
+        'by_reference' => false,
+        'prototype' => true,
+        'prototype_data' => new TicketCategory(),
       ]);
-      // ->add('ticketCategories', CollectionType::class, [
-      //   'entry_type' => TicketCategoryType::class,
-      //   'entry_options' => ['label' => false],
-      //   'allow_add' => true,
-      //   'allow_delete' => true,
-      //   'by_reference' => false,
-      //   'prototype' => true
-      // ]);
   }
 
   public function configureOptions(OptionsResolver $resolver): void

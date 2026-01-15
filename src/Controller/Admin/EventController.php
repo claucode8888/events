@@ -67,10 +67,6 @@ final class EventController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-
-      //
-      $this->deleteTC($form, $event);
-      //
       if ($form->get('imageFile')->getData()) {
        /** Replace image in events directory */
         $oldFilename = $event->getImgPath();
@@ -102,18 +98,5 @@ final class EventController extends AbstractController
     }
 
     return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
-  }
-
-  //_____________________________________________________________________________________
-  public function deleteTC($form, $event)
-  {
-    foreach ($form->get('ticketCategories') as $index => $categoryForm) {
-      // dd($categoryForm->get('_delete')->getData());
-      if ($categoryForm->get('_delete')->getData()) {
-        $event->removeTicketCategory(
-          $event->getTicketCategories()->get($index)
-        );
-      }
-    }
   }
 }

@@ -1,42 +1,32 @@
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  const wrapper = document.getElementById('ticket-categories-wrapper');
+  const addButton = document.getElementById('add-ticket-category');
+  const prototype = `{{ TCprototype |e('js') }}`;
+  let index = wrapper.querySelectorAll('.ticket-category-row').length
 
-    const wrapper   = document.getElementById('ticket-categories-wrapper');
-    const addButton = document.getElementById('add-ticket-category');
+  // Add new Ticket Category 
+  addButton.onclick = (e) => {
+    e.preventDefault();
+    const newHtml = prototype.replace(/__name__/g, index);
+    wrapper.insertAdjacentHTML('beforeend', newHtml);
+    index++;
+  }
 
-    // Twig-rendered prototype
-    const prototype = `{{ ticketCategoryPrototype|e('js') }}`;
-
-    // Correct index even after validation errors
-    let index = wrapper.querySelectorAll('.ticket-category-row').length;
-
-    // ADD
-    addButton.addEventListener('click', () => {
-      const html = prototype.replace(/__name__/g, index);
-      index++;
-      console.log('_ADD_FORM_ INDEX =>', index, ' PROTOTYPE => ', prototype);
-      const container = document.createElement('div');
-      container.innerHTML = html;
-
-      const row = container.firstElementChild;
-      wrapper.appendChild(row);
-    });
-
-    // DELETE (delegated)
-    wrapper.addEventListener('click', e => {
-      const btn = e.target.closest('.remove-ticket-category');
-      if (!btn) return;
-
-      const row = btn.closest('.ticket-category-row');
-      if (!row) return;
-
-      const input = row.querySelector('input[name$="[_delete]"]');
-
-      if (input) {
-        input.value = 1;          // mark for deletion
-        row.style.display = 'none';
-      }
-    });
-
-  });
+  // Delete Ticket Category 
+  wrapper.onclick = (e) => {
+    if (!e.target.closest('.remove-ticket-category')) return;
+    e.preventDefault();
+    const row = e.target.closest('.ticket-category-row');
+    const deleteInput = row.querySelector('input[name$="[_delete]"]');
+    
+    if (deleteInput) {
+      deleteInput.value = '1';
+      row.style.display = 'none';
+      
+      // Disable ALL inputs in hidden row
+      row.querySelectorAll('input').forEach(input => {
+        input.disabled = true;
+      });
+    }
+  };
 </script>
