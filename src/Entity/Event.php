@@ -19,21 +19,26 @@ class Event extends AbstractEntity
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 2000)]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\NotBlank]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $capacity = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $status = null;
 
     /**
