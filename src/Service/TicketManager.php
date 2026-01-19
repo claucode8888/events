@@ -4,12 +4,13 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\Ticket;
+use App\Service\QRService;
 use App\Entity\TicketCategory;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TicketManager
 {
-  public function __construct(private EntityManagerInterface $em){}
+  public function __construct(private EntityManagerInterface $em, private QRService $QRService){}
 
   public function processTicketSelection(array $tickets, User $user): bool
   {
@@ -31,7 +32,7 @@ class TicketManager
     $ticket = new Ticket();
     $ticket->setCategory($TC);
     $ticket->setBuyer($user);
-    $ticket->setQRCode('-');
+    $ticket->setQRCode($this->QRService->generateQRCode('--'));
     $ticket->setStatus(Ticket::PENDING_STATUS);
     $this->em->persist($ticket);
   }

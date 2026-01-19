@@ -1482,6 +1482,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     throttle_limit?: int, // Another password reset cannot be made faster than this throttle time in seconds. // Default: 3600
  *     enable_garbage_collection?: bool, // Enable/Disable automatic garbage collection. // Default: true
  * }
+ * @psalm-type EndroidQrCodeConfig = array<string, mixed>
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1498,6 +1499,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *     symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *     symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *     endroid_qr_code?: EndroidQrCodeConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1517,6 +1519,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *         endroid_qr_code?: EndroidQrCodeConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1534,6 +1537,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *         endroid_qr_code?: EndroidQrCodeConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1552,6 +1556,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *         endroid_qr_code?: EndroidQrCodeConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
