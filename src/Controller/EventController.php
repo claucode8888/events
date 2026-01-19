@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Repository\EventRepository;
+use App\Service\TicketManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,8 +39,30 @@ final class EventController extends AbstractController
   }
 
   #[Route('/{id}/purchase', name: 'app_event_purchase', methods: ['POST'])]
-  public function purchase(Event $event): JsonResponse
+  public function purchase(Request $request, Event $event, TicketManager $ticketManager): JsonResponse
   {
-    return new JsonResponse(['message' => $event->getName()], 400);
+    $user = $this->getUser();
+    $tickets = json_decode($request->getContent(), true)['tickets'];
+    if(!$tickets){
+      return new JsonResponse(
+        ['message' => 'Any ticket was selected.'],
+        Response::HTTP_BAD_REQUEST
+      );
+    }
+
+    $processResult = $ticketManager->processTicketSelection($tickets, $user);
+    if(!$processResult){
+      return new JsonResponse(
+        ['message' => 'Tickets could have not been created.'],
+        Response::HTTP_OK
+      );
+    }
+
+    return new JsonResponse(
+      ['message' => 'Tickets created correctly.',
+      'status_text' => Response::$statusTexts[Response::HTTP_CREATED]
+      ],
+      Response::HTTP_CREATED
+    );
   }
 }
