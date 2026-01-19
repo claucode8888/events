@@ -153,11 +153,83 @@
   }
 
   /**
+   * Handles all quantity button clicks via event delegation
+   */
+  function handleQuantityButtonClick(event) {
+    const button = event.target.closest('.quantity-btn');
+    if (!button) return;
+
+    const ticketId = button.dataset.ticketId;
+    const action = button.dataset.action;
+    const change = action === 'increase' ? 1 : -1;
+
+    handleQuantityUpdate(ticketId, change);
+  }
+
+  /**
+   * Handles checkout button click
+   */
+  function handleCheckout(event) {
+    event.preventDefault();
+    
+    if (Object.keys(cart).length === 0) {
+      alert('Please select at least one ticket');
+      return;
+    }
+
+    submitCart();
+  }
+
+  /** Submits cart by AJAX */
+  async function submitCart() {
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const originalText = checkoutBtn.textContent;
+    checkoutBtn.textContent = 'Processing...';
+    checkoutBtn.disabled = true;
+    try {
+      const response = await fetch('{{ path("app_event_purchase", {id: event.id}) }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': '{{ csrf_token("checkout") }}'
+        },
+        body: JSON.stringify({
+          tickets: cart,
+          _token: '{{ csrf_token("checkout") }}'
+        })
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+        // Success - redirect to payment
+        // window.location.href = result.redirectUrl || '/checkout/success';
+      } else {
+        console.log(result.message);
+        // Error from server
+        // throw new Error(result.message || 'Checkout failed');
+      }
+    }catch (error) {
+      console.error('Checkout error:', error);
+      alert(`Error: ${error.message}`);
+      checkoutBtn.textContent = originalText;
+      checkoutBtn.disabled = false;
+    }
+  }
+
+  /**
    * Initializes the ticket purchase page
    * Sets up event listeners and initial state
    */
   function initTicketPage() {
     console.log('Ticket page initialized');
+
+    // 1. Quantity buttons
+    document.addEventListener('click', handleQuantityButtonClick);
+    
+    // 2. Checkout button
+    document.getElementById('checkout-btn').addEventListener('click', handleCheckout);
+
     updateCartSummary();
   }
 
