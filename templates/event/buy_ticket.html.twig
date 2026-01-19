@@ -4,9 +4,8 @@
 
 {% block content %}
 <div class="grid grid-cols-12 gap-6 p-6 max-w-7xl mx-auto lg:px-6">
-  
   <!-- Ticket categories -->
-  <section class="col-span-12 lg:col-span-8">
+  <section class="col-span-12 lg:col-span-7">
     <!-- Event image - MOBILE ONLY (hidden on desktop) -->
     {% if event.imgPath %}
       <article class="mb-6 lg:hidden">
@@ -20,7 +19,7 @@
     
     <!-- Event header -->
     <article class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ event.name }}</h1>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ event.name | title }}</h1>
       <div class="flex items-center justify-center space-x-4 text-gray-600">
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,7 +45,7 @@
           <div class="bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md">
             <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-4">
               <div class="mb-3 lg:mb-0">
-                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ ticketCategory.name }}</h3>
+                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ ticketCategory.name | title }}</h3>
                 <p class="text-gray-600 text-sm">
                   {{ ticketCategory.quantity }} tickets available
                 </p>
@@ -71,9 +70,8 @@
               <div class="flex items-center space-x-3">
                 <button 
                   type="button"
-                  class="quantity-btn decrease w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  data-ticket-id="{{ ticketCategory.id }}"
-                  onclick="updateQuantity('{{ ticketCategory.id }}', -1)"
+                  class="w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  onclick="handleQuantityUpdate('{{ ticketCategory.id }}', -1)"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
@@ -84,9 +82,8 @@
                 
                 <button 
                   type="button"
-                  class="quantity-btn increase w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  data-ticket-id="{{ ticketCategory.id }}"
-                  onclick="updateQuantity('{{ ticketCategory.id }}', 1)"
+                  class="w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  onclick="handleQuantityUpdate('{{ ticketCategory.id }}', 1)"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -103,7 +100,7 @@
       </div>
     </article>
 
-    <!-- Register prompt (for non-logged in users) -->
+    <!-- Register (for non-logged in users) -->
     {% if not app.user %}
       <article class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
         <div class="flex items-center justify-between">
@@ -120,7 +117,7 @@
   </section>
 
   <!-- Order Summary Sidebar -->
-  <section class="col-span-12 lg:col-span-4">
+  <section class="col-span-12 lg:col-span-5">
     <div class="sticky top-6">
       <!-- Event image - DESKTOP ONLY (hidden on mobile) -->
       {% if event.imgPath %}
@@ -190,48 +187,5 @@
   </section>
 </div>
 
-<!-- EXACT SAME JAVASCRIPT -->
-<script>
-// Cart state and ticket data
-let cart = {};
-const ticketData = {
-    {% for ticketCategory in event.ticketCategories %}
-    {{ ticketCategory.id }}: {
-        price: {{ ticketCategory.price }},
-        maxQuantity: {{ ticketCategory.quantity }},
-        name: "{{ ticketCategory.name|e('js') }}"
-    },
-    {% endfor %}
-};
-
-// Update quantity function
-function updateQuantity(ticketId, change) {
-    const ticket = ticketData[ticketId];
-    const currentQuantity = cart[ticketId] || 0;
-    const newQuantity = currentQuantity + change;
-    
-    // Validate
-    if (newQuantity < 0 || newQuantity > ticket.maxQuantity) return;
-    
-    // Update cart
-    cart[ticketId] = newQuantity || delete cart[ticketId];
-    
-    // Update quantity display
-    document.getElementById(`quantity-${ticketId}`).textContent = newQuantity || 0;
-    
-    // Update cart summary
-    let cartHtml = '';
-    let subtotal = 0;
-    
-    for (const [id, quantity] of Object.entries(cart)) {
-        const itemPrice = ticketData[id].price * quantity;
-        subtotal += itemPrice;
-        cartHtml += `<div class="cart-item">${ticketData[id].name} (${quantity}): €${itemPrice.toFixed(2)}</div>`;
-    }
-    
-    document.getElementById('selected-tickets').innerHTML = cartHtml || 'No tickets selected';
-    document.getElementById('total').textContent = `€${subtotal.toFixed(2)}`;
-    document.getElementById('checkout-btn').disabled = !cartHtml;
-}
-</script>
+{% include 'event/js/buy_ticket.js.html.twig' %}
 {% endblock %}

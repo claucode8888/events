@@ -1,0 +1,165 @@
+<script>
+  const SERVICE_FEE = 2.00;
+
+  // Ticket information
+  const ticketData = {
+    {% for ticketCategory in event.ticketCategories %}
+      {{ ticketCategory.id }}:
+        {
+          price: {{ ticketCategory.price }},
+          maxQuantity: {{ ticketCategory.quantity }},
+          name: {{ ticketCategory.name|json_encode|raw }}
+        },
+    {% endfor %}
+  };
+
+  // Cart management
+  let cart = {};
+  /**
+   * Updates cart with new quantity for a ticket
+   * @param {string} ticketId - ID of the ticket to update
+   * @param {number} change - Quantity change (+1 or -1)
+   */
+  function updateCartQuantity(ticketId, change) {
+    const ticket = ticketData[ticketId];
+    const currentQuantity = cart[ticketId] || 0;
+    const newQuantity = currentQuantity + change;
+    
+    // Validate quantity
+    if (newQuantity < 0 || newQuantity > ticket.maxQuantity) {
+      return false;
+    }
+
+    // Update or remove from cart
+    if (newQuantity === 0) {
+      delete cart[ticketId];
+    } else {
+      cart[ticketId] = newQuantity;
+    }
+
+    return true;
+  }
+
+  /**
+   * Calculates cart subtotal
+   * @returns {number} Subtotal amount
+   */
+  function calculateSubtotal() {
+    let subtotal = 0;
+    for (const [ticketId, quantity] of Object.entries(cart)) {
+      subtotal += ticketData[ticketId].price * quantity;
+    }
+    return subtotal;
+  }
+
+  /**
+   * Calculates total price including fees
+   * @param {number} subtotal - Price before fees
+   * @returns {number} Total price
+   */
+  function calculateTotal(subtotal) {
+    return subtotal ? subtotal + SERVICE_FEE : subtotal;
+  }
+
+  // DOM manipulation and updates
+  /**
+   * Updates quantity display for a specific ticket
+   * @param {string} ticketId - Ticket ID
+   * @param {number} quantity - New quantity to display
+   */
+  function updateQuantityDisplay(ticketId, quantity) {
+    const displayElement = document.getElementById(`quantity-${ticketId}`);
+    if (displayElement) {
+      displayElement.textContent = quantity || 0;
+    }
+  }
+
+  /**
+   * Updates the cart items list in the sidebar
+   */
+  function updateCartItemsDisplay() {
+    const container = document.getElementById('selected-tickets');
+    // const emptyMessage = document.getElementById('empty-cart-message');
+    let cartHtml = '';
+
+    for (const [ticketId, quantity] of Object.entries(cart)) {
+      const ticket = ticketData[ticketId];
+      const itemPrice = ticket.price * quantity;
+      cartHtml += `
+        <div class="cart-item">
+          ${quantity} × ${ticket.name}: €${itemPrice.toFixed(2)}
+        </div>
+      `;
+    }
+
+    container.innerHTML = cartHtml || '';
+    // emptyMessage.style.display = cartHtml ? 'none' : 'block';
+  }
+  
+  /**
+   * Updates all price displays in the order summary
+   */
+  function updatePriceDisplays() {
+    const subtotal = calculateSubtotal();
+    const total = calculateTotal(subtotal);
+
+    document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2)}`;
+    document.getElementById('service-fee').textContent = `€${SERVICE_FEE.toFixed(2)}`;
+    document.getElementById('total').textContent = `€${total.toFixed(2)}`;
+  }
+
+  /**
+   * Updates checkout button state based on cart content
+   */
+  function updateCheckoutButton() {
+    const checkoutButton = document.getElementById('checkout-btn');
+    const hasItems = Object.keys(cart).length > 0;
+
+    if (hasItems) {
+      const total = calculateTotal(calculateSubtotal());
+      checkoutButton.disabled = false;
+      checkoutButton.textContent = `Checkout · €${total.toFixed(2)}`;
+    }else{
+      checkoutButton.textContent = 'Checkout';
+      checkoutButton.disabled = true;
+    }
+  }
+
+  /**
+   * Updates the entire cart (items, prices, button)
+   */
+  function updateCartSummary() {
+    updateCartItemsDisplay();
+    updatePriceDisplays();
+    updateCheckoutButton();
+  }
+
+  // Cart operations
+  /**
+   * Main function to handle quantity updates
+   * Called when +/- buttons are clicked
+   * @param {string} ticketId - Ticket ID
+   * @param {number} change - +1 or -1
+   */
+  function handleQuantityUpdate(ticketId, change) {
+    // 1. Update cart state
+    const success = updateCartQuantity(ticketId, change);
+    if (!success) return;
+    // 2. Update quantity display for this ticket
+    const newQuantity = cart[ticketId] || 0;
+    updateQuantityDisplay(ticketId, newQuantity);
+    // 3. Update cart summary
+    updateCartSummary();
+  }
+
+  /**
+   * Initializes the ticket purchase page
+   * Sets up event listeners and initial state
+   */
+  function initTicketPage() {
+    console.log('Ticket page initialized');
+    updateCartSummary();
+  }
+
+  document.addEventListener('DOMContentLoaded', initTicketPage);
+</script>
