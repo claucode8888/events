@@ -31,38 +31,10 @@ final class EventController extends AbstractController
   }
 
   #[Route('/{id}/ticket-selection', name: 'app_ticket_selection', methods: ['GET'])]
-  public function buyTicket(Event $event): Response
+  public function ticketSelection(Event $event): Response
   {
     return $this->render('event/ticket_selection.html.twig', [
       'event' => $event,
     ]);
-  }
-
-  #[Route('/{id}/purchase', name: 'app_event_purchase', methods: ['POST'])]
-  public function purchase(Request $request, Event $event, TicketManager $ticketManager): JsonResponse
-  {
-    $user = $this->getUser();
-    $tickets = json_decode($request->getContent(), true)['tickets'];
-    if(!$tickets){
-      return new JsonResponse(
-        ['message' => 'Any ticket was selected.'],
-        Response::HTTP_BAD_REQUEST
-      );
-    }
-
-    $processResult = $ticketManager->processTicketSelection($tickets, $user);
-    if(!$processResult){
-      return new JsonResponse(
-        ['message' => 'Tickets could have not been created.'],
-        Response::HTTP_OK
-      );
-    }
-
-    return new JsonResponse(
-      ['message' => 'Tickets created correctly.',
-      'status_text' => Response::$statusTexts[Response::HTTP_CREATED]
-      ],
-      Response::HTTP_CREATED
-    );
   }
 }
