@@ -79,7 +79,6 @@
    */
   function updateCartItemsDisplay() {
     const container = document.getElementById('selected-tickets');
-    // const emptyMessage = document.getElementById('empty-cart-message');
     let cartHtml = '';
 
     for (const [ticketId, quantity] of Object.entries(cart)) {
@@ -93,7 +92,6 @@
     }
 
     container.innerHTML = cartHtml || '';
-    // emptyMessage.style.display = cartHtml ? 'none' : 'block';
   }
   
   /**
@@ -184,8 +182,11 @@
   async function submitCart() {
     const checkoutBtn = document.getElementById('checkout-btn');
     const originalText = checkoutBtn.textContent;
+    
+    // Immediately show processing state
     checkoutBtn.textContent = 'Processing...';
     checkoutBtn.disabled = true;
+    
     try {
       const response = await fetch('{{ path("app_create_booking") }}', {
         method: 'POST',
@@ -199,17 +200,23 @@
           _token: '{{ csrf_token("checkout") }}'
         })
       });
+      
       const result = await response.json();
+      
       if (response.ok) {
-        // After successful purchase
-        window.location.href = result.redirect;
-        // Success - redirect to payment
+        checkoutBtn.textContent = '✓ Success! Redirecting...';
+
+        setTimeout(() => {
+          window.location.href = result.redirect;
+        }, 2000);
+        
       } else {
         alert(result.error);
-        // Error from server
-        // throw new Error(result.message || 'Checkout failed');
+        checkoutBtn.textContent = originalText;
+        checkoutBtn.disabled = false;
       }
-    }catch (error) {
+      
+    } catch (error) {
       console.error('Checkout error:', error);
       alert(`Error: ${error.message}`);
       checkoutBtn.textContent = originalText;
