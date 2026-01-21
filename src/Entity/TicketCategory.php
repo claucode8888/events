@@ -131,4 +131,11 @@ class TicketCategory extends AbstractEntity
 
         return $this;
     }
+
+  public function ticketsAvailability(): int
+  {
+    $soldTickets = count($this->getTickets());
+    $maxSell = $this->getQuantity();
+    return $maxSell - $soldTickets;
+  }
 }

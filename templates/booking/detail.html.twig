@@ -1,0 +1,104 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Booking #{{ booking.id }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-6">
+  {# Header #}
+  <div class="text-center mb-8">
+    <h1 class="text-2xl font-bold mb-2">✅ Booking Confirmed</h1>
+    <p class="text-gray-600">Booking ID: <strong>{{ booking.id }}</strong></p>
+  </div>
+
+  {# Tickets #}
+  <div class="bg-white border rounded-lg p-6 mb-6">
+    <h2 class="text-lg font-bold mb-4">Your Tickets ({{ booking.tickets|length }})</h2>
+    {% for ticket in booking.tickets %}
+      <div class="border-b py-3 last:border-b-0">
+        <div class="flex justify-between">
+          <div>
+            <div class="font-medium">{{ ticket.category.name }}</div>
+            <div class="text-sm text-gray-500">{{ ticket.category.event.name }}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-bold">€{{ ticket.category.price|number_format(2) }}</div>
+            <div class="text-xs text-gray-500">#{{ ticket.id }}</div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {# Event Info #}
+  {% if booking.tickets|length > 0 %}
+    {% set event = booking.tickets.first.category.event %}
+    <div class="bg-white border rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold mb-4">Event Info</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="text-sm text-gray-500">Event</div>
+          <div class="font-medium">{{ event.name }}</div>
+        </div>
+        <div>
+          <div class="text-sm text-gray-500">Date</div>
+          <div class="font-medium">{{ event.startAt|date('M j, Y') }}</div>
+        </div>
+        <div>
+          <div class="text-sm text-gray-500">Time</div>
+          <div class="font-medium">{{ event.startAt|date('g:i A') }}</div>
+        </div>
+        <div>
+          <div class="text-sm text-gray-500">Status</div>
+          <div class="font-medium">{{ booking.status|upper }}</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {# Total #}
+  <div class="bg-white border rounded-lg p-6 mb-6">
+    <h2 class="text-lg font-bold mb-4">Payment Summary</h2>
+    <div class="space-y-2">
+      <div class="flex justify-between">
+        <span>Tickets</span>
+        <span>€{{ booking.total|number_format(2) }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Service Fee</span>
+        <span>€0.00</span>
+      </div>
+      <hr class="my-2">
+      <div class="flex justify-between text-lg font-bold">
+        <span>Total</span>
+        <span>€{{ booking.total|number_format(2) }}</span>
+      </div>
+    </div>
+  </div>
+
+  {# QR Codes #}
+  <div class="bg-white border rounded-lg p-6 mb-6">
+    <h2 class="text-lg font-bold mb-4">Ticket QR Codes</h2>
+    <div class="grid grid-cols-2 gap-4">
+      {% for ticket in booking.tickets %}
+        <div class="text-center">
+          <img src="{{ path('app_ticket_qr', {QRCode: ticket.QRCode}) }}" 
+            alt="QR Code"
+            class="w-32 h-32 mx-auto border">
+          <div class="text-sm mt-2">{{ ticket.category.name }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {# Actions #}
+  <div class="flex gap-4">
+    <button onclick="window.print()" class="flex-1 bg-blue-900 hover:bg-blue-700 text-white py-3 rounded font-medium cursor-pointer">
+      Print
+    </button>
+    <a href="{{ path('app_event_show', {id: event.id}) }}"
+      class="flex-1 border border-gray-300 hover:border-gray-600 text-center py-3 rounded font-medium cursor-pointer">
+      Event Page
+    </a>
+  </div>
+</div>
+{% endblock %}

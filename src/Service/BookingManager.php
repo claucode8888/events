@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Service;
+
+use Exception;
+use App\Entity\User;
+use App\Entity\Ticket;
+use App\Entity\Booking;
+use App\Entity\TicketCategory;
+use App\Security\TokenGenerator;
+use Doctrine\ORM\EntityManagerInterface;
+
+class BookingManager
+{
+  public function __construct(private EntityManagerInterface $em, private TokenGenerator $tokenGenerator){}
+
+  public function createBooking(array $tickets, User $user): ? Booking
+  {
+    /** Check if Ticket Categories were found */
+    $TCEntities = $this->em->getRepository(TicketCategory::class)->findBy(['id' => array_keys($tickets)]);
+    if(!$TCEntities) return null;
+
+    $total = 0;
+    $booking = new Booking();
+    $booking->setStatus(Booking::STATUS_PENDING);
+    $booking->setBuyer($user);
+
+    foreach($TCEntities as $TCEntity){
+      $quantity = $tickets[$TCEntity->getId()];
+      $total += $TCEntity->getPrice() * $quantity;
+
+      /** Check availability */
+      if($TCEntity->ticketsAvailability() < $quantity){
+        throw new Exception('Not enough tickets available for ' . $TCEntity->getName());
+      }
+
+      /** Tickets creation */
+      for($i = 0; $quantity > $i; $i++){
+        $ticket = $this->createTicket($TCEntity, $user, $booking);
+        $booking->addTicket($ticket);
+      }
+    }
+
+    $booking->setTotal($total);
+    $this->em->persist($booking);
+    $this->em->flush();
+    return $booking;
+  }
+
+  public function createTicket(TicketCategory $TC, User $user, Booking $booking): Ticket
+  {
+    $qrToken = $this->tokenGenerator->generate();
+
+    $ticket = new Ticket();
+    $ticket->setCategory($TC);
+    $ticket->setBuyer($user);
+    $ticket->setQRCode($qrToken);
+    $ticket->setStatus(Ticket::PENDING_STATUS);
+    $ticket->setBooking($booking);
+    $this->em->persist($ticket);
+    return $ticket;
+  }
+}

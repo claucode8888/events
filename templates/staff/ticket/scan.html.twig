@@ -1,0 +1,126 @@
+{# templates/staff/ticket/scan.html.twig #}
+{% extends 'layout.html.twig' %}
+
+{% block title %}Scan Tickets{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  {# Header #}
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">🎫 Ticket Scanner</h1>
+    <p class="text-gray-600">Scan QR codes to validate tickets</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-8">
+    {# Scanner Section #}
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Scan QR Code</h2>
+      
+      {# Video Feed #}
+      <div id="qr-scanner" class="relative mb-4">
+        <video id="qr-video" class="w-full h-64 bg-black rounded-lg"></video>
+        <div class="absolute inset-0 border-2 border-blue-400 rounded-lg m-4 pointer-events-none"></div>
+      </div>
+      
+      {# Manual Input #}
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Or enter ticket code:</label>
+        <div class="flex gap-2">
+          <input type="text" id="manual-code" 
+                 class="flex-1 border border-gray-300 rounded-lg px-4 py-2"
+                 placeholder="Ticket code...">
+          <button onclick="validateManualCode()" 
+                  class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
+            Validate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {# Results Section #}
+    <div class="space-y-6">
+      {# Recent Scans #}
+      <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Recent Scans</h2>
+        <div id="scan-results" class="space-y-3 max-h-96 overflow-y-auto">
+          {# Results appear here via JavaScript #}
+          <div class="text-center text-gray-500 py-8">No scans yet</div>
+        </div>
+      </div>
+
+      {# Stats #}
+      <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Today's Stats</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="text-center p-4 bg-blue-50 rounded-lg">
+            <div class="text-2xl font-bold text-blue-700" id="scanned-count">0</div>
+            <div class="text-sm text-blue-600">Scanned</div>
+          </div>
+          <div class="text-center p-4 bg-green-50 rounded-lg">
+            <div class="text-2xl font-bold text-green-700" id="valid-count">0</div>
+            <div class="text-sm text-green-600">Valid</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// QR Scanner using html5-qrcode library (add to your base template)
+document.addEventListener('DOMContentLoaded', function() {
+  const scanner = new Html5QrcodeScanner("qr-scanner", { 
+    fps: 10, 
+    qrbox: 250 
+  });
+  
+  scanner.render(onScanSuccess);
+});
+
+function onScanSuccess(decodedText) {
+  // Send to checkin endpoint
+  fetch(`/staff/ticket/checkin/${decodedText}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(response => response.json())
+  .then(data => {
+    addScanResult(decodedText, data.success);
+  });
+}
+
+function validateManualCode() {
+  const code = document.getElementById('manual-code').value;
+  if (code) onScanSuccess(code);
+}
+
+function addScanResult(ticketId, isValid) {
+  const resultDiv = document.createElement('div');
+  resultDiv.className = `p-3 rounded-lg ${isValid ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`;
+  resultDiv.innerHTML = `
+    <div class="flex justify-between items-center">
+      <div>
+        <div class="font-medium">Ticket #${ticketId}</div>
+        <div class="text-sm text-gray-500">${new Date().toLocaleTimeString()}</div>
+      </div>
+      <span class="px-3 py-1 rounded-full text-sm font-semibold ${isValid ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+        ${isValid ? '✓ Valid' : '✗ Invalid'}
+      </span>
+    </div>
+  `;
+  
+  document.getElementById('scan-results').prepend(resultDiv);
+  
+  // Update counters
+  if (isValid) {
+    document.getElementById('valid-count').textContent = 
+      parseInt(document.getElementById('valid-count').textContent) + 1;
+  }
+  document.getElementById('scanned-count').textContent = 
+    parseInt(document.getElementById('scanned-count').textContent) + 1;
+}
+</script>
+
+{# Add this to your base template head #}
+{# <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> #}
+{% endblock %}

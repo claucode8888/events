@@ -1,3 +1,4 @@
+
 {% extends 'layout.html.twig' %}
 
 {% block title %}Selection ticket for {{ event.name }}{% endblock %}
@@ -47,7 +48,7 @@
               <div class="mb-3 lg:mb-0">
                 <h3 class="text-lg font-bold text-gray-900 mb-1">{{ ticketCategory.name | title }}</h3>
                 <p class="text-gray-600 text-sm">
-                  {{ ticketCategory.quantity }} tickets available
+                  {{ ticketCategory.ticketsAvailability }} tickets available
                 </p>
               </div>
               

@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\TicketRepository;
+use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TicketRepository;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
-class Ticket
+class Ticket extends AbstractEntity
 {
   const PENDING_STATUS = 'pending';
 
@@ -30,6 +31,9 @@ class Ticket
 
   #[ORM\Column(nullable: true)]
   private ?\DateTimeImmutable $checkedInAt = null;
+
+  #[ORM\ManyToOne(inversedBy: 'tickets')]
+  private ?Booking $booking = null;
 
   public function getId(): ?int
   {
@@ -89,5 +93,17 @@ class Ticket
   {
     $this->checkedInAt = $checkedInAt;
     return $this;
+  }
+
+  public function getBooking(): ?Booking
+  {
+      return $this->booking;
+  }
+
+  public function setBooking(?Booking $booking): static
+  {
+      $this->booking = $booking;
+
+      return $this;
   }
 }
