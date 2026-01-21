@@ -182,8 +182,6 @@
   async function submitCart() {
     const checkoutBtn = document.getElementById('checkout-btn');
     const originalText = checkoutBtn.textContent;
-    
-    // Immediately show processing state
     checkoutBtn.textContent = 'Processing...';
     checkoutBtn.disabled = true;
     
