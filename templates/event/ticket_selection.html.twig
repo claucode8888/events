@@ -100,13 +100,23 @@
     <!-- Register (for non-logged in users) -->
     {% if not app.user %}
       <article class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col justify-between">
           <div>
-            <h3 class="font-bold text-blue-900 mb-1">Sign in to continue</h3>
-            <p class="text-blue-700">Create an account or sign in to purchase tickets</p>
+            <h4 class="font-bold text-blue-900 mb-1">Sign in required to continue</h4>
+            <p class="text-blue-700 text-sm mb-3">You need an account to purchase tickets for this event</p>
           </div>
-          <div>
-            {% include 'components/_register_button.html.twig' %}
+          <div class="flex gap-2">
+            <div>
+              <a
+                href="{{ path('app_login') }}"
+                class="inline-flex items-center justify-center rounded-md bg-blue-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+              >
+              Log in
+              </a>
+            </div>
+            <div>
+              {% include 'components/_register_button.html.twig' %}
+            </div>
           </div>
         </div>
       </article>
