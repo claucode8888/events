@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TicketRepository;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
-#[ORM\Index(name: 'idx_ticket_qrtoken', columns: ['qrtoken'])]
-#[ORM\Index(name: 'idx_ticket_status', columns: ['status'])]
-#[ORM\Index(name: 'idx_ticket_checked_in_at', columns: ['checked_in_at'])]
+#[ORM\UniqueConstraint(name:'uniq_ticket_qrtoken', columns : ['qrtoken'])]
+#[ORM\Index(name:'idx_ticket_status', columns: ['status'])]
+#[ORM\Index(name:'idx_ticket_checked_in_at', columns: ['checked_in_at'])]
 class Ticket extends AbstractEntity
 {
   const PENDING_STATUS = 'pending';
@@ -35,7 +35,7 @@ class Ticket extends AbstractEntity
   #[ORM\ManyToOne(inversedBy: 'tickets')]
   private ?Booking $booking = null;
 
-  #[ORM\Column(length: 1000, unique: true)]
+  #[ORM\Column(length: 1000)]
   private ?string $qrtoken = null;
 
   public function getId(): ?int
