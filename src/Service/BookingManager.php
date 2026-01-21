@@ -54,7 +54,7 @@ class BookingManager
     $ticket = new Ticket();
     $ticket->setCategory($TC);
     $ticket->setBuyer($user);
-    $ticket->setQRCode($qrToken);
+    $ticket->setQrtoken($qrToken);
     $ticket->setStatus(Ticket::PENDING_STATUS);
     $ticket->setBooking($booking);
     $this->em->persist($ticket);

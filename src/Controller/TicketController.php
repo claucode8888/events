@@ -8,16 +8,24 @@ use App\Service\QRService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/tickets')]
 final class TicketController extends AbstractController
 {
-  #[Route('/qr/{QRCode}', name: 'app_ticket_qr')]
-  public function QRCode(Ticket $ticket, QRService $QRService): Response
+  /** QR generator ondemand */
+  #[Route('/qr/{qrtoken}', name: 'app_ticket_generate_qr')]
+  public function generateQR(Ticket $ticket, QRService $QRService): Response
   {
     try {
-      $qr = $QRService->generateQRCode('http://192.168.1.76:8000/staff/ticket/scan');
-      // $png = $qrService->generateQRCode($ticket->getQRCode());
+      $route = $this->generateUrl('app_staff_ticket_checkin', [
+        'qrtoken' => $ticket->getQrtoken(),
+        ],
+        UrlGeneratorInterface::ABSOLUTE_URL
+      );
+
+      // $qr = $QRService->generateQRCode('http://192.168.1.76:8000/staff/ticket/scan');
+      $qr = $QRService->generateQRCode($route);
       return new Response(
         $qr,
         200,

@@ -7,6 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TicketRepository;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
+#[ORM\Index(name: 'idx_ticket_qrtoken', columns: ['qrtoken'])]
+#[ORM\Index(name: 'idx_ticket_status', columns: ['status'])]
+#[ORM\Index(name: 'idx_ticket_checked_in_at', columns: ['checked_in_at'])]
 class Ticket extends AbstractEntity
 {
   const PENDING_STATUS = 'pending';
@@ -23,9 +26,6 @@ class Ticket extends AbstractEntity
   #[ORM\ManyToOne(inversedBy: 'tickets')]
   private ?TicketCategory $category = null;
 
-  #[ORM\Column(length: 5000, nullable: true)]
-  private ?string $QRCode = null;
-
   #[ORM\Column(length: 80)]
   private ?string $status = null;
 
@@ -34,6 +34,9 @@ class Ticket extends AbstractEntity
 
   #[ORM\ManyToOne(inversedBy: 'tickets')]
   private ?Booking $booking = null;
+
+  #[ORM\Column(length: 1000, unique: true)]
+  private ?string $qrtoken = null;
 
   public function getId(): ?int
   {
@@ -61,18 +64,7 @@ class Ticket extends AbstractEntity
     $this->category = $category;
     return $this;
   }
-
-  public function getQRCode(): ?string
-  {
-    return $this->QRCode;
-  }
-
-  public function setQRCode(?string $QRCode): static
-  {
-    $this->QRCode = $QRCode;
-    return $this;
-  }
-
+  
   public function getStatus(): ?string
   {
     return $this->status;
@@ -103,6 +95,18 @@ class Ticket extends AbstractEntity
   public function setBooking(?Booking $booking): static
   {
       $this->booking = $booking;
+
+      return $this;
+  }
+
+  public function getQrtoken(): ?string
+  {
+      return $this->qrtoken;
+  }
+
+  public function setQrtoken(string $qrtoken): static
+  {
+      $this->qrtoken = $qrtoken;
 
       return $this;
   }
