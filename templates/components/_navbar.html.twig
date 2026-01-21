@@ -1,5 +1,9 @@
 <!-- Include this script tag or install `@tailwindplus/elements` via npm: -->
 
+<!-- Variable definitions -->
+{% set onlyRoleUser = (app.user) and ('ROLE_ADMIN' not in app.user.roles) and ('ROLE_STAFF' not in app.user.roles) ? true : false %}
+<!-- Variable definitions -->
+
 <header class="bg-gray-900">
   <nav aria-label="Global" class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
     <div class="flex lg:flex-1">
@@ -9,7 +13,7 @@
       </a>
     </div>
     <div class="flex lg:hidden">
-      <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400">
+      <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400 cursor-pointer">
         <span class="sr-only">Open main menu</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
           <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -121,10 +125,24 @@
 -->
 
       <a href="{{ path('app_home') }}" class="text-sm/6 font-semibold text-white">Home</a>
-      <a href="#" class="text-sm/6 font-semibold text-white">Dashboard</a>
-      <a href="#" class="text-sm/6 font-semibold text-white">Events</a>
-      <a href="#" class="text-sm/6 font-semibold text-white">My Tickets</a>
-      <a href="#" class="text-sm/6 font-semibold text-white">Check-in</a>
+      <!-- Admin -->
+      {% if is_granted('ROLE_ADMIN') %}
+        <a href="#" class="text-sm/6 font-semibold text-white">Dashboard</a>
+      {% endif %}
+      <!-- End Admin -->
+
+      <!-- Users -->
+      {% if is_granted('ROLE_USER') and onlyRoleUser %}
+        <a href="#" class="text-sm/6 font-semibold text-white">My Events</a>
+        <a href="#" class="text-sm/6 font-semibold text-white">Favourites</a>
+      {% endif %}
+      <!-- End Users -->
+
+      <!-- Staff -->
+      {% if is_granted('ROLE_STAFF') %}
+        <a href="#" class="text-sm/6 font-semibold text-white">Check-in</a>
+      {% endif %}
+      <!-- End Staff -->
     </el-popover-group>
 
     <!-- Login and Sign up buttons -->
@@ -146,27 +164,38 @@
         </div>
       {% else %}
         <div class="flex items-center justify-center gap-2 text-white">
-          <a
-            href="{{ path('app_logout') }}"
-            class="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
-          >
-            Log out
-            <!-- Log out icon -->
-            <svg
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke-width="1.5" 
-              stroke="currentColor" 
-              class="size-6"
+          <!-- User data -->
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center font-bold">
+              {{ app.user.email|first|upper }}
+            </div>
+            <span class="text-sm">{{ app.user.email[:20] ~ (app.user.email|length > 20 ? '...' : '') }}</span>
+          </div>
+          <!-- User data -->
+
+          <!-- Log out -->
+          <div>
+            <a
+              href="{{ path('app_logout') }}"
+              class="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
-              />
-            </svg>
-            <!-- End Log out icon -->
-          </a>
+              Log out
+              <svg
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor" 
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                />
+              </svg>
+            </a>
+          </div>
+          <!-- End Log out -->
         </div>
       {% endif %}
     </div>
@@ -182,7 +211,7 @@
               <span class="sr-only">Claucode Events</span>
               <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="" class="h-8 w-auto" />
             </a>
-            <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-400">
+            <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-400 cursor-pointer">
               <span class="sr-only">Close menu</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
                 <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
@@ -213,37 +242,67 @@
                 -->
 
                 <a href="{{ path('app_home') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Home</a>
-                <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Dashboard</a>
-                <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Events</a>
-                <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">My Tickets</a>
-                <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Check-in</a>
+                <!-- Admin -->
+                {% if is_granted('ROLE_ADMIN') %}
+                  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Dashboard</a>
+                {% endif %}
+                <!-- End Admin -->
+
+                <!-- Users -->
+                {% if is_granted('ROLE_USER') and onlyRoleUser %}
+                  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">My Events</a>
+                  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Favourites</a>
+                {% endif %}
+                <!-- End Users -->
+
+                <!-- Staff -->
+                {% if is_granted('ROLE_STAFF') %}
+                  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Check-in</a>
+                {% endif %}
+                <!-- End Staff -->
+                
               </div>
               <div class="py-6">
                 {% if not app.user %}
                   <a href="{{ path('app_login') }}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5">Log in</a>
                   <a href="{{ path('app_register') }}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-blue-500">Sign up</a>
                 {% else %}
-                  <a
-                    href="{{ path('app_logout') }}"
-                    class="flex items-center gap-2 -mx-3 rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5"
-                  >
-                    Log out
-                    <!-- Log out icon -->
-                    <svg
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke-width="1.5" 
-                      stroke="currentColor" 
-                      class="size-6"
+                <div class="flex flex-col gap-2 text-white">
+                  <!-- User data -->
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center font-bold">
+                      {{ app.user.email|first|upper }}
+                    </div>
+                    <span class="text-sm">
+                      {{ app.user.email|split('@')[0]|slice(0, 10) ~ '...' }}
+                    </span>
+                  </div>
+                  <!-- User data -->
+
+                  <!-- Log out -->
+                  <div>
+                    <a
+                      href="{{ path('app_logout') }}"
+                      class="flex items-center gap-2 -mx-3 rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5"
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
-                      />
-                    </svg>
-                    <!-- End Log out icon -->
-                  </a>
+                      Log out
+                      <svg
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke-width="1.5" 
+                        stroke="currentColor" 
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                  <!-- End Log out -->
+                </div>
                 {% endif %}
               </div>
             </div>
