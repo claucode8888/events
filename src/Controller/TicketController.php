@@ -5,10 +5,12 @@ namespace App\Controller;
 use Exception;
 use App\Entity\Ticket;
 use App\Service\QRService;
+use App\Repository\TicketRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[Route('/tickets')]
 final class TicketController extends AbstractController
@@ -24,7 +26,6 @@ final class TicketController extends AbstractController
         UrlGeneratorInterface::ABSOLUTE_URL
       );
 
-      // $qr = $QRService->generateQRCode('http://192.168.1.76:8000/staff/ticket/scan');
       $qr = $QRService->generateQRCode($route);
       return new Response(
         $qr,
@@ -35,5 +36,18 @@ final class TicketController extends AbstractController
       } catch (Exception $e) {
       return new Response('QR Error: ' . $e->getMessage(), 500);
     }
+  }
+
+  #[Route('/my', name: 'app_my_tickets', methods: ['GET'])]
+  public function myTickets(TicketRepository $ticketRepository): Response
+  {
+    $user = $this->getUser();
+    if(!$user){
+      throw new AccessDeniedHttpException('You must be logged in to view your tickets.');
+    }
+    $userTickets = $ticketRepository->findAllTickets($user);
+    return $this->render('ticket/index.html.twig', [
+      'tickets' => $userTickets
+    ]);
   }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\BookingRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BookingRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
-class Booking
+class Booking extends AbstractEntity 
 {
     public const STATUS_PENDING = 'pending';
     public const STATUS_COMPLETED = 'completed';

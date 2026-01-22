@@ -133,7 +133,7 @@
 
       <!-- Users -->
       {% if is_granted('ROLE_USER') and onlyRoleUser %}
-        <a href="#" class="text-sm/6 font-semibold text-white">My Events</a>
+        <a href="{{ path('app_my_tickets') }}" class="text-sm/6 font-semibold text-white">My Events</a>
         <a href="#" class="text-sm/6 font-semibold text-white">Favourites</a>
       {% endif %}
       <!-- End Users -->
@@ -250,7 +250,7 @@
 
                 <!-- Users -->
                 {% if is_granted('ROLE_USER') and onlyRoleUser %}
-                  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">My Events</a>
+                  <a href="{{ path('app_my_tickets') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">My Events</a>
                   <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Favourites</a>
                 {% endif %}
                 <!-- End Users -->
