@@ -35,7 +35,7 @@ final class BookingController extends AbstractController
       return new JsonResponse([
         'success' => true,
         'booking_id' => $booking->getId(),
-        'redirect' => $this->generateUrl('app_booking_detail', ['id' => $booking->getId()])
+        'redirect' => $this->generateUrl('app_booking_details', ['id' => $booking->getId()])
         ], 
         Response::HTTP_CREATED
       );
@@ -47,11 +47,17 @@ final class BookingController extends AbstractController
     }
   }
 
-  #[Route('/detail/{id}', name: 'app_booking_detail', methods: ['GET'])]
-  public function detail(Booking $booking)
+  #[Route('/details/{id}', name: 'app_booking_details', methods: ['GET'])]
+  public function details(Booking $booking)
   {
-    return $this->render('booking/detail.html.twig', [
+    return $this->render('booking/details.html.twig', [
       'booking' => $booking
     ]);
+  }
+
+  #[Route('/pdf/{id}', name: 'app_booking_pdf', methods: ['GET'])]
+  public function exportPDF(Booking $booking)
+  {
+    dd($booking);
   }
 }

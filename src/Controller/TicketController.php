@@ -46,8 +46,16 @@ final class TicketController extends AbstractController
       throw new AccessDeniedHttpException('You must be logged in to view your tickets.');
     }
     $userTickets = $ticketRepository->findAllTickets($user);
-    return $this->render('ticket/index.html.twig', [
+    return $this->render('ticket/my_tickets.html.twig', [
       'tickets' => $userTickets
+    ]);
+  }
+
+  #[Route('/{id}', name: 'app_ticket_details', methods: ['GET'])]
+  public function details(Ticket $ticket): Response
+  {
+    return $this->render('ticket/details.html.twig', [
+      'ticket' => $ticket
     ]);
   }
 }

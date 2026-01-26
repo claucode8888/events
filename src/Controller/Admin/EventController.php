@@ -44,7 +44,6 @@ final class EventController extends AbstractController
 
       $entityManager->persist($event);
       $entityManager->flush();
-
       return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -76,7 +75,7 @@ final class EventController extends AbstractController
        /** End Replace image in events directory */
         $event->setImgPath($filename);
       }
-
+      $entityManager->persist($event);
       $entityManager->flush();
 
       return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);

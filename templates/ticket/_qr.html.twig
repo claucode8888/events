@@ -1,0 +1,6 @@
+<div class="text-center">
+  <img src="{{ path('app_ticket_generate_qr', {qrtoken: qrtoken}) }}" 
+    alt="QR Code"
+    class="w-32 h-32 mx-auto border">
+  <div class="text-sm mt-2">{{ ticket.category.name }}</div>
+</div>
