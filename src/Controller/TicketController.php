@@ -25,6 +25,7 @@ final class TicketController extends AbstractController
         ],
         UrlGeneratorInterface::ABSOLUTE_URL
       );
+      // $route = 'http://192.168.1.142:8000/register';
 
       $qr = $QRService->generateQRCode($route);
       return new Response(

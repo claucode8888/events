@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Booking #{{ booking.id }}</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 20px;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      color: #1e3a8a;
+      margin: 0 0 10px 0;
+    }
+    
+    .header p {
+      color: #666;
+      margin: 5px 0;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+      page-break-inside: avoid;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1e3a8a;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .ticket-item {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+    }
+    
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .ticket-name {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .ticket-price {
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+    
+    .ticket-details {
+      color: #666;
+      font-size: 11px;
+    }
+    
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 10px;
+    }
+    
+    .info-box {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 4px;
+    }
+    
+    .info-label {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .info-value {
+      font-weight: bold;
+      font-size: 13px;
+    }
+    
+    .payment-summary {
+      background-color: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 20px;
+      border-radius: 4px;
+    }
+    
+    .payment-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    
+    .payment-total {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1e3a8a;
+      border-top: 2px solid #ddd;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .qr-item {
+      text-align: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .qr-code {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 10px;
+    }
+    
+    .ticket-id {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      text-align: center;
+      font-size: 10px;
+      color: #888;
+    }
+    
+    .print-only {
+      display: block;
+    }
+    
+    .screen-only {
+      display: none;
+    }
+
+    .border {
+      border: solid 1px;
+    }
+    
+    @media print {
+      body {
+        font-size: 11px;
+      }
+      
+      .header h1 {
+        font-size: 20px;
+      }
+      
+      .ticket-item {
+        page-break-inside: avoid;
+      }
+      
+      .no-print {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Booking Confirmed</h1>
+    <p>Booking ID: <strong>#{{ booking.id }}</strong></p>
+    <p>Date: {{ booking.createdAt|date('M j, Y g:i A') }}</p>
+    <p class="no-print">This is your printable ticket confirmation. Present at entrance.</p>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Your Tickets ({{ booking.tickets|length }})</div>
+    {% for ticket in booking.tickets %}
+      <div class="ticket-item">
+        <div class="ticket-header">
+          <div class="ticket-name">{{ ticket.category.name }}</div>
+          <div class="ticket-price">€{{ ticket.category.price|number_format(2) }}</div>
+        </div>
+        <div class="ticket-details">
+          Event: {{ ticket.category.event.name }}<br>
+          Ticket ID: {{ ticket.id }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  
+  {% if booking.tickets|length > 0 %}
+    {% set event = booking.tickets.first.category.event %}
+    <div class="section">
+      <div class="section-title">Event Information</div>
+      <div class="grid-2">
+        <div class="info-box">
+          <div class="info-label">Event</div>
+          <div class="info-value">{{ event.name }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Date</div>
+          <div class="info-value">{{ event.startAt|date('M j, Y') }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Time</div>
+          <div class="info-value">{{ event.startAt|date('g:i A') }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Booking Status</div>
+          <div class="info-value">{{ booking.status|upper }}</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  
+  <div class="section">
+    <div class="section-title">Payment Summary</div>
+    <div class="payment-summary">
+      <div class="payment-row">
+        <span>Tickets</span>
+        <span>€{{ booking.total|number_format(2) }}</span>
+      </div>
+      <div class="payment-row">
+        <span>Service Fee</span>
+        <span>€0.00</span>
+      </div>
+      <div class="payment-row payment-total">
+        <span>Total Paid</span>
+        <span>€{{ booking.total|number_format(2) }}</span>
+      </div>
+    </div>
+  </div>
+
+  {% if booking.tickets|length > 0 %}
+  <div class="section">
+    <div class="section-title">Ticket QR Codes</div>
+    <div class="qr-grid">
+      {% for ticketWithQr in ticketsWithQr %}
+        <div class="qr-item">
+          <div class="qr-code border">
+            <img src="{{ ticketWithQr.qrCode }}" alt="QR Code" width="120" height="120">
+          </div>
+          <div class="ticket-id">Ticket #{{ ticketWithQr.ticket.id }}</div>
+          <div class="ticket-details" style="font-size: 10px; margin-top: 5px;">
+            Scan at entrance
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="footer">
+    <p>Thank you for your purchase! • Booking ID: #{{ booking.id }}</p>
+    <p>Present this document at the entrance for admission.</p>
+    <p>Generated on {{ "now"|date('M j, Y g:i A') }}</p>
+  </div>
+</body>
+</html>

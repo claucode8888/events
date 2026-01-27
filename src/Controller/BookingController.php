@@ -5,6 +5,8 @@ namespace App\Controller;
 use Exception;
 use App\Entity\Booking;
 use App\Service\BookingManager;
+use App\Service\PDFService;
+use App\Service\QRService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -56,8 +58,33 @@ final class BookingController extends AbstractController
   }
 
   #[Route('/pdf/{id}', name: 'app_booking_pdf', methods: ['GET'])]
-  public function exportPDF(Booking $booking)
+  public function generatePDF(Booking $booking, PDFService $pdfService, QRService $QRService)
   {
-    dd($booking);
+    /** 1. Prepare QR codes for each ticket */
+    $ticketsWithQr = [];
+    foreach ($booking->getTickets() as $ticket) {
+      /** Generate QR code */
+      $qrCode = $QRService->generateQRCode($ticket->getQrtoken());
+      $ticketsWithQr[] = [
+        'ticket' => $ticket,
+        'qrCode' => 'data:image/png;base64,' . base64_encode($qrCode)
+      ];
+    }
+
+    /** 2. Getting HTML */
+    $html = $this->renderView('booking/booking.pdf.html.twig', [ 'booking' => $booking, 'ticketsWithQr' => $ticketsWithQr ]);
+
+    if(empty($html)){
+      throw new Exception('Failed to generate PDF template');
+    }
+
+    /** 3. Gerating PDF */
+    $pdf = $pdfService->generatePDF($html);
+
+    /** 4. Return PDF as download */
+    return new Response($pdf, 200, [
+      'Content-Type' => 'application/pdf',
+      'Content-Disposition' => 'attachment; filename="booking-' . $booking->getId() . '.pdf"'
+    ]);
   }
 }
