@@ -1,58 +1,148 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Event index{% endblock %}
+{% block title %}Events{% endblock %}
 
 {% block content %}
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-8">
 
-    <!-- Events counter section -->
-    <section class="m-2 p-16 bg-gray-100">
-      <p>Images</p>
-      {{ events | length }}
+    <section class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-sm mx-4 mt-4 p-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Discover Events</h1>
+        <p class="text-gray-600 text-lg mb-6">Find your next unforgettable experience</p>
+      </div>
     </section>
-    <!-- End Events counter section -->
 
-    <!-- Events section -->
-    <section class="mr-2 ml-2 py-6 px-6 lg:py-14 lg:px-28 bg-gray-100">
+    {# RANGE-TIME EVENT SECTIONS #}
+    <section class="mx-4 mb-4 py-8 px-8 lg:px-8 space-y-12">
 
-      {% if events | length > 0 %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {% for event in events %}
-            <!-- Card -->
-            <article class="bg-white rounded-xl shadow-lg hover:shadow-xl transition flex flex-col h-full overflow-hidden">
-              <!-- Header card -->
-              <!-- Image -->
-              <div class="relative overflow-hidden rounded-t-xl shadow-md">
-                <img 
-                  class="object-cover w-full h-56 transition-transform duration-500 hover:scale-105" 
-                  src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}"
-                  alt="{{ event.name }}"
-                >
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40"></div>
-              </div>
-              <!-- End Image -->
-              <!-- End Header card -->
+      {% if counts.total > 0 %}
+        
+        {# 1. TODAY & TOMORROW #}
+        {% if categorizedEvents.today_tomorrow|length > 0 %}
+          <div>
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <!-- Priority indicator -->
+                <span class="bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  🔥 Soon
+                </span>
+                Today & Tomorrow 
+                <small>
+                  ({{ categorizedEvents.today_tomorrow|length }})
+                </small>
+              </h2>
+              <p class="text-gray-600 mt-1">Events happening in the next 48 hours</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {% for event in categorizedEvents.today_tomorrow %}
+                {% include 'event/event_card.html.twig' %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
 
-              <div class="flex flex-col gap-1">
-                <!-- Body card -->
-                {% include 'components/event/_body_card.html.twig' %}
-                <!-- End Body card -->
+        {# 2. THIS WEEKEND #}
+        {% if categorizedEvents.weekend|length > 0 %}
+          <div>
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <span class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-sm font-semibold px-3 py-1 rounded-full">
+                  Weekend
+                </span>
+                This Weekend
+                <small>
+                  ({{ categorizedEvents.weekend|length }})
+                </small>
+              </h2>
+              <p class="text-gray-600 mt-1">Perfect for your days off</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {% for event in categorizedEvents.weekend %}
+                {% include 'event/event_card.html.twig' %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
 
-                <!-- Fotter card -->
-                {% include 'components/event/_footer_card.html.twig' %}
-                <!-- End Fotter card -->
-              </div>
-            </article>
-            <!-- End Card -->
-          {% endfor %}
-        </div>
+        {# 3. NEXT WEEK #}
+        {% if categorizedEvents.next_week|length > 0 %}
+          <div>
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-900">
+                Next Week
+                <small>
+                  ({{ categorizedEvents.next_week|length }})
+                </small>
+              </h2>
+              <p class="text-gray-600 mt-1">Plan ahead for the coming week</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {% for event in categorizedEvents.next_week %}
+                {% include 'event/event_card.html.twig' %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        {# 4. NEXT MONTH #}
+        {% if categorizedEvents.next_month|length > 0 %}
+          <div>
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-900">
+                Next Month
+                <small>
+                  ({{ categorizedEvents.next_month|length }})
+                </small>
+              </h2>
+              <p class="text-gray-600 mt-1">Future planning</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {% for event in categorizedEvents.next_month %}
+                {% include 'event/event_card.html.twig' %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        {# 5. LATER #}
+        {% if categorizedEvents.later|length > 0 %}
+          <div>
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-900">
+                Coming Soon
+                <small>
+                  ({{ categorizedEvents.later|length }})
+                </small>
+              </h2>
+              <p class="text-gray-600 mt-1">Future events to look forward to</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {% for event in categorizedEvents.later %}
+                {% include 'event/event_card.html.twig' %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
       {% else %}
-        <article class="text-center">
-          <p>There is not events shortly.</p>
-        </article>
+        {# EMPTY STATE #}
+        <div class="text-center py-16">
+          <div class="max-w-md mx-auto">
+            <svg class="w-24 h-24 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">No events scheduled</h2>
+            <p class="text-gray-600 mb-6">Check back soon for upcoming events!</p>
+            {% if is_granted('ROLE_ADMIN') %}
+              <a href="{{ path('app_admin_event_new') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200">
+                Create First Event
+              </a>
+            {% endif %}
+          </div>
+        </div>
       {% endif %}
+
     </section>
-    <!-- End Events section -->
 
   </div>
 {% endblock %}

@@ -1,0 +1,22 @@
+<div class="relative overflow-hidden rounded-t-lg">
+  <div class="h-44 bg-gray-100">
+    <img 
+      src="{{ asset('uploads/events/' ~ event.imgPath) }}"
+      alt="{{ event.name }}"
+      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    
+    {# {% set statusColors = {
+      'published': 'bg-green-500',
+      'draft': 'bg-gray-500',
+      'pending': 'bg-yellow-500',
+      'cancelled': 'bg-red-500'
+    } %}
+    <span class="absolute top-3 right-3 {{ statusColors[event.status] ?? 'bg-gray-500' }} text-white text-xs font-semibold px-2 py-1 rounded-full">
+      {{ event.status|upper }}
+    </span> #}
+  </div>
+
+  <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>

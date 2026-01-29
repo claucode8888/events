@@ -73,26 +73,20 @@
 
       <div class="border border-gray-200 rounded-xl p-6 space-y-4">
 
-        {% if true %}
-          <div class="text-3xl font-bold text-gray-900">
-            € 80
-          </div>
-        {% else %}
+        {% if event.isTotallyFree %}
           <div class="text-2xl font-semibold text-green-600">
             Free
           </div>
+          {% if event.ticketCategories[0].ticketsAvailability %}
+            <p class="text-sm text-gray-500">
+              {{ event.ticketCategories[0].ticketsAvailability }} tickets remaining
+            </p>
+          {% else %}
+            <p class="text-sm text-red-600">
+              
+            </p>
+          {% endif %}
         {% endif %}
-
-        {# {% if event.capacity > event.ticketsSold %}
-          <p class="text-sm text-gray-500">
-            {{ event.capacity - event.ticketsSold }} tickets remaining
-          </p>
-        {% else %}
-          <p class="text-sm text-red-600">
-            Sold out
-          </p>
-        {% endif %} #}
-
         <a
           href="{{ path('app_event_ticket_selection', {'id': event.id }) }}"
           class="w-full inline-flex justify-center items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"

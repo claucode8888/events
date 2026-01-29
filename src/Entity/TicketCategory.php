@@ -138,4 +138,9 @@ class TicketCategory extends AbstractEntity
     $maxSell = $this->getQuantity();
     return $maxSell - $soldTickets;
   }
+
+  public function isFree()
+  {
+    return $this->price == 0 ? true : false;
+  }
 }

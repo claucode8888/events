@@ -38,15 +38,19 @@ class UserFixtures extends Fixture
             ],
             [
                 'email' => 'jane@example.com',
-                'password' => 'jane123',
+                'password' => 'lala88',
             ],
             [
                 'email' => 'alice@bilbostack.com',
-                'password' => 'alice123',
+                'password' => 'lala88',
             ],
             [
                 'email' => 'bob@bilbostack.com',
-                'password' => 'bob123',
+                'password' => 'lala88',
+            ],
+            [
+                'email' => 'bgallastegui86@gmail.com',
+                'password' => 'lala88',
             ],
         ];
 

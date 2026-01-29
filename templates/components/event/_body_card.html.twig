@@ -1,4 +1,4 @@
-<div class="flex flex-col p-6 leading-normal h-full">
+<div class="flex flex-col p-6 leading-normal">
   <!-- Title -->
   <div class="mb-1 text-xl font-bold tracking-tight text-gray-900">
     <h5>{{ event.name }}</h5>
@@ -6,22 +6,25 @@
   <!-- End Title -->
 
   <!-- DateTime -->
-  <div class="flex items-center text-sm text-gray-500 mb-3">
-    {{ event.startAt | date('M d, Y · H:i') }}
+  <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+    <span>{{ event.startAt|date('M d, Y') }}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span>{{ event.startAt|date('H:i') }}</span>
   </div>
   <!-- End DateTime -->
 
   <!-- Description -->
-  <div class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">
-    <p>{{ event.description }}</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dolore non. Totam, deleniti voluptas fugiat pariatur blanditiis tempore, ex, provident nisi ullam dignissimos quam rem at aspernatur quod eaque veniam!
-    Quo modi odit animi dicta harum rerum quas maiores nam? Natus quam vel nisi. Saepe soluta atque, veritatis eligendi dolorum eius similique cumque temporibus iste earum adipisci neque recusandae error.
-    Sunt id minima laudantium nam saepe quasi est cum nobis laboriosam, ipsam itaque perferendis eligendi adipisci cumque quae eveniet nisi! Et officia aliquam itaque exercitationem nulla, excepturi ducimus sint fugiat?
-    Libero porro recusandae hic quod laboriosam veritatis consequuntur magnam, quidem rem animi est labore sit ea nulla enim eaque quas aliquid fuga unde officia iste illum ex aut optio. Atque!
-    Distinctio dolorum ratione incidunt dicta ex, quia explicabo laborum omnis recusandae atque eligendi cum nobis aliquam ea possimus quas similique aperiam exercitationem vitae, labore officia ut. Animi soluta doloremque autem?
-    Facilis repudiandae est inventore aperiam dolor fugiat dolorum rem quasi iure odio ut ipsum qui dolorem a voluptates voluptatum distinctio possimus expedita, perferendis eum. Nihil doloribus modi sapiente ullam illo.
-    Ipsa, aliquid. Culpa et quos accusantium iure. In tempora perspiciatis cum mollitia, obcaecati omnis eveniet sequi hic dignissimos veritatis rem quaerat incidunt blanditiis repellendus eum ipsam! Fuga quae amet quia.
-    Et omnis error sed, quidem tempore illum, obcaecati enim fugit blanditiis in nisi. Magni quidem alias nobis! Repellendus suscipit tempora molestias veniam et. Laborum dicta praesentium excepturi deleniti impedit harum.</p>
+  <div class="text-gray-600 text-sm leading-relaxed h-16">
+    {% if event.description | length > 120 %}
+      {{ event.description | slice(0, 120) ~ '...' }}
+    {% else %}
+      {{ event.description }}
+    {% endif %}
   </div>
   <!-- End Description -->
 </div>

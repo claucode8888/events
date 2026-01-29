@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Event;
 use App\Repository\EventRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +15,15 @@ final class EventController extends AbstractController
   #[Route('/', name: 'app_event_index', methods: ['GET'])]
   public function index(EventRepository $eventRepository): Response
   {
+    $now = new DateTime();
+    
+    $categorizedEvents = $eventRepository->findAllCategorized($now);
+    $counts = $eventRepository->getCategoryCounts($now);
+    
     return $this->render('event/index.html.twig', [
-      'events' => $eventRepository->findAll(),
+      'categorizedEvents' => $categorizedEvents,
+      'counts' => $counts,
+      'now' => $now,
     ]);
   }
 
