@@ -178,12 +178,14 @@ class Event extends AbstractEntity
 
     public function isTotallyFree() : bool
     {
-      if(count($this->getTicketCategories()) === 1)
+      foreach($this->ticketCategories as $tc)
       {
-        $TC = $this->getTicketCategories()[0];
-        return $TC->isFree();
+        if(!$tc->isFree())
+        {
+          return false;
+        }
       }
-      return false;
+      return true;
     }
 
     public function hasAvailability() : int
