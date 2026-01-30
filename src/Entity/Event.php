@@ -185,4 +185,14 @@ class Event extends AbstractEntity
       }
       return false;
     }
+
+    public function hasAvailability() : int
+    {
+      $availability = 0;
+      foreach($this->ticketCategories as $TC)
+      {
+        $availability += $TC->ticketsAvailability();
+      }
+      return $availability;
+    }
 }

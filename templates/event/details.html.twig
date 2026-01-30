@@ -3,107 +3,126 @@
 {% block title %}{{ event.name }}{% endblock %}
 
 {% block content %}
+  <!-- 1. Section -->
+  <section class="relative h-[70vh] w-full">
 
-<!-- HERO -->
-<section class="relative h-[70vh] w-full">
-
-  <img
-    src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}"
-    alt="{{ event.name }}"
-    class="absolute inset-0 w-full h-full object-cover"
-  >
-
-  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30"></div>
-
-  <div class="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-20">
-    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
-      {{ event.name }}
-    </h1>
-
-    <div class="flex flex-wrap gap-6 text-white/90 text-sm md:text-base">
-      <span>📅 {{ event.startAt|date('F d, Y · H:i') }}</span>
-      <span>📍 location  </span>
-      <span>👤 organizer </span>
+    <!-- Image -->
+    <div>
+      <img
+        src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}"
+        alt="{{ event.name }}"
+        class="absolute inset-0 w-full h-full object-cover"
+      >
     </div>
-  </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30"></div>
+    <!-- End Image -->
 
-</section>
-
-<!-- CONTENT -->
-<section class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
-
-  <!-- MAIN -->
-  <div class="lg:col-span-2">
-
-    <h2 class="text-2xl font-semibold mb-6">About this event</h2>
-
-    <div class="prose max-w-none text-gray-700">
-      {{ event.description|nl2br }}
-    </div>
-
-    <!-- EXTRA INFO -->
-    <div class="mt-16 space-y-8">
-
+    <!-- Event Info -->
+    <div class="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-20">
       <div>
-        <h3 class="font-semibold text-lg mb-2">📍 Location</h3>
-        <p class="text-gray-600">location</p>
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+          {{ event.name }}
+        </h1>
       </div>
-
-      <div>
-        <h3 class="font-semibold text-lg mb-2">👤 Organizer</h3>
-        <p class="text-gray-600">Organizer</p>
+      <div class="flex flex-wrap gap-6 text-white/90 text-sm md:text-base">
+        <span>📅 {{ event.startAt|date('F d, Y · H:i') }}</span>
+        <span>📍location</span>
+        <span>👤organizer</span>
       </div>
+    </div>
+    <!-- End Event Info -->
 
-      <div>
-        <h3 class="font-semibold text-lg mb-2">🕒 Date & time</h3>
-        <p class="text-gray-600">
-          {{ event.startAt|date('l, F d, Y') }} · {{ event.startAt|date('H:i') }}
-        </p>
+  </section>
+  <!-- End 1. Section -->
+
+  <!-- 2. Section -->
+  <section class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
+    <div class="lg:col-span-2">
+      <h2 class="text-2xl font-semibold mb-6">About this event</h2>
+      <!-- Description -->
+      <div class="text-gray-700">
+        {{ event.description }}
       </div>
+      <!-- End Description -->
 
+      <!-- Extra info -->
+      <div class="mt-16 space-y-8">
+        <div>
+          <h3 class="font-semibold text-lg mb-2">📍Location</h3>
+          <p class="text-gray-600">location</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-2">👤Organizer</h3>
+          <p class="text-gray-600">Organizer</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-2">🕒Date & time</h3>
+          <p class="text-gray-600">
+            {{ event.startAt|date('l, F d, Y') }} · {{ event.startAt|date('H:i') }}
+          </p>
+        </div>
+      </div>
+      <!-- End Extra info -->
     </div>
 
-  </div>
+    <!-- SIDEBAR -->
+    <aside class="space-y-8 border border-amber-600">
+      <div class="sticky top-24">
+        <div class="border border-gray-200 rounded-xl p-6 space-y-4">
 
-  <!-- SIDEBAR -->
-  <aside class="space-y-8">
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          <div class="flex justify-between items-center border border-green-700">
+            <span class="text-md font-semibold text-green-600">
+              {% if event.isTotallyFree %}
+                Free
+              {% else %}
+                Range of prices
+              {% endif %}
+            </span>
 
-    <!-- Buy ticket -->
-    <div class="sticky top-24">
+              {# {% if event.hasAvailability < 5 %}
+                <span class="text-red-600 font-bold">SELLING FAST! {{ event.hasAvailability }} left</span>
+              {% elseif event.hasAvailability < 10 %}
+                <span class="text-amber-600 font-semibold">{{ event.hasAvailability }} remaining</span>
+              {% endif %} #}
 
-      <div class="border border-gray-200 rounded-xl p-6 space-y-4">
+              <!-- Buy ticket button -->
+              {% set isSoldOut = not event.hasAvailability %}
+              {% include 'components/event/_get_ticket_button.html.twig' with {
+                  icon: false,
+                  title: isSoldOut ? 'sold out' : null,
+                  customStyle: isSoldOut ? 'text-white bg-blue-900' : null,
+                  disabled: isSoldOut
+                }
+              %}
+              <!-- End Buy ticket button -->
+            </div>
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
+          {# ==================================================================================================== #}
 
-        {% if event.isTotallyFree %}
-          <div class="text-2xl font-semibold text-green-600">
-            Free
-          </div>
-          {% if event.ticketCategories[0].ticketsAvailability %}
-            <p class="text-sm text-gray-500">
-              {{ event.ticketCategories[0].ticketsAvailability }} tickets remaining
-            </p>
-          {% else %}
-            <p class="text-sm text-red-600">
-              
-            </p>
-          {% endif %}
-        {% endif %}
-        <a
-          href="{{ path('app_event_ticket_selection', {'id': event.id }) }}"
-          class="w-full inline-flex justify-center items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
-        >
-          Get ticket
-        </a>
-
-        <button class="w-full border border-gray-300 rounded-lg py-3 text-sm hover:bg-gray-100">
-          Save event
-        </button>
-
+          <!-- Save Event button -->
+          {# <div>
+            <button class="w-full border border-gray-300 rounded-lg py-3 text-sm hover:bg-gray-100">
+              Save event
+            </button>
+          </div> #}
+          <!-- End Save Event button -->
+        </div>
       </div>
-
-    </div>
-
-  </aside>
-
-</section>
-
+    </aside>
+  </section>
+  <!-- End 2. Section -->
 {% endblock %}
