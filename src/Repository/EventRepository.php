@@ -16,11 +16,11 @@ class EventRepository extends ServiceEntityRepository
     parent::__construct($registry, Event::class);
   }
 
-  public function findByDateRange(DateTimeInterface $date, ?string $range): array
+  public function getByDateRange(DateTimeInterface $date, ?string $range): array
   {
     $queryBuilder = $this->createQueryBuilder('e')
       ->andWhere('e.status = :status')
-      ->setParameter('status', 'published')
+      ->setParameter('status', Event::STATUS_PUBLISHED)
       ->orderBy('e.startAt', 'ASC');
     
     switch ($range) {
@@ -61,7 +61,9 @@ class EventRepository extends ServiceEntityRepository
         break;
         
       case 'later':
-        $start = $this->getLastDayOfNextMonth($date)->modify('+1 second');
+        $start = $this->getLastDayOfNextMonth($date)
+          ->setTime(23, 59, 59)
+          ->modify('+1 second');
         $end = null;
         break;
         
@@ -80,42 +82,25 @@ class EventRepository extends ServiceEntityRepository
     return $queryBuilder->getQuery()->getResult();
   }
 
-  public function findAllCategorized(DateTimeInterface $now): array
+  public function getAllCategorized(DateTimeInterface $now): array
   {
     return [
-      'today_tomorrow' => $this->findByDateRange($now, 'today_tomorrow'),
-      'weekend' => $this->findByDateRange($now, 'this_weekend'),
-      'next_week' => $this->findByDateRange($now, 'next_week'),
-      'next_month' => $this->findByDateRange($now, 'next_month'),
-      'later' => $this->findByDateRange($now, 'later'),
+      'today_tomorrow' => $this->getByDateRange($now, 'today_tomorrow'),
+      'weekend' => $this->getByDateRange($now, 'this_weekend'),
+      'next_week' => $this->getByDateRange($now, 'next_week'),
+      'next_month' => $this->getByDateRange($now, 'next_month'),
+      'later' => $this->getByDateRange($now, 'later'),
     ];
   }
 
-  public function getCategoryCounts(DateTimeInterface $now): array
+  public function getTotal(string $status = Event::STATUS_PUBLISHED) : int
   {
-    $categories = $this->findAllCategorized($now);
-    
-    return [
-      'total' => $this->createQueryBuilder('e')
-        ->select('COUNT(e.id)')
-        ->andWhere('e.status = :status')
-        ->setParameter('status', 'published')
-        ->getQuery()
-        ->getSingleScalarResult(),
-      'today_tomorrow' => count($categories['today_tomorrow']),
-      'weekend' => count($categories['weekend']),
-      'next_week' => count($categories['next_week']),
-      'next_month' => count($categories['next_month']),
-      'later' => count($categories['later']),
-      'upcoming' => $this->createQueryBuilder('e')
-        ->select('COUNT(e.id)')
-        ->andWhere('e.startAt > :now')
-        ->andWhere('e.status = :status')
-        ->setParameter('status', 'published')
-        ->setParameter('now', $now)
-        ->getQuery()
-        ->getSingleScalarResult(),
-    ];
+    return $this->createQueryBuilder('e')
+      ->select('COUNT(e.id)')
+      ->andWhere('e.status = :status')
+      ->setParameter('status', $status)
+      ->getQuery()
+      ->getSingleScalarResult();
   }
 
   private function getNextSaturday(DateTimeInterface $date): DateTime
@@ -170,29 +155,52 @@ class EventRepository extends ServiceEntityRepository
     return $lastDay->modify('last day of next month');
   }
 
-  public function findUpcoming(DateTimeInterface $from, ?int $limit): array
+  public function getUpcoming(DateTimeInterface $from, int|bool $limit = false): array
   {
     $qb = $this->createQueryBuilder('e')
       ->andWhere('e.startAt >= :from')
       ->andWhere('e.status = :status')
-      ->setParameter('status', 'published')
+      ->setParameter('status', Event::STATUS_PUBLISHED)
       ->setParameter('from', $from)
       ->orderBy('e.startAt', 'ASC');
       
-    if ($limit !== null) {
+    if ($limit) {
       $qb->setMaxResults($limit);
     }
       
     return $qb->getQuery()->getResult();
   }
-
-  public function findTodayEvents(DateTimeInterface $date): array
-  {
-    return $this->findByDateRange($date, 'today');
-  }
   
-  public function findTomorrowEvents(DateTimeInterface $date): array
+  public function getRangePrices(Event $event): array
   {
-    return $this->findByDateRange($date, 'tomorrow');
+    return $this->createQueryBuilder('e')
+      ->select('MIN(tc.price) AS min, MAX(tc.price) AS max')
+      ->innerJoin('e.ticketCategories', 'tc')
+      ->where('e.id = :eventId')
+      ->setParameter('eventId', $event->getId())
+      ->getQuery()
+      ->getSingleResult();
+  }
+
+  public function getAvailabilityByEvent(): array
+  {
+    $queryResults = $this->createQueryBuilder('e')
+      ->select(
+        [
+          'e.id',
+          'COUNT(t.id) as tickets_sold',
+          'e.capacity as total_capacity',
+          'e.capacity - COUNT(t.id) as availability'
+        ]
+      )
+      ->innerJoin('e.ticketCategories', 'tc')
+      ->innerJoin('tc.tickets', 't')
+      ->where('e.status = :status')
+      ->setParameter('status', Event::STATUS_PUBLISHED)
+      ->groupBy('e.id')
+      ->getQuery()
+      ->getResult();
+
+      return array_column($queryResults, null, 'id');
   }
 }

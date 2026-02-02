@@ -66,53 +66,30 @@
     </div>
 
     <!-- SIDEBAR -->
-    <aside class="space-y-8 border border-amber-600">
+    <aside class="space-y-8">
       <div class="sticky top-24">
         <div class="border border-gray-200 rounded-xl p-6 space-y-4">
-
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          <div class="flex justify-between items-center border border-green-700">
-            <span class="text-md font-semibold text-green-600">
+          <div class="flex justify-between items-center">
+            <span class="text-md {% if event.isTotallyFree %}text-green-600 font-semibold{% else %}text-gray-700{% endif %}">
               {% if event.isTotallyFree %}
                 Free
               {% else %}
-                Range of prices
+                {{ range_prices.min | format_currency('EUR') }} - 
+                {{ range_prices.max | format_currency('EUR') }} 
               {% endif %}
             </span>
-
-              {# {% if event.hasAvailability < 5 %}
-                <span class="text-red-600 font-bold">SELLING FAST! {{ event.hasAvailability }} left</span>
-              {% elseif event.hasAvailability < 10 %}
-                <span class="text-amber-600 font-semibold">{{ event.hasAvailability }} remaining</span>
-              {% endif %} #}
-
-              <!-- Buy ticket button -->
-              {% set isSoldOut = not event.hasAvailability %}
+            <!-- Buy ticket button -->
+            <div>
               {% include 'components/event/_get_ticket_button.html.twig' with {
                   icon: false,
-                  title: isSoldOut ? 'sold out' : null,
-                  customStyle: isSoldOut ? 'text-white bg-blue-900' : null,
-                  disabled: isSoldOut
+                  title: event.isSoldOut ? 'sold out' : null,
+                  customStyle: 'text-white bg-blue-900 hover:bg-blue-700',
+                  disabled: event.isSoldOut
                 }
               %}
-              <!-- End Buy ticket button -->
             </div>
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-          {# ==================================================================================================== #}
-
+            <!-- End Buy ticket button -->
+          </div>
           <!-- Save Event button -->
           {# <div>
             <button class="w-full border border-gray-300 rounded-lg py-3 text-sm hover:bg-gray-100">

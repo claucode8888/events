@@ -16,26 +16,26 @@ final class EventController extends AbstractController
   public function index(EventRepository $eventRepository): Response
   {
     $now = new DateTime();
-    
-    $categorizedEvents = $eventRepository->findAllCategorized($now);
-    $counts = $eventRepository->getCategoryCounts($now);
-    
+    $availabilityTicketsByEvent = $eventRepository->getAvailabilityByEvent();
+    $categorizedEvents = $eventRepository->getAllCategorized($now);
+
     return $this->render('event/index.html.twig', [
       'categorizedEvents' => $categorizedEvents,
-      'counts' => $counts,
-      'now' => $now,
+      'availabilityTicketsByEvent' => $availabilityTicketsByEvent
     ]);
   }
 
   #[Route('/{id}', name: 'app_event_details', methods: ['GET'])]
-  public function details(Event $event): Response
+  public function details(Event $event, EventRepository $eventRepository): Response
   {
+
     return $this->render('event/details.html.twig', [
       'event' => $event,
+      'range_prices' => $eventRepository->getRangePrices($event)
     ]);
   }
 
-  #[Route('/{id}/ticket-selection', name: 'app_event_ticket_selection', methods: ['GET'])]
+  #[Route('/ticket-selection/{id}', name: 'app_event_ticket_selection', methods: ['GET'])]
   public function ticketSelection(Event $event): Response
   {
     return $this->render('event/ticket_selection.html.twig', [

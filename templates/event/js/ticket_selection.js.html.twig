@@ -7,7 +7,7 @@
       {{ ticketCategory.id }}:
         {
           price: {{ ticketCategory.price }},
-          maxQuantity: {{ ticketCategory.quantity }},
+          maxQuantity: {{ ticketCategory.ticketsAvailability }},
           name: {{ ticketCategory.name|json_encode|raw }}
         },
     {% endfor %}

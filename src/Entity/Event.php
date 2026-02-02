@@ -11,8 +11,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
+#[ORM\Index(name:'idx_event_status', columns: ['status'])]
+#[ORM\Index(name:'idx_event_start_at', columns: ['start_at'])]
+#[ORM\Index(name:'idx_event_end_at', columns: ['end_at'])]
 class Event extends AbstractEntity
 {
+    const STATUS_PUBLISHED = 'published';
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -196,5 +201,17 @@ class Event extends AbstractEntity
         $availability += $TC->ticketsAvailability();
       }
       return $availability;
+    }
+
+    public function isSoldOut(): bool
+    {
+      foreach($this->ticketCategories as $TC)
+      {
+        if(!$TC->isSoldOut())
+        {
+          return false;
+        }
+      }
+      return true;
     }
 }

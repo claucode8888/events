@@ -15,7 +15,7 @@
     {# RANGE-TIME EVENT SECTIONS #}
     <section class="mx-4 mb-4 py-8 px-8 lg:px-8 space-y-12">
 
-      {% if counts.total > 0 %}
+      {% if categorizedEvents %}
         
         {# 1. TODAY & TOMORROW #}
         {% if categorizedEvents.today_tomorrow|length > 0 %}

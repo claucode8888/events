@@ -143,4 +143,9 @@ class TicketCategory extends AbstractEntity
   {
     return $this->price == 0 ? true : false;
   }
+
+  public function isSoldOut(): bool
+  {
+    return $this->ticketsAvailability() === 0 ? true : false;
+  }
 }

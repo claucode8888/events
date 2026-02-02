@@ -1,0 +1,43 @@
+{% set badgeStyles = {
+  'soldout': 'font-bold text-white bg-red-500 rounded-full px-3 py-1.5 shadow',
+  'lowerfive': 'font-bold text-white bg-gradient-to-r from-red-500 to-orange-500 rounded-full px-3 py-1.5 shadow',
+  'lowerten': 'font-semibold text-white bg-amber-500 rounded-full px-3 py-1.5 shadow',
+  'available': 'font-semibold text-white bg-green-600 rounded-full px-3 py-1.5 shadow'
+  }
+%}
+
+{% set defaultStyles = {
+  'soldout': 'font-bold text-red-400',
+  'lowerfive': 'font-bold text-red-400 animate-pulse',
+  'lowerten': 'font-semibold text-amber-600',
+  'available': 'font-semibold text-amber-600'
+  }
+%}
+
+{% if availability == 0 %}
+  {% set style = 'soldout' %}
+  {% set title = 'sold out' %}
+
+{% elseif availability < 5 %}
+  {% set title = '🔥 ' ~ availability ~ ' left' %}
+  {% set style = 'lowerfive' %}
+
+{% elseif availability < 10 %}
+  {% set title = availability ~ ' left' %}
+  {% set style = 'lowerten' %}
+
+{% else %}
+  {% set title = 'available' %}
+  {% set style = 'available' %}
+{% endif %}
+
+  <span class="
+    text-xs 
+    {% if cardStyles | default(false) %}
+      {{ badgeStyles[style] }}
+    {% else %}
+      {{ defaultStyles[style] }}
+    {% endif %}
+  ">
+    {{ title | title }}
+  </span>
