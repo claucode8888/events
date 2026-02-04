@@ -23,6 +23,34 @@
     </div>
   </div>
 
+  {# Event Info #}
+  {% if booking.tickets|length > 0 %}
+    {% set event = booking.tickets.first.category.event %}
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Event Info</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="text-sm text-gray-500">Event</div>
+          <div class="font-medium">{{ event.name }}</div>
+        </div>
+        <div>
+          <div class="text-sm text-gray-500">Date & Time</div>
+          <div class="font-medium">
+            {{ event.startAt|date('M j, Y') }} at {{ event.startAt|date('g:i A') }}
+          </div>
+        </div>
+        <div>
+          <div class="text-sm text-gray-500">Status</div>
+          <div class="font-medium">{{ booking.status|upper }}</div>
+        </div>
+        <div>
+          <div class="text-sm text-gray-500">Location</div>
+          <div class="font-medium">{{ event.location }}</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  
   {# Tickets by Category #}
   <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
     <div class="flex items-center justify-between mb-6">
@@ -75,34 +103,6 @@
     </div>
   </div>
 
-  {# Event Info #}
-  {% if booking.tickets|length > 0 %}
-    {% set event = booking.tickets.first.category.event %}
-    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
-      <h2 class="text-xl font-bold text-gray-900 mb-4">Event Info</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <div class="text-sm text-gray-500">Event</div>
-          <div class="font-medium">{{ event.name }}</div>
-        </div>
-        <div>
-          <div class="text-sm text-gray-500">Date & Time</div>
-          <div class="font-medium">
-            {{ event.startAt|date('M j, Y') }} at {{ event.startAt|date('g:i A') }}
-          </div>
-        </div>
-        <div>
-          <div class="text-sm text-gray-500">Status</div>
-          <div class="font-medium">{{ booking.status|upper }}</div>
-        </div>
-        <div>
-          <div class="text-sm text-gray-500">Location</div>
-          <div class="font-medium">{{ event.location }}</div>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-  
   {# Total #}
   <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
     <h2 class="text-xl font-bold text-gray-900 mb-4">Payment Summary</h2>
