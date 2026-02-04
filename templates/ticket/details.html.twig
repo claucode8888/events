@@ -41,12 +41,14 @@
         <div class="font-medium">{{ ticket.category.event.name }}</div>
       </div>
       <div>
-        <div class="text-sm text-gray-500">Date</div>
-        <div class="font-medium">{{ ticket.category.event.startAt|date('M j, Y') }}</div>
+        <div class="text-sm text-gray-500">Date & Time</div>
+        <div class="font-medium">
+          {{ ticket.category.event.startAt|date('M j, Y') }} at {{ ticket.category.event.startAt|date('g:i A') }}
+        </div>
       </div>
       <div>
-        <div class="text-sm text-gray-500">Time</div>
-        <div class="font-medium">{{ ticket.category.event.startAt|date('g:i A') }}</div>
+        <div class="text-sm text-gray-500">Location</div>
+        <div class="font-medium">{{ ticket.category.event.location }}</div>
       </div>
       <div>
         <div class="text-sm text-gray-500">Status</div>

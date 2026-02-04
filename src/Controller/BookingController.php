@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Exception;
 use App\Entity\Booking;
+use App\Repository\TicketRepository;
 use App\Service\BookingManager;
 use App\Service\PDFService;
 use App\Service\QRService;
@@ -50,10 +51,13 @@ final class BookingController extends AbstractController
   }
 
   #[Route('/details/{id}', name: 'app_booking_details', methods: ['GET'])]
-  public function details(Booking $booking)
+  public function details(Booking $booking, TicketRepository $ticketRepository)
   {
+    $queryResults = $ticketRepository->getTicketsByCategory($booking);
     return $this->render('booking/details.html.twig', [
-      'booking' => $booking
+      'booking' => $booking,
+      'tickets_by_category' => $queryResults['tickets_by_category'],
+      'total_tickets_booking' => $queryResults['total_tickets']
     ]);
   }
 

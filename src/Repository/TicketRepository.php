@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Entity\Ticket;
+use App\Entity\Booking;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -37,13 +38,31 @@ class TicketRepository extends ServiceEntityRepository
     return $query;
   }
 
-    //    public function findOneBySomeField($value): ?Ticket
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+  public function getTicketsByCategory(Booking $booking)
+  {
+    $query = $this->createQueryBuilder('t')
+      ->select(
+        [
+          'COUNT(t.id) AS category_total_tickets',
+          'tc.id',
+          'tc.name',
+          'tc.price',
+          '(tc.price * COUNT(t.id)) total_price',
+          'e.name AS event_name'
+        ]
+      )
+      ->join('t.booking', 'booking')
+      ->join('t.category', 'tc')
+      ->join('tc.event', 'e')
+      ->andWhere('t.booking = :booking')
+      ->setParameter('booking', $booking)
+      ->groupBy('tc.id')
+      ->getQuery()->getResult();
+
+    $totalTickets = array_sum(array_column($query, 'category_total_tickets'));
+    
+    $results['tickets_by_category'] = array_column($query, null, 'id');
+    $results['total_tickets'] = $totalTickets;
+    return $results;
+  }
 }

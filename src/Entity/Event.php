@@ -57,6 +57,12 @@ class Event extends AbstractEntity
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imgPath = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $location = 'Luna Park';
+
+    #[ORM\Column(length: 255)]
+    private ?string $organizer = 'Claucode';
+
     public function __construct()
     {
         $this->ticketCategories = new ArrayCollection();
@@ -213,5 +219,29 @@ class Event extends AbstractEntity
         }
       }
       return true;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function getOrganizer(): ?string
+    {
+        return $this->organizer;
+    }
+
+    public function setOrganizer(string $organizer): static
+    {
+        $this->organizer = $organizer;
+
+        return $this;
     }
 }
