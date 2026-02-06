@@ -53,19 +53,15 @@
   
   {# Tickets by Category #}
   <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h2>
-          <span class="text-gray-900 text-xl font-bold">
-            Your Tickets
-          </span>
-          <span class="text-gray-700 text-md">
-            ({{ total_tickets_booking }})
-          </span>
-        </h2>
-      </div>
+    <div class="mb-6">
+      <h2 class="text-xl font-bold text-gray-900">
+        Your Tickets
+        <span class="text-gray-700 font-normal">
+          ({{ total_tickets_booking }})
+        </span>
+      </h2>
     </div>
-    
+
     <div class="space-y-4">
       {% if tickets_by_category %}
         {% for categoryId, category in tickets_by_category %}
@@ -124,9 +120,9 @@
   </div>
   
   {# Actions #}
-  <div class="grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-2 gap-3">
     {# Download PDF #}
-    <a href="{{ path('app_booking_pdf', { id: booking.id }) }}"
+    {# <a href="{{ path('app_booking_pdf', { id: booking.id }) }}"
       class="flex flex-col items-center justify-center gap-1 bg-blue-900 hover:bg-blue-700 text-white py-3 rounded font-medium cursor-pointer transition duration-200"
       title="Download Tickets"
     >
@@ -134,8 +130,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
       </svg>
       <span class="text-xs">Download PDF</span>
-    </a>
+    </a> #}
 
+   
     {# Event Page #}
     <a href="{{ path('app_event_details', { id: event.id }) }}"
       class="flex flex-col items-center justify-center gap-1 bg-blue-900 hover:bg-blue-700 text-white py-3 rounded font-medium cursor-pointer transition duration-200"

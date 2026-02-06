@@ -12,7 +12,7 @@
         <div class="col-span-12 md:col-span-4">
           <div class="flex gap-2">
             <!-- Date badge -->
-            <div class="flex flex-col items-center justify-center bg-gray-100 rounded-sm p-1 w-12 self-start">
+            <div class="hidden lg:flex flex-col items-center justify-center bg-gray-100 rounded-sm p-1 w-12 self-start">
               <span class="text-amber-400 text-xs font-semibold">
                 {{ ticket.category.event.startAt | date('M') | upper }}.
               </span>
@@ -22,13 +22,8 @@
             </div>
 
             <!-- Image -->
-            <div class="relative overflow-hidden rounded-xl shadow-md flex-1">
-              <img
-                class="object-cover w-full h-44 transition-transform duration-300 hover:scale-105"
-                src="{{ asset(uploads_events ~ '/' ~ ticket.category.event.imgPath) }}"
-                alt="{{ ticket.category.event.name }}"
-              >
-              <div class="absolute inset-0 bg-gradient-to-t from-black/40"></div>
+            <div class="flex-1">
+              {% include 'components/event/_img_event.html.twig' with {event: ticket.category.event }%}
             </div>
           </div>
         </div>

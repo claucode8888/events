@@ -1,8 +1,8 @@
 {% set badgeStyles = {
-  'soldout': 'font-bold text-white bg-red-500 rounded-full px-3 py-1.5 shadow',
-  'lowerfive': 'font-bold text-white bg-gradient-to-r from-red-500 to-orange-500 rounded-full px-3 py-1.5 shadow',
-  'lowerten': 'font-semibold text-white bg-amber-500 rounded-full px-3 py-1.5 shadow',
-  'available': 'font-semibold text-white bg-green-600 rounded-full px-3 py-1.5 shadow'
+    'soldout': 'font-bold text-white bg-red-400 rounded-lg p-1.5 shadow',
+    'lowerfive': 'font-bold text-white bg-gradient-to-r from-orange-400 to-red-500 rounded-lg p-1.5 shadow',
+    'lowerten': 'font-semibold text-white bg-amber-300 rounded-lg p-1.5 shadow',
+    'available': 'hidden'
   }
 %}
 
@@ -41,3 +41,28 @@
   ">
     {{ title | title }}
   </span>
+
+
+  {# <span class="
+    text-xs {{ badgeStyles['soldout'] }}
+  ">
+  Sold Out
+  </span>
+
+  <span class="
+    text-xs {{ badgeStyles['lowerfive'] }}
+  ">
+  🔥 {{ availability }} left
+  </span>
+
+  <span class="
+    text-xs {{ badgeStyles['lowerten'] }}
+  ">
+    {{ availability }} left
+  </span>
+
+  <span class="
+    text-xs {{ badgeStyles['available'] }}
+  ">
+  Available
+  </span> #}

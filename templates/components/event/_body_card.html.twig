@@ -2,7 +2,7 @@
 
   <!-- Availability badge -->
   {% if availabilityTicketsByEvent[event.id] is defined %}
-    <div class="absolute top-4 right-4 z-10">
+    <div class="absolute top-1 right-1 z-10">
       {% include 'components/event/_availability_badge.html.twig'
         with {
           'availability': availabilityTicketsByEvent[event.id]['availability'],
@@ -14,13 +14,13 @@
   <!-- End Availability badge -->
 
   <!-- Title -->
-  <div class="mb-1 text-xl font-bold tracking-tight text-gray-900">
+  <div class="text-lg font-bold tracking-tight text-gray-900 mb-2">
     <h5>{{ event.name }}</h5>
   </div>
   <!-- End Title -->
 
   <!-- DateTime -->
-  <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+  <div class="flex items-center gap-1 text-sm text-gray-500 mb-2">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
@@ -33,7 +33,7 @@
   <!-- End DateTime -->
 
   <!-- Location -->
-  <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+  <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -43,9 +43,9 @@
   <!-- End Location -->
 
   <!-- Description -->
-  <div class="text-gray-600 text-sm leading-relaxed h-16">
-    {% if event.description | length > 120 %}
-      {{ event.description | slice(0, 120) ~ '...' }}
+  <div class="text-gray-600 text-sm leading-relaxed">
+    {% if event.description | length > 100 %}
+      {{ event.description | slice(0, 100) ~ '...' }}
     {% else %}
       {{ event.description }}
     {% endif %}

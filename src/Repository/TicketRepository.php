@@ -21,7 +21,7 @@ class TicketRepository extends ServiceEntityRepository
   /**
   * @return Ticket[] Returns an array of Ticket objects
   */
-  public function findAllTickets(User $user, ?string $status = null): array
+  public function getAllTickets(User $user, ?string $status = null): array
   {
     $query = $this->createQueryBuilder('t')
       ->join('t.booking', 'booking')
