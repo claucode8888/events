@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\User;
 use App\Entity\Ticket;
 use App\Entity\Booking;
@@ -21,19 +22,26 @@ class TicketRepository extends ServiceEntityRepository
   /**
   * @return Ticket[] Returns an array of Ticket objects
   */
-  public function getAllTickets(User $user, ?string $status = null): array
+  public function getTicketsByUser(User $user, ?string $categoryTime = null): array
   {
+    $now = new DateTime();
+
+    // Main query
     $query = $this->createQueryBuilder('t')
       ->join('t.booking', 'booking')
+      ->join('t.category', 'category')
+      ->join('category.event', 'event')
       ->andWhere('booking.buyer = :buyer')
-      ->setParameter('buyer', $user)
-      ->orderBy('booking.id', 'DESC');
+      ->setParameter('buyer', $user);
 
-    if($status){
-      $query = $query->andWhere('booking.status = :status')
-        ->setParameter('status', $status);
+    // Get by category time
+    if($categoryTime){
+      $operator = $this->getOperator($categoryTime);
+      $query = $query->andWhere('event.startAt '.$operator.' :now')
+        ->setParameter('now', $now);
     }
 
+    $query = $query->orderBy('event.startAt', 'DESC');
     $query = $query->getQuery()->getResult();
     return $query;
   }
@@ -64,5 +72,26 @@ class TicketRepository extends ServiceEntityRepository
     $results['tickets_by_category'] = array_column($query, null, 'id');
     $results['total_tickets'] = $totalTickets;
     return $results;
+  }
+
+  public function getUpcomingTicketsByUser($user)
+  {
+    return $this->getTicketsByUser($user, 'upcoming');
+  }
+
+  public function getPastTicketsByUser($user)
+  {
+    return $this->getTicketsByUser($user, 'past');
+  }
+
+  // Helpers
+  public function getOperator($categoryTime)
+  {
+    return match($categoryTime)
+    {
+      'upcoming' => '>=',
+      'past' => '<',
+      default => '>='
+    };
   }
 }

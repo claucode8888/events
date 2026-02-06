@@ -40,16 +40,39 @@ final class TicketController extends AbstractController
     }
   }
 
-  #[Route('/my', name: 'app_my_tickets', methods: ['GET'])]
-  public function myTickets(TicketRepository $ticketRepository): Response
+  #[Route('/my-tickets/{search}', name: 'app_my_tickets', methods: ['GET'], defaults: ['search' => 'upcoming'])]
+  public function myTickets(TicketRepository $ticketRepository, string $search): Response
   {
     $user = $this->getUser();
+
+    // Type of search references array
+    $searches = [
+      'upcoming' => [ 'title' => 'upcoming events', 'active' => false ],
+      'past' => [ 'title' => 'previous events', 'active' => false ],
+    ];
+
+    // Validations
     if(!$user){
       throw new AccessDeniedHttpException('You must be logged in to view your tickets.');
     }
-    $userTickets = $ticketRepository->getAllTickets($user);
+
+    if(!array_key_exists($search, $searches)){
+      throw $this->createNotFoundException('Invalid search type');
+    }
+
+    $searches[$search]['active'] = true;
+
+    // Query on demand
+    $tickets = match($search)
+    {
+      'upcoming' => $ticketRepository->getUpcomingTicketsByUser($user),
+      'past' => $ticketRepository->getPastTicketsByUser($user),
+    };
+
     return $this->render('ticket/my_tickets.html.twig', [
-      'tickets' => $userTickets
+      'myTickets' => $tickets,
+      'searches' => $searches,
+      'currentSearch' => $search
     ]);
   }
 
