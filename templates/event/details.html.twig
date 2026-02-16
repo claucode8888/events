@@ -80,13 +80,17 @@
             </span>
             <!-- Buy ticket button -->
             <div>
-              {% include 'components/event/_get_ticket_button.html.twig' with {
-                  icon: false,
-                  title: event.isSoldOut ? 'sold out' : null,
-                  customStyle: 'text-white bg-blue-900 hover:bg-blue-700',
-                  disabled: event.isSoldOut
-                }
-              %}
+              {% set button_config = {
+                icon: false,
+                title: event.isSoldOut ? 'sold out' : null,
+                disabled: event.isSoldOut
+              } %}
+
+              {% if event.isSoldOut %}
+                {% set button_config = button_config|merge({ customStyle: 'text-white bg-red-700' }) %}
+              {% endif %}
+              
+              {% include 'components/event/_get_ticket_button.html.twig' with button_config %}
             </div>
             <!-- End Buy ticket button -->
           </div>

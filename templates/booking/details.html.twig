@@ -39,10 +39,10 @@
             {{ event.startAt|date('M j, Y') }} at {{ event.startAt|date('g:i A') }}
           </div>
         </div>
-        <div>
+        {# <div>
           <div class="text-sm text-gray-500">Status</div>
           <div class="font-medium">{{ booking.status|upper }}</div>
-        </div>
+        </div> #}
         <div>
           <div class="text-sm text-gray-500">Location</div>
           <div class="font-medium">{{ event.location }}</div>
