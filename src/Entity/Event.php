@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 #[ORM\Index(name:'idx_event_status', columns: ['status'])]
 #[ORM\Index(name:'idx_event_start_at', columns: ['start_at'])]
 #[ORM\Index(name:'idx_event_end_at', columns: ['end_at'])]
+#[ORM\HasLifecycleCallbacks]
 class Event extends AbstractEntity
 {
     const STATUS_PUBLISHED = 'published';
@@ -32,18 +33,15 @@ class Event extends AbstractEntity
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\NotBlank]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $endAt = null;
 
-    #[ORM\Column]
-    #[Assert\NotBlank]
+    #[ORM\Column(nullable: true)]
     private ?int $capacity = null;
 
     #[ORM\Column(length: 80, nullable: true)]
-    #[Assert\NotBlank]
     private ?string $status = null;
 
     /**
@@ -124,13 +122,6 @@ class Event extends AbstractEntity
     public function getCapacity(): ?int
     {
         return $this->capacity;
-    }
-
-    public function setCapacity(int $capacity): static
-    {
-        $this->capacity = $capacity;
-
-        return $this;
     }
 
     public function getStatus(): ?string
@@ -244,4 +235,15 @@ class Event extends AbstractEntity
 
         return $this;
     }
+
+  #[ORM\PrePersist]
+  #[ORM\PreUpdate]
+  public function calculateCapacity(): void
+  {
+    $total = 0;
+    foreach ($this->getTicketCategories() as $category) {
+      $total += $category->getQuantity();
+    }
+    $this->capacity = $total;
+  }
 }

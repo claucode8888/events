@@ -58,12 +58,8 @@
     </div>
   </div>
 
-  {# Capacity & Status #}
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-    <div class="form-group">
-      {{ form_label(form.capacity, null, { label_attr: { class: labelClasses } }) }}
-      {{ form_widget(form.capacity, { attr: { class: inputClasses } }) }}
-    </div>
+  {# Status #}
+  <div class="grid grid-cols-1 gap-10">
     <div class="form-group">
       {{ form_label(form.status, null, { label_attr: { class: labelClasses } }) }}
       {{ form_widget(form.status, { attr: { class: inputClasses ~ ' bg-white' } }) }}
