@@ -87,7 +87,7 @@ final class EventController extends AbstractController
     ]);
   }
 
-  #[Route('/{id}', name: 'app_admin_event_delete', methods: ['POST'])]
+  #[Route('/{id}', name: 'app_admin_event_delete', methods: ['DELETE'])]
   public function delete(Request $request, Event $event, EntityManagerInterface $entityManager, ImageUploader $imageUploader): Response
   {
     if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->getPayload()->getString('_token'))) {

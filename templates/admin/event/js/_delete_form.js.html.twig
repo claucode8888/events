@@ -3,8 +3,8 @@
     const forms = document.querySelectorAll('form[data-event]');
     forms.forEach(function (form) {
       form.addEventListener('submit', function (event) {
-        const eventName = form.getAttribute('data-event');
-        const message = 'Are sure you want to delete ' + eventName + ' event?';
+        const eventName = form.getAttribute('data-event') || 'this event';
+        const message = `Are you sure you want to delete the event "${eventName}"?`;
 
         if (!confirm(message)) {
           event.preventDefault();
