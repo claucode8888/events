@@ -26,13 +26,14 @@
           class: inputClasses ~ '
             file:mr-2
             file:py-2 file:px-4
+            file:border
+            file:border-gray-200
             file:rounded-md
-            file:border-0
-            file:bg-blue-900
-            file:text-white
+            file:bg-gray-200
+            file:text-gray-700
             file:text-xs
             file:font-semibold
-            hover:file:bg-blue-700
+            hover:file:border-gray-400
             cursor-pointer
           '
         }
@@ -81,7 +82,7 @@
       </svg>
       Events
     </a>
-    <button type="submit" class="px-4 py-1.5 bg-blue-900 text-white font-medium rounded-md hover:bg-blue-700 transition cursor-pointer">
+    <button type="submit" class="btn-primary">
       {{ button_label | default('Save') }}
     </button>
   </div>

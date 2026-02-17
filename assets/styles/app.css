@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
-/* body {
-    background-color: skyblue;
-} */
+
+:root {
+  --color-main: #1E3A6F;
+  --color-main-light: #3A5683;
+  --color-main-dark: #0A1F3F;
+}
+
+@layer components {
+  .btn-primary {
+    @apply text-white rounded-md px-3 py-1.5 transition cursor-pointer;
+    background-color: var(--color-main);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--color-main-light);
+  }
+}
