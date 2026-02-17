@@ -596,7 +596,6 @@ class EventFixtures extends Fixture
       $event->setDescription($eventData['description']);
       $event->setStartAt(new \DateTimeImmutable($eventData['startAt']));
       $event->setEndAt(new \DateTimeImmutable($eventData['endAt']));
-      $event->setCapacity($eventData['capacity']);
       $event->setStatus($eventData['status']);
       $event->setImgPath($eventData['image']);
       

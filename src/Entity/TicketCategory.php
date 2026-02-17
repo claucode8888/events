@@ -42,7 +42,7 @@ class TicketCategory extends AbstractEntity
     /**
      * @var Collection<int, Ticket>
      */
-    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'category', cascade: ['remove'], orphanRemoval: true)]
     private Collection $tickets;
 
     public function __construct()

@@ -44,6 +44,7 @@ final class EventController extends AbstractController
 
       $entityManager->persist($event);
       $entityManager->flush();
+      $this->addFlash('success', 'Event "' . $event->getName() . '" created successfully.');
       return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -78,6 +79,7 @@ final class EventController extends AbstractController
       $entityManager->persist($event);
       $entityManager->flush();
 
+      $this->addFlash('success', 'Event "' . $event->getName() . '" was updated.');
       return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -90,12 +92,18 @@ final class EventController extends AbstractController
   #[Route('/{id}', name: 'app_admin_event_delete', methods: ['DELETE'])]
   public function delete(Request $request, Event $event, EntityManagerInterface $entityManager, ImageUploader $imageUploader): Response
   {
-    if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->getPayload()->getString('_token'))) {
+    if($this->isCsrfTokenValid('delete' . $event->getId(), $request->getPayload()->getString('_token')))
+    {
       /** Delete image */
       $imageUploader->delete($event->getImgPath());
       /** End Delete image */
+
       $entityManager->remove($event);
       $entityManager->flush();
+      $this->addFlash('success', 'Event "' . $event->getName() . '" deleted successfully.');
+    }
+    else{
+      $this->addFlash('error', 'Event not found.');
     }
 
     return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
