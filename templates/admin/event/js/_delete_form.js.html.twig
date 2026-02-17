@@ -1,0 +1,15 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('form[data-event]');
+    forms.forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        const eventName = form.getAttribute('data-event');
+        const message = 'Are sure you want to delete ' + eventName + ' event?';
+
+        if (!confirm(message)) {
+          event.preventDefault();
+        }
+      });
+    });
+  });
+</script>
