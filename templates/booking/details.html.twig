@@ -4,13 +4,14 @@
 
 {% block content %}
 <div class="max-w-3xl mx-auto p-6">
-  {# Header #}
+  <!-- Header -->
   <div class="text-center mb-8">
     <h1 class="text-2xl font-bold mb-2">✅ Booking Confirmed</h1>
     <p class="text-gray-600">Booking ID: <strong>#{{ booking.id }}</strong> • {{ booking.createdAt|date('M j, Y g:i A') }}</p>
   </div>
+  <!-- End Header -->
 
-  {# Email notice #}
+  <!-- Email notice -->
   <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
     <div class="flex items-center">
       <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,8 +23,9 @@
       </div>
     </div>
   </div>
+  <!-- End Email notice -->
 
-  {# Event Info #}
+  <!-- Event Info -->
   {% if booking.tickets|length > 0 %}
     {% set event = booking.tickets.first.category.event %}
     <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
@@ -39,10 +41,6 @@
             {{ event.startAt|date('M j, Y') }} at {{ event.startAt|date('g:i A') }}
           </div>
         </div>
-        {# <div>
-          <div class="text-sm text-gray-500">Status</div>
-          <div class="font-medium">{{ booking.status|upper }}</div>
-        </div> #}
         <div>
           <div class="text-sm text-gray-500">Location</div>
           <div class="font-medium">{{ event.location }}</div>
@@ -50,8 +48,9 @@
       </div>
     </div>
   {% endif %}
-  
-  {# Tickets by Category #}
+  <!-- End Event Info -->
+
+  <!-- Tickets by Category -->
   <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
     <div class="mb-6">
       <h2 class="text-xl font-bold text-gray-900">
@@ -98,8 +97,9 @@
       {% endif %}
     </div>
   </div>
+  <!-- End Tickets by Category -->
 
-  {# Total #}
+  <!-- Total -->
   <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
     <h2 class="text-xl font-bold text-gray-900 mb-4">Payment Summary</h2>
     <div class="space-y-2">
@@ -118,10 +118,11 @@
       </div>
     </div>
   </div>
-  
-  {# Actions #}
+  <!-- End Total -->
+
+  <!-- Actions -->
   <div class="grid grid-cols-2 gap-3">
-    {# Download PDF #}
+    <!-- Download PDF -->
     {# <a href="{{ path('app_booking_pdf', { id: booking.id }) }}"
       class="flex flex-col items-center justify-center gap-1 bg-blue-900 hover:bg-blue-700 text-white py-3 rounded font-medium cursor-pointer transition duration-200"
       title="Download Tickets"
@@ -131,9 +132,9 @@
       </svg>
       <span class="text-xs">Download PDF</span>
     </a> #}
+    <!-- End Download PDF -->
 
-   
-    {# Event Page #}
+    <!-- Event Page -->
     <a href="{{ path('app_event_details', { id: event.id }) }}"
       class="flex flex-col items-center justify-center gap-1 font-medium btn-primary"
       title="Event Page"
@@ -143,8 +144,9 @@
       </svg>
       <span class="text-xs">Event Page</span>
     </a>
+    <!-- End Event Page -->
 
-    {# My Tickets #}
+    <!-- My Tickets -->
     <a href="{{ path('app_my_tickets') }}"
       class="flex flex-col items-center justify-center font-medium btn-primary"
       title="See My Tickets"
@@ -154,6 +156,8 @@
     </svg>
       <span class="text-xs">My Tickets</span>
     </a>
+    <!-- End My Tickets -->
   </div>
+  <!-- End Actions -->
 </div>
 {% endblock %}

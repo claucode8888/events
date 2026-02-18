@@ -4,7 +4,7 @@
 
 {% block content %}
   <article class="max-w-3xl mx-auto p-5 font-sans text-xs text-gray-700 leading-relaxed">
-    {# Header #}
+    <!-- Header -->
     <header class="text-center mb-8 border-b-2 pb-5">
       <h1 class="text-2xl m-0 mb-2.5 font-bold">Ticket Details</h1>
       <p class="text-gray-500 m-1">Booking ID:
@@ -14,8 +14,9 @@
       </p>
       <p class="text-gray-500 m-1 print:hidden">This is your digital ticket. Present at entrance.</p>
     </header>
+    <!-- End Header -->
 
-    {# Ticket Info #}
+    <!-- Ticket Info -->
     <section class="mb-6 break-inside-avoid border border-gray-300 rounded p-5 bg-white">
       <h2 class="text-base font-bold mb-4 pb-1 border-b border-gray-300">Ticket Information</h2>
       <div class="flex justify-between items-start">
@@ -29,8 +30,9 @@
         </div>
       </div>
     </section>
+    <!-- End Ticket Info -->
 
-    {# QR Code #}
+    <!-- QR Code -->
     <section class="text-center border border-gray-300 rounded p-5 mb-6 bg-gray-50">
       <h2 class="text-base font-bold mb-2.5">Your Ticket QR Code</h2>
       <p class="text-xs text-gray-500 mb-4">Present this at the entrance for admission</p>
@@ -43,8 +45,9 @@
         Ticket ID: {{ ticket.qrtoken }}
       </div>
     </section>
+    <!-- End QR Code -->
 
-    {# Event Info #}
+    <!-- Event Info -->
     <section class="mb-6 break-inside-avoid border border-gray-300 rounded p-5 bg-white">
       <h2 class="text-base font-bold mb-4 pb-1 border-b border-gray-300">Event Information</h2>
       <div class="grid grid-cols-2 gap-4 mt-2.5">
@@ -64,42 +67,11 @@
           <span class="text-xs text-gray-500 uppercase tracking-wide mb-1">Location</span>
           <div class="font-bold text-sm">{{ ticket.category.event.location }}</div>
         </div>
-        {# <div class="border border-gray-300 p-4 rounded">
-          <span class="text-xs text-gray-500 uppercase tracking-wide mb-1">Ticket Status</span>
-          <div class="font-bold text-sm">
-            {% if ticket.status == 'valid' %}
-              <span class="inline-block px-2 py-1 text-xs font-bold rounded uppercase tracking-wide bg-green-100 text-green-800">
-                {{ ticket.status | upper }}
-              </span>
-            {% elseif ticket.status == 'used' %}
-              <span class="inline-block px-2 py-1 text-xs font-bold rounded uppercase tracking-wide bg-gray-100 text-gray-700">
-                {{ ticket.status | upper }}
-              </span>
-            {% else %}
-              <span class="inline-block px-2 py-1 text-xs font-bold rounded uppercase tracking-wide bg-yellow-100 text-yellow-800">
-                {{ ticket.status | upper }}
-              </span>
-            {% endif %}
-          </div>
-        </div> #}
-        {# <div class="border border-gray-300 p-4 rounded">
-          <span class="text-xs text-gray-500 uppercase tracking-wide mb-1">Booking Status</span>
-          <div class="font-bold text-sm">
-            {% if ticket.booking.status == 'confirmed' %}
-              <span class="inline-block px-2 py-1 text-xs font-bold rounded uppercase tracking-wide bg-green-100 text-green-800">
-                {{ ticket.booking.status | upper }}
-              </span>
-            {% else %}
-              <span class="inline-block px-2 py-1 text-xs font-bold rounded uppercase tracking-wide bg-yellow-100 text-yellow-800">
-                {{ ticket.booking.status | upper }}
-              </span>
-            {% endif %}
-          </div>
-        </div> #}
       </div>
     </section>
+    <!-- End Event Info -->
 
-    {# Payment Summary #}
+    <!-- Payment Summary -->
     <section class="mb-6 break-inside-avoid border border-gray-300 rounded p-5 bg-white">
       <h2 class="text-base font-bold mb-4 pb-1 border-b border-gray-300">Payment Summary</h2>
       <div class="bg-blue-50 border border-sky-200 p-5 rounded">
@@ -117,14 +89,17 @@
         </div>
       </div>
     </section>
+    <!-- End Payment Summary -->
 
-    {# Actions #}
+    <!-- Actions -->
     <div class="flex justify-center items-center mt-8 print:hidden">
-      <a href="{{ path('app_my_tickets') }}"
-        class="bg-blue-900 hover:bg-blue-700 py-3 px-4 text-sm text-white text-center no-underline">
+      <a
+        href="{{ path('app_my_tickets') }}"
+        class="btn-primary text-sm py-3"
+      >
         Back to My Tickets
       </a>
     </div>
-
+    <!-- End Actions -->
   </article>
 {% endblock %}
