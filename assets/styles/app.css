@@ -9,11 +9,15 @@
 
 @layer components {
   .btn-primary {
-    @apply text-white rounded-md px-3 py-1.5 transition cursor-pointer;
-    background-color: var(--color-main);
+    @apply text-white rounded-md px-3 py-1.5 transition duration-200 cursor-pointer;
+    background-color: var(--color-main-light);
   }
   
   .btn-primary:hover {
-    background-color: var(--color-main-light);
+    background-color: var(--color-main);
+  }
+
+  .bg-project {
+    @apply bg-radial-[circle_at_center] from-[var(--color-main)] via-[var(--color-main-light)] to-[var(--color-main-dark)]
   }
 }
