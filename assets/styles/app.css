@@ -2,9 +2,9 @@
 
 
 :root {
-  --color-main: #1E3A6F;
-  --color-main-light: #3A5683;
-  --color-main-dark: #0A1F3F;
+  --color-main: #002D57;
+  --color-main-light: #001f3f;
+  --color-main-dark: #001223;
 }
 
 @layer components {
