@@ -18,6 +18,15 @@
   }
 
   .bg-project {
-    @apply bg-radial-[circle_at_center] from-[var(--color-main)] via-[var(--color-main-light)] to-[var(--color-main-dark)]
+    @apply bg-radial-[circle_at_center] from-[var(--color-main)] via-[var(--color-main-light)] to-[var(--color-main-dark)];
+  }
+
+  .btn-get-tickets {
+    @apply
+    px-4 py-1.5 rounded-md text-white 
+    border border-[var(--color-main)]
+    bg-[var(--color-main)]
+    brightness-160 transition duration-200 
+    hover:brightness-180 
   }
 }

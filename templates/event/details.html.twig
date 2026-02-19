@@ -78,21 +78,15 @@
                 {{ range_prices.max | format_currency('EUR') }} 
               {% endif %}
             </span>
-            <!-- Buy ticket button -->
             <div>
-              {% set button_config = {
-                icon: false,
-                title: event.isSoldOut ? 'sold out' : null,
-                disabled: event.isSoldOut
-              } %}
-
-              {% if event.isSoldOut %}
-                {% set button_config = button_config|merge({ customStyle: 'text-white bg-red-700' }) %}
+              {% if not event.isSoldOut %}
+                {% include 'components/event/_get_ticket_button.html.twig' with { icon: false } %}
+              {% else %}
+                <span class="bg-red-400 text-white font-semibold p-2">
+                  Sold Out
+                </span>
               {% endif %}
-              
-              {% include 'components/event/_get_ticket_button.html.twig' with button_config %}
             </div>
-            <!-- End Buy ticket button -->
           </div>
           <!-- Save Event button -->
           {# <div>
