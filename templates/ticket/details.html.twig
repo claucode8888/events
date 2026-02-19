@@ -70,27 +70,7 @@
       </div>
     </section>
     <!-- End Event Info -->
-
-    <!-- Payment Summary -->
-    <section class="mb-6 break-inside-avoid border border-gray-300 rounded p-5 bg-white">
-      <h2 class="text-base font-bold mb-4 pb-1 border-b border-gray-300">Payment Summary</h2>
-      <div class="bg-blue-50 border border-sky-200 p-5 rounded">
-        <div class="flex justify-between mb-2">
-          <span>{{ ticket.category.name | title }} Ticket</span>
-          <span>€{{ ticket.category.price|number_format(2) }}</span>
-        </div>
-        <div class="flex justify-between mb-2">
-          <span>Service Fee</span>
-          <span>€0.00</span>
-        </div>
-        <div class="flex justify-between text-base font-bold border-t-2 border-gray-300 pt-2.5 mt-2.5">
-          <span>Total Paid</span>
-          <span>€{{ ticket.category.price|number_format(2) }}</span>
-        </div>
-      </div>
-    </section>
-    <!-- End Payment Summary -->
-
+    
     <!-- Actions -->
     <div class="flex justify-center items-center mt-8 print:hidden">
       <a

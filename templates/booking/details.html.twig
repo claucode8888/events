@@ -104,17 +104,17 @@
     <h2 class="text-xl font-bold text-gray-900 mb-4">Payment Summary</h2>
     <div class="space-y-2">
       <div class="flex justify-between">
-        <span>Tickets</span>
-        <span>€{{ booking.total|number_format(2) }}</span>
+        <span>Subtotal</span>
+        <span>€{{ booking.subtotal }}</span>
       </div>
       <div class="flex justify-between">
         <span>Service Fee</span>
-        <span>€0.00</span>
+        <span>€{{ booking.serviceFee }}</span>
       </div>
       <hr class="my-2">
       <div class="flex justify-between text-lg font-bold">
         <span>Total</span>
-        <span>€{{ booking.total|number_format(2) }}</span>
+        <span>€{{ booking.total }}</span>
       </div>
     </div>
   </div>
