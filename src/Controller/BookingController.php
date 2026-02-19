@@ -21,7 +21,8 @@ final class BookingController extends AbstractController
   public function create(Request $request, BookingManager $bookingManager): JsonResponse
   {
     $user = $this->getUser();
-    $tickets = json_decode($request->getContent(), true)['tickets'];
+    $datas = json_decode($request->getContent(), true);
+    $tickets = $datas['tickets'];
     if(!$tickets){
       return new JsonResponse(
         ['error' => 'No tickets selected.'],
@@ -30,7 +31,7 @@ final class BookingController extends AbstractController
     }
 
     try {
-      $booking = $bookingManager->createBooking($tickets, $user);
+      $booking = $bookingManager->createBooking($datas, $user);
       if(!$booking){
         return new JsonResponse(['error' => 'Booking creation failed.'], Response::HTTP_CONFLICT);
       }

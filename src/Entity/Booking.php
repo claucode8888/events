@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Booking extends AbstractEntity 
 {
     public const STATUS_PENDING = 'pending';
@@ -35,6 +36,12 @@ class Booking extends AbstractEntity
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'booking')]
     private Collection $tickets;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $serviceFee = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $subtotal = null;
 
     public function __construct()
     {
@@ -110,5 +117,35 @@ class Booking extends AbstractEntity
         }
 
         return $this;
+    }
+
+    public function getServiceFee(): ?float
+    {
+        return $this->serviceFee;
+    }
+
+    public function setServiceFee(?float $serviceFee): static
+    {
+        $this->serviceFee = $serviceFee;
+
+        return $this;
+    }
+
+    public function getSubtotal(): ?float
+    {
+        return $this->subtotal;
+    }
+
+    public function setSubtotal(?float $subtotal): static
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function calculateTotal() : void
+    {
+      $this->total = $this->getSubtotal() + $this->getServiceFee();
     }
 }

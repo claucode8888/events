@@ -1,5 +1,5 @@
 <script>
-  const SERVICE_FEE = 2.00;
+  const SERVICE_FEE = {{ service_fee }};
 
   // Ticket information
   const ticketData = {
@@ -194,6 +194,7 @@
           'X-CSRF-Token': '{{ csrf_token("checkout") }}'
         },
         body: JSON.stringify({
+          service_fee: SERVICE_FEE,
           tickets: cart,
           _token: '{{ csrf_token("checkout") }}'
         })

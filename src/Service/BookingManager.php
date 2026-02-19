@@ -14,20 +14,23 @@ class BookingManager
 {
   public function __construct(private EntityManagerInterface $em, private TokenGenerator $tokenGenerator){}
 
-  public function createBooking(array $tickets, User $user): ? Booking
+  public function createBooking(array $datas, User $user): ? Booking
   {
+    $serviceFee = $datas['service_fee'];
+    $tickets = $datas['tickets'];
+
     /** Check if Ticket Categories were found */
     $TCEntities = $this->em->getRepository(TicketCategory::class)->findBy(['id' => array_keys($tickets)]);
     if(!$TCEntities) return null;
 
-    $total = 0;
+    $subtotal = 0;
     $booking = new Booking();
     $booking->setStatus(Booking::STATUS_PENDING);
     $booking->setBuyer($user);
 
     foreach($TCEntities as $TCEntity){
       $quantity = $tickets[$TCEntity->getId()];
-      $total += $TCEntity->getPrice() * $quantity;
+      $subtotal += $TCEntity->getPrice() * $quantity;
 
       /** Check availability */
       if($TCEntity->ticketsAvailability() < $quantity){
@@ -40,8 +43,9 @@ class BookingManager
         $booking->addTicket($ticket);
       }
     }
-
-    $booking->setTotal($total);
+    
+    $booking->setServiceFee($serviceFee);
+    $booking->setSubtotal($subtotal);
     $this->em->persist($booking);
     $this->em->flush();
     return $booking;

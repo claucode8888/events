@@ -40,6 +40,7 @@ final class EventController extends AbstractController
   {
     return $this->render('event/ticket_selection.html.twig', [
       'event' => $event,
+      'service_fee' => $this->getParameter('service_fee')
     ]);
   }
 }
