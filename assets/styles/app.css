@@ -2,30 +2,21 @@
 
 
 :root {
-  --color-main: #002D57;
-  --color-main-light: #001f3f;
+  --color-main: #001f3f;
+  --color-main-light: #002D57;
   --color-main-dark: #001223;
 }
 
 @layer components {
-  .btn-primary {
-    @apply text-white rounded-md px-3 py-1.5 transition duration-200 cursor-pointer;
-    background-color: var(--color-main-light);
-  }
-  
-  .btn-primary:hover {
-    background-color: var(--color-main);
-  }
-
   .bg-project {
-    @apply bg-radial-[circle_at_center] from-[var(--color-main)] via-[var(--color-main-light)] to-[var(--color-main-dark)];
+    @apply bg-radial-[circle_at_center] from-[var(--color-main-light)] via-[var(--color-main)] to-[var(--color-main-dark)];
   }
 
-  .btn-get-tickets {
+  .btn-primary {
     @apply
     px-4 py-1.5 rounded-md text-white 
-    border border-[var(--color-main)]
-    bg-[var(--color-main)]
+    border border-[var(--color-main-light)]
+    bg-[var(--color-main-light)]
     brightness-160 transition duration-200 
     hover:brightness-180 
   }
