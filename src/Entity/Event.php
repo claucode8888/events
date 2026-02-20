@@ -58,8 +58,9 @@ class Event extends AbstractEntity
     #[ORM\Column(length: 255)]
     private ?string $location = 'Luna Park';
 
-    #[ORM\Column(length: 255)]
-    private ?string $organizer = 'Claucode';
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organizer $organizer = null;
 
     public function __construct()
     {
@@ -224,18 +225,6 @@ class Event extends AbstractEntity
         return $this;
     }
 
-    public function getOrganizer(): ?string
-    {
-        return $this->organizer;
-    }
-
-    public function setOrganizer(string $organizer): static
-    {
-        $this->organizer = $organizer;
-
-        return $this;
-    }
-
   #[ORM\PrePersist]
   #[ORM\PreUpdate]
   public function calculateCapacity(): void
@@ -245,5 +234,24 @@ class Event extends AbstractEntity
       $total += $category->getQuantity();
     }
     $this->capacity = $total;
+  }
+
+  public function setCapacity(?int $capacity): static
+  {
+      $this->capacity = $capacity;
+
+      return $this;
+  }
+
+  public function getOrganizer(): ?Organizer
+  {
+      return $this->organizer;
+  }
+
+  public function setOrganizer(?Organizer $organizer): static
+  {
+      $this->organizer = $organizer;
+
+      return $this;
   }
 }

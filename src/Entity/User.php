@@ -3,17 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\AbstractEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -37,24 +36,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private bool $isVerified = false;
+    
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Buyer $buyer = null;
 
-    /**
-     * @var Collection<int, Ticket>
-     */
-    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'buyer', orphanRemoval: true)]
-    private Collection $tickets;
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Organizer $organizer = null;
 
-    /**
-     * @var Collection<int, Booking>
-     */
-    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'buyer', orphanRemoval: true)]
-    private Collection $bookings;
-
-    public function __construct()
-    {
-        $this->tickets = new ArrayCollection();
-        $this->bookings = new ArrayCollection();
-    }
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Profile $profile = null;
 
     public function getId(): ?int
     {
@@ -149,62 +141,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Ticket>
-     */
-    public function getTickets(): Collection
+    public function getBuyer(): ?Buyer
     {
-        return $this->tickets;
+        return $this->buyer;
     }
 
-    public function addTicket(Ticket $ticket): static
+    public function setBuyer(Buyer $buyer): static
     {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets->add($ticket);
-            $ticket->setBuyer($this);
-        }
+        $this->buyer = $buyer;
 
         return $this;
     }
 
-    public function removeTicket(Ticket $ticket): static
+    public function getOrganizer(): ?Organizer
     {
-        if ($this->tickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getBuyer() === $this) {
-                $ticket->setBuyer(null);
-            }
-        }
+        return $this->organizer;
+    }
+
+    public function setOrganizer(?Organizer $organizer): static
+    {
+        $this->organizer = $organizer;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Booking>
-     */
-    public function getBookings(): Collection
+    public function getProfile(): ?Profile
     {
-        return $this->bookings;
+        return $this->profile;
     }
 
-    public function addBooking(Booking $booking): static
+    public function setProfile(Profile $profile): static
     {
-        if (!$this->bookings->contains($booking)) {
-            $this->bookings->add($booking);
-            $booking->setBuyer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBooking(Booking $booking): static
-    {
-        if ($this->bookings->removeElement($booking)) {
-            // set the owning side to null (unless already changed)
-            if ($booking->getBuyer() === $this) {
-                $booking->setBuyer(null);
-            }
-        }
+        $this->profile = $profile;
 
         return $this;
     }

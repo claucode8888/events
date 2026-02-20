@@ -20,11 +20,7 @@ class Booking extends AbstractEntity
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'bookings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $buyer = null;
-
+    
     #[ORM\Column]
     private ?float $total = null;
 
@@ -43,6 +39,10 @@ class Booking extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?float $subtotal = null;
 
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Buyer $buyer = null;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
@@ -51,18 +51,6 @@ class Booking extends AbstractEntity
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getBuyer(): ?User
-    {
-        return $this->buyer;
-    }
-
-    public function setBuyer(?User $buyer): static
-    {
-        $this->buyer = $buyer;
-
-        return $this;
     }
 
     public function getTotal(): ?float
@@ -147,5 +135,17 @@ class Booking extends AbstractEntity
     public function calculateTotal() : void
     {
       $this->total = $this->getSubtotal() + $this->getServiceFee();
+    }
+
+    public function getBuyer(): ?Buyer
+    {
+        return $this->buyer;
+    }
+
+    public function setBuyer(?Buyer $buyer): static
+    {
+        $this->buyer = $buyer;
+
+        return $this;
     }
 }

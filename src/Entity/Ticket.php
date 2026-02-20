@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TicketRepository;
 
@@ -10,7 +9,7 @@ use App\Repository\TicketRepository;
 #[ORM\UniqueConstraint(name:'uniq_ticket_qrtoken', columns : ['qrtoken'])]
 #[ORM\Index(name:'idx_ticket_status', columns: ['status'])]
 #[ORM\Index(name:'idx_ticket_checked_in_at', columns: ['checked_in_at'])]
-class Ticket extends AbstractEntity
+class Ticket
 {
   const PENDING_STATUS = 'pending';
 
@@ -18,10 +17,6 @@ class Ticket extends AbstractEntity
   #[ORM\GeneratedValue]
   #[ORM\Column]
   private ?int $id = null;
-
-  #[ORM\ManyToOne(inversedBy: 'tickets')]
-  #[ORM\JoinColumn(nullable: false)]
-  private ?User $buyer = null;
 
   #[ORM\ManyToOne(inversedBy: 'tickets')]
   private ?TicketCategory $category = null;
@@ -42,18 +37,7 @@ class Ticket extends AbstractEntity
   {
     return $this->id;
   }
-
-  public function getBuyer(): ?User
-  {
-    return $this->buyer;
-  }
-
-  public function setBuyer(?User $buyer): static
-  {
-    $this->buyer = $buyer;
-    return $this;
-  }
-
+  
   public function getCategory(): ?TicketCategory
   {
     return $this->category;
