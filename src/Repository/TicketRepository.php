@@ -41,7 +41,7 @@ class TicketRepository extends ServiceEntityRepository
         ->setParameter('now', $now);
     }
 
-    $query = $query->orderBy('event.startAt', 'DESC');
+    $query = $query->orderBy('event.startAt', 'ASC');
     $query = $query->getQuery()->getResult();
     return $query;
   }
