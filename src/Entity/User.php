@@ -45,9 +45,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private ?Buyer $buyer = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Organizer $organizer = null;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Profile $profile = null;
 
@@ -155,19 +152,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
         return $this;
     }
-
-    public function getOrganizer(): ?Organizer
-    {
-        return $this->organizer;
-    }
-
-    public function setOrganizer(?Organizer $organizer): static
-    {
-        $this->organizer = $organizer;
-
-        return $this;
-    }
-
+    
     public function getProfile(): ?Profile
     {
         return $this->profile;
