@@ -26,7 +26,7 @@ class BookingManager
     $subtotal = 0;
     $booking = new Booking();
     $booking->setStatus(Booking::STATUS_PENDING);
-    $booking->setBuyer($user);
+    $booking->setBuyer($user->getBuyer());
 
     foreach($TCEntities as $TCEntity){
       $quantity = $tickets[$TCEntity->getId()];
@@ -39,7 +39,7 @@ class BookingManager
 
       /** Tickets creation */
       for($i = 0; $quantity > $i; $i++){
-        $ticket = $this->createTicket($TCEntity, $user, $booking);
+        $ticket = $this->createTicket($TCEntity, $booking);
         $booking->addTicket($ticket);
       }
     }
@@ -51,13 +51,12 @@ class BookingManager
     return $booking;
   }
 
-  public function createTicket(TicketCategory $TC, User $user, Booking $booking): Ticket
+  public function createTicket(TicketCategory $TC, Booking $booking): Ticket
   {
     $qrToken = $this->tokenGenerator->generate();
 
     $ticket = new Ticket();
     $ticket->setCategory($TC);
-    $ticket->setBuyer($user);
     $ticket->setQrtoken($qrToken);
     $ticket->setStatus(Ticket::PENDING_STATUS);
     $ticket->setBooking($booking);

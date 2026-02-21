@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-use DateTime;
-use App\Entity\User;
-use App\Entity\Ticket;
 use App\Entity\Booking;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Buyer;
+use App\Entity\Ticket;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Ticket>
@@ -22,7 +22,7 @@ class TicketRepository extends ServiceEntityRepository
   /**
   * @return Ticket[] Returns an array of Ticket objects
   */
-  public function getTicketsByUser(User $user, ?string $categoryTime = null): array
+  public function getTicketsByBuyer(Buyer $buyer, ?string $categoryTime = null): array
   {
     $now = new DateTime();
 
@@ -32,7 +32,7 @@ class TicketRepository extends ServiceEntityRepository
       ->join('t.category', 'category')
       ->join('category.event', 'event')
       ->andWhere('booking.buyer = :buyer')
-      ->setParameter('buyer', $user);
+      ->setParameter('buyer', $buyer);
 
     // Get by category time
     if($categoryTime){
@@ -74,14 +74,14 @@ class TicketRepository extends ServiceEntityRepository
     return $results;
   }
 
-  public function getUpcomingTicketsByUser($user)
+  public function getUpcomingTicketsByBuyer($buyer)
   {
-    return $this->getTicketsByUser($user, 'upcoming');
+    return $this->getTicketsByBuyer($buyer, 'upcoming');
   }
 
-  public function getPastTicketsByUser($user)
+  public function getPastTicketsByBuyer($buyer)
   {
-    return $this->getTicketsByUser($user, 'past');
+    return $this->getTicketsByBuyer($buyer, 'past');
   }
 
   // Helpers

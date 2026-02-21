@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Buyer;
 use App\Entity\Profile;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -26,29 +27,38 @@ class RegistrationController extends AbstractController
   {
     $user = new User();
     $user->setProfile(new Profile());
-
+    
     $form = $this->createForm(RegistrationFormType::class, $user);
     $form->handleRequest($request);
+
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var string $plainPassword */
       $plainPassword = $form->get('plainPassword')->getData();
-      // encode the plain password
+      
+      // Encode password
       $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+
+      // Create Buyer
+      $buyer = new Buyer();
+      $user->setBuyer($buyer);
+
       $entityManager->persist($user);
       $entityManager->flush();
-      // generate a signed url and email it to the user
+
+      // Send verification email
       $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
         (new TemplatedEmail())
           ->from(new Address('mailer@localhost.com', 'Events Mail Bot'))
-          ->to((string) $user->getEmail())
-          ->subject('Please Confirm your Email')
+          ->to($user->getEmail())
+          ->subject('Please confirm your email')
           ->htmlTemplate('registration/confirmation_email.html.twig')
       );
-      // do anything else you need here, like send an email
-      return $this->redirectToRoute('app_profile_register');
+
+      return $this->redirectToRoute('app_login');
     }
+
     return $this->render('registration/register.html.twig', [
-      'registrationForm' => $form,
+      'registrationForm' => $form->createView(),
     ]);
   }
 

@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
-use Exception;
 use App\Entity\Ticket;
-use App\Service\QRService;
 use App\Repository\TicketRepository;
+use App\Service\QRService;
+use Exception;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[Route('/tickets')]
 final class TicketController extends AbstractController
@@ -48,6 +49,10 @@ final class TicketController extends AbstractController
     if(!$user){
       throw new AccessDeniedHttpException('You must be logged in to view your tickets.');
     }
+    $buyer = $user->getBuyer();
+    if(!$buyer){
+      throw new NotFoundHttpException('Buyer object not found.');
+    }
 
     // Type of search references array
     $past = 'past';
@@ -66,8 +71,8 @@ final class TicketController extends AbstractController
     // Query on demand
     $tickets = match($search)
     {
-      $upcoming => $ticketRepository->getUpcomingTicketsByUser($user),
-      $past => $ticketRepository->getPastTicketsByUser($user),
+      $upcoming => $ticketRepository->getUpcomingTicketsByBuyer($buyer),
+      $past => $ticketRepository->getPastTicketsByBuyer($buyer),
     };
 
     return $this->render('ticket/my_tickets.html.twig', [
