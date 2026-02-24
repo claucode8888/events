@@ -3,16 +3,17 @@ namespace App\Form;
 
 use App\Entity\Event;
 use App\Entity\TicketCategory;
+use App\Form\OrganizerType;
 use App\Form\TicketCategoryType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class EventType extends AbstractType
 {
@@ -37,7 +38,7 @@ class EventType extends AbstractType
         'mapped' => false,
         'required' => false
       ])
-      // Ticket Categories 
+      // Ticket Categories
       ->add('ticketCategories', CollectionType::class, [
         'entry_type'   => TicketCategoryType::class,
         'entry_options'=> ['label' => false],
@@ -46,7 +47,12 @@ class EventType extends AbstractType
         'by_reference' => false,
         'prototype' => true,
         'prototype_data' => new TicketCategory(),
-      ]);
+      ])
+      // Organizer
+      ->add('organizer', OrganizerType::class, [
+        'label' => 'Event organizer',
+        ]
+      );
   }
 
   public function configureOptions(OptionsResolver $resolver): void

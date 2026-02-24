@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Event;
 use App\Repository\OrganizerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrganizerRepository::class)]
 class Organizer
@@ -25,14 +27,17 @@ class Organizer
     private Collection $events;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Please enter the organizer name.')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Please enter the organizer email.')]
+    #[Assert\Email(message: 'Please enter a valid email.')]
     private ?string $email = null;
 
     public function __construct()
     {
-        $this->events = new ArrayCollection();
+      $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int

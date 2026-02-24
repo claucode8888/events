@@ -5,19 +5,41 @@
 
 <div class="bg-white rounded-xl shadow-lg p-10 space-y-10">
 
-  {# Event Name #}
+  <!-- Event Name -->
   <div class="form-group">
     {{ form_label(form.name, null, { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(form.name, { attr: { class: inputClasses } }) }}
+    {{ form_widget(
+        form.name, 
+        { attr: 
+          { class: inputClasses ~ 
+            (form.name.vars.errors | length ? ' border-red-500' : '')
+          }
+        }
+      )
+    }}
+    <span class="text-sm text-red-600 mt-2">
+      {{ form_errors(form.name) }}
+    </span>
   </div>
+  <!-- End Event Name -->
 
-  {# Description #}
+  <!-- Description -->
   <div class="form-group">
     {{ form_label(form.description, null, { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(form.description, { attr: { class: inputClasses ~ ' min-h-[160px]', rows: 6 } }) }}
+    {{ form_widget(
+        form.description, 
+        { attr: 
+          { class: inputClasses ~ ' min-h-[160px] ' ~ (form.description.vars.errors | length ? ' border-red-500' : ''), rows: 6 }
+        }
+      )
+    }}
+    <span class="text-sm text-red-600 mt-2">
+      {{ form_errors(form.description) }}
+    </span>
   </div>
+  <!-- End Description -->
 
-  {# Image Upload #}
+  <!-- Image Upload -->
   <div class="flex flex-col gap-1.5">
     <div class="form-group">
       {{ form_label(form.imageFile, null, { label_attr: { class: labelClasses } }) }}
@@ -39,15 +61,17 @@
         }
       }) }}
     </div>
-    {# Image #}
+    <!-- Image -->
     {% if event.imgPath %}
       <div>
         <img src="{{ asset(uploads_events ~ '/' ~ event.imgPath) }}" alt="{{ event.name }}" class="w-36 h-auto rounded-md">
       </div>
     {% endif %}
+    <!-- End Image -->
   </div>
+  <!-- End Image Upload -->
 
-  {# Date & Time #}
+  <!-- Date & Time -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
     <div class="form-group">
       {{ form_label(form.startAt, null, { label_attr: { class: labelClasses } }) }}
@@ -58,23 +82,75 @@
       {{ form_widget(form.endAt, { attr: { class: inputClasses } }) }}
     </div>
   </div>
+  <!-- End Date & Time -->
 
-  {# Status #}
+  <!-- Status -->
   <div class="grid grid-cols-1 gap-10">
     <div class="form-group">
       {{ form_label(form.status, null, { label_attr: { class: labelClasses } }) }}
-      {{ form_widget(form.status, { attr: { class: inputClasses ~ ' bg-white' } }) }}
+      {{ form_widget(
+          form.status, 
+          { attr: 
+            { class: inputClasses ~ ' bg-white ' ~ 
+              (form.status.vars.errors | length ? ' border-red-500' : '')
+            }
+          }
+        )
+      }}
+      <span class="text-sm text-red-600 mt-2">
+        {{ form_errors(form.status) }}
+      </span>
     </div>
   </div>
+  <!-- End Status -->
 
-  {# Ticket Categories Form #}
+  <!-- Ticket Categories Form -->
   {% include 'admin/event/_ticket_category_form.html.twig' %}
+  <!-- End Ticket Categories Form -->
+
   <!-- TC prototype definition -->
   {% set TCprototype %}
     {% include 'admin/event/_ticket_category_row.html.twig' with { form: form.ticketCategories.vars.prototype } %}
   {% endset %}
+  <!-- End TC prototype definition -->
 
-  {# Form Actions #}
+  <!-- Organizer -->
+  <div class="form-group">
+    <!-- Name -->
+    {{ form_label(form.organizer, null, { label_attr: { class: labelClasses } }) }}
+    {{ form_widget(
+        form.organizer.name, 
+        { attr: 
+          { class: inputClasses ~ 
+            (form.organizer.name.vars.errors | length ? ' border-red-500' : ''),
+            placeholder: 'Organizer name'
+          } 
+        }
+      )
+    }}
+    <span class="text-sm text-red-600 mt-2">
+      {{ form_errors(form.organizer.name) }}
+    </span>
+    <!-- End Name -->
+
+    <!-- Email -->
+    {{ form_widget(
+        form.organizer.email,
+        { attr: 
+          { class: inputClasses ~ ' mt-2 ' ~ (form.organizer.email.vars.errors | length ? ' border-red-500' : ''),
+          placeholder: 'Organizer email' 
+          }
+        }
+      )
+    }}
+    <span class="text-sm text-red-600 mt-2">
+      {{ form_errors(form.organizer.email) }}
+    </span>
+    <!-- End Email -->
+  </div>
+  <!-- End Organizer -->
+
+  <!-- Form Actions -->
   <div class="flex justify-center gap-2">
     <a href="{{ path('app_admin_events_index') }}" class="inline-flex items-center gap-2 px-4 py-1.5 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,6 +162,7 @@
       {{ button_label | default('Save') }}
     </button>
   </div>
+  <!-- End Form Actions -->
 
 </div>
 

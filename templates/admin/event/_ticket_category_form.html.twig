@@ -1,11 +1,6 @@
 <div class="space-y-4">
   <label class="{{ labelClasses }}">Ticket categories</label>
-  {% if form.ticketCategories.vars.errors|length %}
-    <span class="text-red-600 text-xs mt-1">
-      {{ form_errors(form.ticketCategories) }}
-    </span>
-  {% endif %}
-
+  
   <div id="ticket-categories-wrapper" class="space-y-4">
     {% for ticketCategory in form.ticketCategories %}
       {% include 'admin/event/_ticket_category_row.html.twig' with { form: ticketCategory } %}

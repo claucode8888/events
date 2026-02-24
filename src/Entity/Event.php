@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\AbstractEntity;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Organizer;
 use App\Repository\EventRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ORM\Index(name:'idx_event_status', columns: ['status'])]
@@ -24,11 +25,11 @@ class Event extends AbstractEntity
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Please enter a name for the Event.')]
     private ?string $name = null;
 
     #[ORM\Column(length: 2000)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Please enter a decription.')]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
@@ -40,7 +41,8 @@ class Event extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?int $capacity = null;
 
-    #[ORM\Column(length: 80, nullable: true)]
+    #[ORM\Column(length: 80, nullable: false)]
+    #[Assert\NotBlank(message: 'Please select one status.')]
     private ?string $status = null;
 
     /**
@@ -57,7 +59,8 @@ class Event extends AbstractEntity
     #[ORM\Column(length: 255)]
     private ?string $location = 'Luna Park';
 
-    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[Assert\Valid]
+    #[ORM\ManyToOne(inversedBy: 'events', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Organizer $organizer = null;
 
@@ -123,19 +126,7 @@ class Event extends AbstractEntity
     {
         return $this->capacity;
     }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(?string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, TicketCategory>
      */
@@ -250,6 +241,18 @@ class Event extends AbstractEntity
   public function setOrganizer(?Organizer $organizer): static
   {
       $this->organizer = $organizer;
+
+      return $this;
+  }
+
+  public function getStatus(): ?string
+  {
+      return $this->status;
+  }
+
+  public function setStatus(string $status): static
+  {
+      $this->status = $status;
 
       return $this;
   }

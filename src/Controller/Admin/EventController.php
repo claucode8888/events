@@ -3,16 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Event;
-use App\Entity\Organizer;
-use App\Entity\TicketCategory;
 use App\Form\EventType;
-use App\Repository\EventRepository;
+use App\Entity\TicketCategory;
 use App\Service\ImageUploader;
+use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -42,16 +41,6 @@ final class EventController extends AbstractController
         /** End Upload image in events directory */
         $event->setImgPath($filename);
       }
-
-
-  /**  */
-  $organizer = new Organizer();
-  $organizer->setName('pepito');
-  $organizer->setCompanyName('pepito S.A');
-  $organizer->setEmail('c@gmail.com');
-  $entityManager->persist($organizer);
-  $event->setOrganizer($organizer);
-  /**  */
 
       $entityManager->persist($event);
       $entityManager->flush();

@@ -21,10 +21,10 @@ class TicketCategory
     private ?Event $event = null;
 
     #[ORM\Column(type: 'string', length: 100)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Please enter ticket category name.')]
     #[Assert\Regex(
-      pattern: '/^[a-z0-9\-]+$/',
-      message: 'Only lowercase letters, numbers and dashes are allowed.'
+      pattern: '/^[a-zA-Z0-9\-]+$/',
+      message: 'Only letters, numbers and dashes are allowed.'
     )]
     private ?string $name = null;
 
@@ -34,7 +34,8 @@ class TicketCategory
     private ?float $price = null;
 
     #[ORM\Column(type: 'integer')]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Please enter the quantity of tickets available.')]
+    #[Assert\Type(type: 'integer', message: 'Quantity must be a whole number.')]
     #[Assert\Positive(message: 'Quantity must be greater than 0.')]
     private ?int $quantity = null;
 
