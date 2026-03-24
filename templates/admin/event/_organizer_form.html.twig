@@ -1,0 +1,58 @@
+{% set noEnteredOrganizer = (form.organizer.name.vars.errors | length and form.organizer.email.vars.errors | length) ? true : false %}
+<!-- Organizer selection -->
+<div class="mb-4" id="organizer_choices_block">
+  {{ form_label(form.organizerChoices, 'Select an organizer', { label_attr: { class: labelClasses } }) }}
+  {{ form_widget(form.organizerChoices, 
+      { attr: 
+        { class: inputClasses ~ (noEnteredOrganizer ? ' border-red-500' : '') }
+      }
+    )
+  }}
+  {% if noEnteredOrganizer %}
+    <span class="text-sm text-red-600 mt-2">
+      Please select or create an organizer.
+    </span>
+  {% endif %}
+</div>
+<!-- End Organizer selection -->
+
+<!-- Organizer creation form -->
+<div class="form-group hidden" id="organizer_creation_block">
+  <!-- Name -->
+  {{ form_label(form.organizer, null, { label_attr: { class: labelClasses } }) }}
+  {{ form_widget(
+      form.organizer.name, 
+      { attr: 
+        { class: inputClasses ~ 
+          (form.organizer.name.vars.errors | length ? ' border-red-500' : ''),
+          placeholder: 'Organizer name'
+        } 
+      }
+    )
+  }}
+  <span class="text-sm text-red-600 mt-2">
+    {{ form_errors(form.organizer.name) }}
+  </span>
+  <!-- End Name -->
+  <!-- Email -->
+  {{ form_widget(
+      form.organizer.email,
+      { attr: 
+        { class: inputClasses ~ ' mt-2 ' ~ (form.organizer.email.vars.errors | length ? ' border-red-500' : ''),
+        placeholder: 'Organizer email' 
+        }
+      }
+    )
+  }}
+  <span class="text-sm text-red-600 mt-2">
+    {{ form_errors(form.organizer.email) }}
+  </span>
+  <!-- End Email -->
+</div>
+<!-- End Organizer creation form -->
+
+<!-- Button -->
+<div class="flex justify-end">
+  <button id="toggle-organizer" class="btn-primary" type="button"></button>
+</div>
+<!-- End Button -->

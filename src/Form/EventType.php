@@ -2,9 +2,11 @@
 namespace App\Form;
 
 use App\Entity\Event;
+use App\Entity\Organizer;
 use App\Entity\TicketCategory;
 use App\Form\OrganizerType;
 use App\Form\TicketCategoryType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -13,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EventType extends AbstractType
@@ -48,11 +52,33 @@ class EventType extends AbstractType
         'prototype' => true,
         'prototype_data' => new TicketCategory(),
       ])
+      // Existing organizers
+      ->add('organizerChoices', EntityType::class, [
+        'class' => Organizer::class,
+        'choice_label' => fn(Organizer $o) => $o->getName().' ('.$o->getEmail().')',
+        'placeholder' => 'Select organizer',
+        'mapped' => false
+      ])
       // Organizer
       ->add('organizer', OrganizerType::class, [
-        'label' => 'Event organizer',
+        'label' => 'Create a new organizer',
         ]
       );
+      
+    $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+      $form = $event->getForm();
+      $eventEntity = $event->getData();
+
+      if (!$eventEntity) {
+        return;
+      }
+      
+      $selectedOrganizer = $form->get('organizerChoices')->getData();
+      // dd($selectedOrganizer);
+      if ($selectedOrganizer) {
+        $eventEntity->setOrganizer($selectedOrganizer);
+      }
+    });
   }
 
   public function configureOptions(OptionsResolver $resolver): void

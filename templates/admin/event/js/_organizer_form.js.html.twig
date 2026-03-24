@@ -1,0 +1,29 @@
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const createText = 'Create new organizer';
+    const selectText = 'Select existing organizer';
+    const toggleBtn = document.getElementById('toggle-organizer');
+    const choicesOrganizerBlock = document.getElementById('organizer_choices_block');
+    const newOrganizerBlock = document.getElementById('organizer_creation_block');
+    const organizerSelect = document.querySelector('[name$="[organizerChoices]"]');
+
+    if (!toggleBtn || !newOrganizerBlock || !organizerSelect) {
+      return;
+    }
+
+    const creationVisible = !newOrganizerBlock.classList.contains('hidden');
+    organizerSelect.disabled = creationVisible;
+    toggleBtn.textContent = creationVisible ? selectText : createText ;
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isHidden = newOrganizerBlock.classList.toggle('hidden');
+      choicesOrganizerBlock.classList.toggle('hidden');
+
+      organizerSelect.disabled = !isHidden;
+      toggleBtn.textContent = isHidden ? createText : selectText;
+
+      console.log(organizerSelect);
+    });
+  });
+</script>

@@ -115,39 +115,7 @@
   <!-- End TC prototype definition -->
 
   <!-- Organizer -->
-  <div class="form-group">
-    <!-- Name -->
-    {{ form_label(form.organizer, null, { label_attr: { class: labelClasses } }) }}
-    {{ form_widget(
-        form.organizer.name, 
-        { attr: 
-          { class: inputClasses ~ 
-            (form.organizer.name.vars.errors | length ? ' border-red-500' : ''),
-            placeholder: 'Organizer name'
-          } 
-        }
-      )
-    }}
-    <span class="text-sm text-red-600 mt-2">
-      {{ form_errors(form.organizer.name) }}
-    </span>
-    <!-- End Name -->
-
-    <!-- Email -->
-    {{ form_widget(
-        form.organizer.email,
-        { attr: 
-          { class: inputClasses ~ ' mt-2 ' ~ (form.organizer.email.vars.errors | length ? ' border-red-500' : ''),
-          placeholder: 'Organizer email' 
-          }
-        }
-      )
-    }}
-    <span class="text-sm text-red-600 mt-2">
-      {{ form_errors(form.organizer.email) }}
-    </span>
-    <!-- End Email -->
-  </div>
+  {% include 'admin/event/_organizer_form.html.twig' %}
   <!-- End Organizer -->
 
   <!-- Form Actions -->
@@ -171,3 +139,7 @@
 <!-- Script prototype -->
 {% include 'admin/event/js/_ticket_category_form.js.html.twig' %}
 <!-- End Script prototype -->
+
+<!-- Organizer script -->
+{% include 'admin/event/js/_organizer_form.js.html.twig' %}
+<!-- End Organizer script -->
