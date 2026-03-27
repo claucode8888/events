@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,50 +34,106 @@ class EventType extends AbstractType
           'Draft' => 'draft',
           'Published' => 'published',
           'Cancelled' => 'cancelled',
-          'Completed' => 'completed'
+          'Completed' => 'completed',
         ],
         'placeholder' => 'Select status',
-        'required' => false
+        'required' => false,
       ])
       ->add('imageFile', FileType::class, [
         'mapped' => false,
-        'required' => false
+        'required' => false,
       ])
-      // Ticket Categories
       ->add('ticketCategories', CollectionType::class, [
-        'entry_type'   => TicketCategoryType::class,
-        'entry_options'=> ['label' => false],
-        'allow_add'    => true,
+        'entry_type' => TicketCategoryType::class,
+        'entry_options' => ['label' => false],
+        'allow_add' => true,
         'allow_delete' => true,
         'by_reference' => false,
         'prototype' => true,
         'prototype_data' => new TicketCategory(),
-      ])
-      // Existing organizers
-      ->add('organizerChoices', EntityType::class, [
-        'class' => Organizer::class,
-        'choice_label' => fn(Organizer $o) => $o->getName().' ('.$o->getEmail().')',
-        'placeholder' => 'Select organizer',
-        'mapped' => false
-      ])
-      // Organizer
-      ->add('organizer', OrganizerType::class, [
-        'label' => 'Create a new organizer',
-        ]
-      );
-      
-    $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+      ]);
+
+    // ONLY CREATION CASE
+    if(!$options['is_edit']){
+      // Create mode - radio and creation block
+      $builder
+        ->add('organizerMode', ChoiceType::class, [
+          'mapped' => false,
+          'choices' => [
+            'Create new organizer' => 'create',
+            'Select existing organizer' => 'select',
+          ],
+          'expanded' => true,
+          'multiple' => false,
+          'label' => false,
+          'data' => 'create',
+        ])
+
+        ->add('organizer', OrganizerType::class, [
+          'label' => 'Create a new organizer',
+        ]);
+    }
+
+    $builder->add('organizerChoices', EntityType::class, [
+      'class' => Organizer::class,
+      'choice_label' => fn(Organizer $o) => $o->getName() . ' (' . $o->getEmail() . ')',
+      'placeholder' => 'Select organizer',
+      'mapped' => false,
+    ]);
+
+    // In case an organizer already exists, it will be shown as pre-selected
+    $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event){
       $form = $event->getForm();
       $eventEntity = $event->getData();
+      $organizer = $eventEntity->getOrganizer();
 
-      if (!$eventEntity) {
-        return;
+      if($organizer){
+        $form->get('organizerChoices')->setData($organizer);
       }
+    });
+
+    // Add Organizer field regarding to mode - mapped or unmapped
+    $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event){
+      $form = $event->getForm();
+      $data = $event->getData();
+      $mode = $data['organizerMode'] ?? 'create';
       
-      $selectedOrganizer = $form->get('organizerChoices')->getData();
-      // dd($selectedOrganizer);
-      if ($selectedOrganizer) {
-        $eventEntity->setOrganizer($selectedOrganizer);
+      if($mode === 'select'){
+        $form->remove('organizer');
+        $form->add('organizer', OrganizerType::class, [
+          'label' => 'Create a new organizer',
+          'mapped' => false,
+          'required' => false,
+        ]);
+      }
+    });
+
+    // Decide which organizer to save
+    $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($options) {
+      $form = $event->getForm();
+      $eventEntity = $event->getData();
+      $selected = $form->get('organizerChoices')->getData();
+
+      // CASE CREATION
+      if(!$options['is_edit']){
+        $mode = $form->get('organizerMode')->getData();
+        $new = $form->get('organizer')->getData();
+
+        if($mode === 'select'){
+          if(!$selected){
+            $form->get('organizerChoices')->addError(new FormError('Please select an organizer.'));
+          }
+          $eventEntity->setOrganizer($selected);
+        }elseif($mode === 'create' && $new){
+          $eventEntity->setOrganizer($new);
+        }
+      }
+      // CASE EDITION
+      else{
+        if(!$selected){
+          $form->get('organizerChoices')->addError(new FormError('Please select an organizer.'));
+        }
+        $eventEntity->setOrganizer($selected);
       }
     });
   }
@@ -84,7 +141,8 @@ class EventType extends AbstractType
   public function configureOptions(OptionsResolver $resolver): void
   {
     $resolver->setDefaults([
-      'data_class' => Event::class
+      'data_class' => Event::class,
+      'is_edit' => false,
     ]);
   }
 }

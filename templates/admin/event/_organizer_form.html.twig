@@ -1,58 +1,63 @@
-{% set noEnteredOrganizer = (form.organizer.name.vars.errors | length and form.organizer.email.vars.errors | length) ? true : false %}
-<!-- Organizer selection -->
-<div class="mb-4" id="organizer_choices_block">
-  {{ form_label(form.organizerChoices, 'Select an organizer', { label_attr: { class: labelClasses } }) }}
-  {{ form_widget(form.organizerChoices, 
-      { attr: 
-        { class: inputClasses ~ (noEnteredOrganizer ? ' border-red-500' : '') }
-      }
-    )
-  }}
-  {% if noEnteredOrganizer %}
-    <span class="text-sm text-red-600 mt-2">
-      Please select or create an organizer.
-    </span>
-  {% endif %}
-</div>
-<!-- End Organizer selection -->
+{% if form.organizerMode is defined and form.organizer is defined %}
+  <!-- Radio buttons to choose mode -->
+  <div class="mb-4">
+    {{ form_label(form.organizerMode, null, { label_attr: { class: labelClasses } }) }}
+    <div class="flex gap-6 mt-2">
+      {% for choice in form.organizerMode %}
+        <label class="inline-flex items-center gap-2 cursor-pointer">
+          {{ form_widget(choice, { attr: { class: 'w-4 h-4 text-blue-600 focus:ring-blue-500' } }) }}
+          <span class="text-sm text-gray-700">{{ choice.vars.label }}</span>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- End Radio buttons to choose mode -->
 
-<!-- Organizer creation form -->
-<div class="form-group hidden" id="organizer_creation_block">
-  <!-- Name -->
-  {{ form_label(form.organizer, null, { label_attr: { class: labelClasses } }) }}
-  {{ form_widget(
-      form.organizer.name, 
-      { attr: 
-        { class: inputClasses ~ 
-          (form.organizer.name.vars.errors | length ? ' border-red-500' : ''),
-          placeholder: 'Organizer name'
-        } 
-      }
-    )
-  }}
-  <span class="text-sm text-red-600 mt-2">
-    {{ form_errors(form.organizer.name) }}
-  </span>
-  <!-- End Name -->
-  <!-- Email -->
-  {{ form_widget(
-      form.organizer.email,
-      { attr: 
-        { class: inputClasses ~ ' mt-2 ' ~ (form.organizer.email.vars.errors | length ? ' border-red-500' : ''),
-        placeholder: 'Organizer email' 
+  <!-- Organizer creation block -->
+  <div id="organizer_creation_block" class="form-group">
+    {{ form_label(form.organizer, null, { label_attr: { class: labelClasses } }) }}
+
+    <!-- Name -->
+    {{ form_widget(
+      form.organizer.name,
+        { attr:
+          { class: inputClasses ~ 
+            (form.organizer.name.vars.errors | length ? ' border-red-500' : ''),
+            placeholder: 'Organizer name'
+          }
         }
-      }
-    )
-  }}
-  <span class="text-sm text-red-600 mt-2">
-    {{ form_errors(form.organizer.email) }}
-  </span>
-  <!-- End Email -->
-</div>
-<!-- End Organizer creation form -->
+      )
+    }}
+    <span class="text-sm text-red-600 mt-2">
+      {{ form_errors(form.organizer.name) }}
+    </span>
 
-<!-- Button -->
-<div class="flex justify-end">
-  <button id="toggle-organizer" class="btn-primary" type="button"></button>
+    <!-- Email -->
+    {{ form_widget(
+      form.organizer.email,
+        { attr:
+          { class: inputClasses ~ ' mt-2 ' ~ (form.organizer.email.vars.errors | length ? ' border-red-500' : ''),
+          placeholder: 'Organizer email'
+          }
+        }
+      )
+    }}
+    <span class="text-sm text-red-600 mt-2">
+      {{ form_errors(form.organizer.email) }}
+    </span>
+  </div>
+  <!-- End Organizer creation block -->
+{% endif %}
+
+<!-- Organizer selection block -->
+<div id="organizer_choices_block" class="mb-4">
+  {{ form_label(form.organizerChoices, 'Select an organizer', { label_attr: { class: labelClasses } }) }}
+  {{ form_widget(form.organizerChoices, { attr: { class: inputClasses ~ (form.organizerChoices.vars.errors | length ? ' border-red-500' : '') } } ) }}
+
+  <!-- Errors -->
+  <span class="text-sm text-red-600 mt-2">
+    {{ form_errors(form.organizerChoices) }}
+  </span>
+  <!-- End Errors -->
 </div>
-<!-- End Button -->
+<!-- End Organizer selection block -->

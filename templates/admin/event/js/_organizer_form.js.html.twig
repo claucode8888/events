@@ -1,29 +1,20 @@
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const createText = 'Create new organizer';
-    const selectText = 'Select existing organizer';
-    const toggleBtn = document.getElementById('toggle-organizer');
-    const choicesOrganizerBlock = document.getElementById('organizer_choices_block');
-    const newOrganizerBlock = document.getElementById('organizer_creation_block');
-    const organizerSelect = document.querySelector('[name$="[organizerChoices]"]');
+  const radioSelect = document.querySelector('input[value="select"]');
+  const radioCreate = document.querySelector('input[value="create"]');
+  const selectBlock = document.getElementById('organizer_choices_block');
+  const createBlock = document.getElementById('organizer_creation_block');
 
-    if (!toggleBtn || !newOrganizerBlock || !organizerSelect) {
-      return;
+  function toggleOrganizerMode(){
+    if (radioSelect.checked) {
+      selectBlock.classList.remove('hidden');
+      createBlock.classList.add('hidden');
+    } else {
+      selectBlock.classList.add('hidden');
+      createBlock.classList.remove('hidden');
     }
+  }
 
-    const creationVisible = !newOrganizerBlock.classList.contains('hidden');
-    organizerSelect.disabled = creationVisible;
-    toggleBtn.textContent = creationVisible ? selectText : createText ;
-
-    toggleBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const isHidden = newOrganizerBlock.classList.toggle('hidden');
-      choicesOrganizerBlock.classList.toggle('hidden');
-
-      organizerSelect.disabled = !isHidden;
-      toggleBtn.textContent = isHidden ? createText : selectText;
-
-      console.log(organizerSelect);
-    });
-  });
+  radioSelect.addEventListener('change', toggleOrganizerMode);
+  radioCreate.addEventListener('change', toggleOrganizerMode);
+  toggleOrganizerMode();
 </script>
