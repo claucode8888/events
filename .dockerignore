@@ -1,0 +1,14 @@
+.env
+.env.*
+.git
+.gitignore
+.railway
+var/cache
+var/log
+vendor
+node_modules
+Dockerfile
+.dockerignore
+README.md
+.gitattributes
+phpunit.xml
