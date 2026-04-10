@@ -1,5 +1,9 @@
 FROM php:8.5-apache
 
+# Deshabilitar MPMs conflictivos antes de habilitar rewrite
+RUN a2dismod mpm_event || true
+RUN a2enmod mpm_prefork
+
 RUN docker-php-ext-install pdo_mysql
 RUN a2enmod rewrite
 
