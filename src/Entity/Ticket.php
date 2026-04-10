@@ -30,7 +30,7 @@ class Ticket
   #[ORM\ManyToOne(inversedBy: 'tickets')]
   private ?Booking $booking = null;
 
-  #[ORM\Column(length: 1000)]
+  #[ORM\Column(length: 40)]
   private ?string $qrtoken = null;
 
   public function getId(): ?int

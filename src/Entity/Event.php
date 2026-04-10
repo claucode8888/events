@@ -28,7 +28,7 @@ class Event extends AbstractEntity
     #[Assert\NotBlank(message: 'Please enter a name for the Event.')]
     private ?string $name = null;
 
-    #[ORM\Column(length: 2000)]
+    #[ORM\Column(length: 500)]
     #[Assert\NotBlank(message: 'Please enter a decription.')]
     private ?string $description = null;
 
