@@ -87,14 +87,10 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts",
-            "@build-assets"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ],
-        "build-assets": [
-            "@php -r \"if (getenv('APP_ENV') === 'prod') { passthru('php bin/console importmap:install'); passthru('php bin/console tailwind:build --minify'); }\""
         ]
     },
     "conflict": {
