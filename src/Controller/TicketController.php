@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/tickets')]
 final class TicketController extends AbstractController
 {
-  /** QR generator ondemand */
+  /** QR generator on demand */
   #[Route('/qr/{qrtoken}', name: 'app_ticket_generate_qr')]
   public function generateQR(Ticket $ticket, QRService $QRService): Response
   {
@@ -26,8 +26,6 @@ final class TicketController extends AbstractController
         ],
         UrlGeneratorInterface::ABSOLUTE_URL
       );
-      // $route = 'http://192.168.1.142:8000/login';
-      $route = 'https://www.linkedin.com/in/claudio-gandolffi/';
 
       $qr = $QRService->generateQRCode($route);
       return new Response(

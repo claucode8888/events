@@ -24,7 +24,7 @@ class UserFixtures extends Fixture
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setIsVerified(true);
         
-        $hashedPassword = $this->passwordHasher->hashPassword($admin, 'lala88');
+        $hashedPassword = $this->passwordHasher->hashPassword($admin, '1234');
         $admin->setPassword($hashedPassword);
         
         $manager->persist($admin);
@@ -34,23 +34,19 @@ class UserFixtures extends Fixture
         $usersData = [
             [
                 'email' => 'claucode88@gmail.com',
-                'password' => 'lala88',
+                'password' => '1234',
             ],
             [
                 'email' => 'jane@example.com',
-                'password' => 'lala88',
+                'password' => '1234',
             ],
             [
                 'email' => 'alice@bilbostack.com',
-                'password' => 'lala88',
+                'password' => '1234',
             ],
             [
                 'email' => 'bob@bilbostack.com',
-                'password' => 'lala88',
-            ],
-            [
-                'email' => 'bgallastegui86@gmail.com',
-                'password' => 'lala88',
+                'password' => '1234',
             ],
         ];
 
