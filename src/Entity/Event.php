@@ -11,14 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-#[ORM\Index(name:'idx_event_status', columns: ['status'])]
 #[ORM\Index(name:'idx_event_start_at', columns: ['start_at'])]
 #[ORM\Index(name:'idx_event_end_at', columns: ['end_at'])]
 #[ORM\HasLifecycleCallbacks]
 class Event extends AbstractEntity
 {
-    const STATUS_PUBLISHED = 'published';
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -41,10 +38,6 @@ class Event extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?int $capacity = null;
 
-    #[ORM\Column(length: 80, nullable: false)]
-    #[Assert\NotBlank(message: 'Please select one status.')]
-    private ?string $status = null;
-
     /**
      * @var Collection<int, TicketCategory>
      */
@@ -63,6 +56,10 @@ class Event extends AbstractEntity
     #[ORM\ManyToOne(inversedBy: 'events', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Organizer $organizer = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?EventStatus $status = null;
 
     public function __construct()
     {
@@ -245,12 +242,12 @@ class Event extends AbstractEntity
       return $this;
   }
 
-  public function getStatus(): ?string
+  public function getStatus(): ?EventStatus
   {
       return $this->status;
   }
 
-  public function setStatus(string $status): static
+  public function setStatus(?EventStatus $status): static
   {
       $this->status = $status;
 

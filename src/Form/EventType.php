@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use App\Entity\Event;
+use App\Entity\EventStatus;
 use App\Entity\Organizer;
 use App\Entity\TicketCategory;
 use App\Form\OrganizerType;
@@ -29,15 +30,11 @@ class EventType extends AbstractType
       ->add('description', TextareaType::class, ['attr' => ['placeholder' => 'Describe your event...']])
       ->add('startAt', DateTimeType::class, ['widget' => 'single_text'])
       ->add('endAt', DateTimeType::class, ['widget' => 'single_text'])
-      ->add('status', ChoiceType::class, [
-        'choices' => [
-          'Draft' => 'draft',
-          'Published' => 'published',
-          'Cancelled' => 'cancelled',
-          'Completed' => 'completed',
-        ],
-        'placeholder' => 'Select status',
-        'required' => false,
+      ->add('status', EntityType::class, [
+          'class' => EventStatus::class,
+          'choice_label' => fn(EventStatus $status) => ucfirst($status->getName()),
+          'placeholder' => 'Select a status',
+          'required' => true,
       ])
       ->add('imageFile', FileType::class, [
         'mapped' => false,

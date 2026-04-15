@@ -2,12 +2,13 @@
 
 namespace App\Repository;
 
-use DateTime;
 use App\Entity\Event;
+use App\Entity\EventStatus;
+use DateTime;
 use DateTimeInterface;
-use InvalidArgumentException;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use InvalidArgumentException;
 
 class EventRepository extends ServiceEntityRepository
 {
@@ -19,8 +20,9 @@ class EventRepository extends ServiceEntityRepository
   public function getByDateRange(DateTimeInterface $date, ?string $range): array
   {
     $queryBuilder = $this->createQueryBuilder('e')
-      ->andWhere('e.status = :status')
-      ->setParameter('status', Event::STATUS_PUBLISHED)
+      ->join('e.status', 'status')
+      ->andWhere('status.name = :status')
+      ->setParameter('status', EventStatus::PUBLISHED)
       ->orderBy('e.startAt', 'ASC');
     
     switch ($range) {
@@ -93,11 +95,12 @@ class EventRepository extends ServiceEntityRepository
     ];
   }
 
-  public function getTotal(string $status = Event::STATUS_PUBLISHED) : int
+  public function getTotal(string $status = EventStatus::PUBLISHED) : int
   {
     return $this->createQueryBuilder('e')
       ->select('COUNT(e.id)')
-      ->andWhere('e.status = :status')
+      ->join('e.status', 'status')
+      ->andWhere('status.name = :status')
       ->setParameter('status', $status)
       ->getQuery()
       ->getSingleScalarResult();
@@ -158,9 +161,10 @@ class EventRepository extends ServiceEntityRepository
   public function getUpcoming(DateTimeInterface $from, int|bool $limit = false): array
   {
     $qb = $this->createQueryBuilder('e')
+      ->join('e.status', 'status')
       ->andWhere('e.startAt >= :from')
-      ->andWhere('e.status = :status')
-      ->setParameter('status', Event::STATUS_PUBLISHED)
+      ->andWhere('status.name = :status')
+      ->setParameter('status', EventStatus::PUBLISHED)
       ->setParameter('from', $from)
       ->orderBy('e.startAt', 'ASC');
       
@@ -195,8 +199,9 @@ class EventRepository extends ServiceEntityRepository
       )
       ->innerJoin('e.ticketCategories', 'tc')
       ->innerJoin('tc.tickets', 't')
-      ->where('e.status = :status')
-      ->setParameter('status', Event::STATUS_PUBLISHED)
+      ->innerJoin('e.status', 'status')
+      ->where('status.name = :status')
+      ->setParameter('status', EventStatus::PUBLISHED)
       ->groupBy('e.id')
       ->getQuery()
       ->getResult();
