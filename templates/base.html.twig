@@ -16,7 +16,7 @@
     {% endblock %}
   </head>
 
-  <body class="{% if app.request.attributes.get('_route') in ['app_login', 'app_register'] %}h-full bg-project {% endif %} flex flex-col min-h-screen">
+  <body class="{% if app.request.attributes.get('_route') in ['app_login', 'app_register'] %}bg-project {% endif %} flex flex-col min-h-screen">
     {% block body %}
       <header class="bg-project">
         {% block navbar %}{% endblock %}
@@ -27,13 +27,15 @@
         {% endblock %}
         {% block content %}{% endblock %}
       </main>
-      {% if not is_granted('ROLE_ADMIN') %}
-        <footer class="bg-gray-900 text-gray-300">
-          {% block footer %}
-            {% include 'components/_footer.html.twig' %}
-          {% endblock %}
-        </footer>
-      {% endif %}
+      <footer>
+        {% if not is_granted('ROLE_ADMIN') %}
+          <div class="bg-gray-900 text-gray-300">
+            {% block footer %}
+              {% include 'components/_footer.html.twig' %}
+            {% endblock %}
+          </div>
+        {% endif %}
+      </footer>
     {% endblock %}
   </body>
 </html>
