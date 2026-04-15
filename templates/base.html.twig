@@ -33,11 +33,11 @@
         {% endblock %}
         {% block content %}{% endblock %}
       </main>
-      {% block footer %}
-        <footer>
+      <footer class="bg-gray-900 text-gray-300">
+        {% block footer %}
           {% include 'components/_footer.html.twig' %}
-        </footer>
-      {% endblock %}
+        {% endblock %}
+      </footer>
     {% endblock %}
   </body>
 </html>
