@@ -27,11 +27,13 @@
         {% endblock %}
         {% block content %}{% endblock %}
       </main>
-      <footer class="bg-gray-900 text-gray-300">
-        {% block footer %}
-          {% include 'components/_footer.html.twig' %}
-        {% endblock %}
-      </footer>
+      {% if not is_granted('ROLE_ADMIN') %}
+        <footer class="bg-gray-900 text-gray-300">
+          {% block footer %}
+            {% include 'components/_footer.html.twig' %}
+          {% endblock %}
+        </footer>
+      {% endif %}
     {% endblock %}
   </body>
 </html>
