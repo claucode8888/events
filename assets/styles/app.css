@@ -8,6 +8,10 @@
 }
 
 @layer components {
+  .bg-login-register {
+    @apply bg-gradient-to-tr from-[var(--color-main-light)] via-[var(--color-main-dark)] to-[var(--color-main)];
+  }
+  
   .bg-project {
     @apply bg-radial-[circle_at_center] from-[var(--color-main-light)] via-[var(--color-main)] to-[var(--color-main-dark)];
   }
