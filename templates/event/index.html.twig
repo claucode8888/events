@@ -5,19 +5,30 @@
 {% block content %}
   <div class="flex flex-col gap-8">
 
-    <section class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-sm mx-4 mt-4 p-8">
-      <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Discover Events</h1>
-        <p class="text-gray-600 text-lg mb-6">Find your next unforgettable experience</p>
+    <!-- IMAGE SECTION -->
+    <section class="container mx-auto px-4">
+      <div class="relative h-64 md:h-80 w-screen left-1/2 right-1/2 -mx-[50vw]">
+        <img
+          src="{{ asset('images/landing_image.jpg') }}"
+          alt="Discover Events"
+          class="w-full h-full object-cover"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-900/30 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <h1 class="text-white text-3xl md:text-4xl font-bold">
+            Discover Events
+          </h1>
+          <p class="text-white/80 text-sm mt-1">Find the best events near you</p>
+        </div>
       </div>
     </section>
 
-    {# RANGE-TIME EVENT SECTIONS #}
+    <!-- RANGE-TIME EVENT SECTIONS -->
     <section class="mx-4 mb-4 py-8 px-8 lg:px-8 space-y-12">
 
       {% if categorizedEvents %}
         
-        {# 1. TODAY & TOMORROW #}
+        <!-- 1. TODAY & TOMORROW -->
         {% if categorizedEvents.today_tomorrow|length > 0 %}
           <div>
             <div class="mb-6">
@@ -27,9 +38,9 @@
                   Soon
                 </span>
                 Today & Tomorrow 
-                {# <small>
+                <!-- <small>
                   ({{ categorizedEvents.today_tomorrow|length }})
-                </small> #}
+                </small> -->
               </h2>
               <p class="text-gray-600 mt-1">Events happening in the next 48 hours</p>
             </div>
@@ -41,7 +52,7 @@
           </div>
         {% endif %}
 
-        {# 2. THIS WEEKEND #}
+        <!-- 2. THIS WEEKEND -->
         {% if categorizedEvents.weekend|length > 0 %}
           <div>
             <div class="mb-6">
@@ -50,9 +61,9 @@
                   Weekend
                 </span>
                 This Weekend
-                {# <small>
+                <!-- <small>
                   ({{ categorizedEvents.weekend|length }})
-                </small> #}
+                </small> -->
               </h2>
               <p class="text-gray-600 mt-1">Perfect for your days off</p>
             </div>
@@ -64,7 +75,7 @@
           </div>
         {% endif %}
 
-        {# 3. NEXT WEEK #}
+        <!-- 3. NEXT WEEK -->
         {% if categorizedEvents.next_week|length > 0 %}
           <div>
             <div class="mb-6">
@@ -84,7 +95,7 @@
           </div>
         {% endif %}
 
-        {# 4. NEXT MONTH #}
+        <!-- 4. NEXT MONTH -->
         {% if categorizedEvents.next_month|length > 0 %}
           <div>
             <div class="mb-6">
@@ -104,7 +115,7 @@
           </div>
         {% endif %}
 
-        {# 5. LATER #}
+        <!-- 5. LATER -->
         {% if categorizedEvents.later|length > 0 %}
           <div>
             <div class="mb-6">
@@ -125,7 +136,7 @@
         {% endif %}
 
       {% else %}
-        {# EMPTY STATE #}
+        <!-- EMPTY STATE -->
         <div class="text-center py-16">
           <div class="max-w-md mx-auto">
             <svg class="w-24 h-24 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
