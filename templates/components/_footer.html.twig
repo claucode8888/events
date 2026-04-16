@@ -4,7 +4,7 @@
     
     <!-- Column 1 -->
     <div>
-      <h3 class="text-xl font-bold text-white mb-4">Claucode Events</h3>
+      <h3 class="text-xl font-bold text-white mb-4">EventHub</h3>
       <p class="text-sm">Your premier platform for discovering and booking amazing events.</p>
     </div>
     <!-- End Column 1 -->
@@ -13,8 +13,14 @@
     <div>
       <h4 class="font-semibold text-white mb-3">Quick Links</h4>
       <ul class="space-y-2 text-sm">
-        <li><a href="#" class="hover:text-white transition">Events</a></li>
-        <li><a href="#" class="hover:text-white transition">My Tickets</a></li>
+        <li>
+          <a href="{{ path('app_event_index') }}" class="hover:text-white transition">Browse Events</a>
+        </li>
+        {% if app.user %}
+          <li>
+            <a href="{{ path('app_my_tickets') }}" class="hover:text-white transition">My Tickets</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
     <!-- End Column 2: Quick Links -->
@@ -30,7 +36,7 @@
   
   <!-- Bottom bar -->
   <div class="border-t border-gray-800 mt-8 pt-6 text-sm text-center text-gray-400">
-    © {{ "now"|date("Y") }} Claucode Events. All rights reserved.
+    © {{ "now"|date("Y") }} Claucode. All rights reserved.
   </div>
   <!-- End Bottom bar -->
 </div>
