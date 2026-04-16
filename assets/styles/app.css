@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@source "./safelist.css.txt";
 
 :root {
   --color-main: #001f3f;

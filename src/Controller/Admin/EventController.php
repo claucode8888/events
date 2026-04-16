@@ -80,6 +80,11 @@ final class EventController extends AbstractController
       $entityManager->flush();
 
       $this->addFlash('success', 'Event "' . $event->getName() . '" was updated.');
+      $this->addFlash('warning', 'Event "' . $event->getName() . '" was updated.');
+      $this->addFlash('error', 'Event "' . $event->getName() . '" was updated.');
+      $this->addFlash('danger', 'Event "' . $event->getName() . '" was updated.');
+      $this->addFlash('info', 'Event "' . $event->getName() . '" was updated.');
+      $this->addFlash('-', 'Event "' . $event->getName() . '" was updated.');
       return $this->redirectToRoute('app_admin_events_index', [], Response::HTTP_SEE_OTHER);
     }
 
