@@ -32,15 +32,19 @@
     <section>
       {% if myTickets | length > 0 %}
         <article class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+
           <!-- Title tickets -->
-          <h2 class="text-xl text-gray-600 font-bold flex flex-wrap items-center gap-3 col-span-full">
-            {{ searches[currentSearch].title|title }}
-            <span class="bg-gray-100 text-gray-600 text-sm font-medium px-3 py-1">
-              {{ myTickets|length }} ticket{{ myTickets|length != 1 ? 's' : '' }}
-            </span>
-          </h2>
+          <div class="flex items-center gap-2 col-span-full">
+            <h2 class="text-md lg:text-xl text-gray-600 font-bold">
+              {{ searches[currentSearch].title|title }}
+            </h2>
+            <div class="flex bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full">
+              <span>{{ myTickets|length }}</span>
+              <span class="ml-1">ticket{{ myTickets|length != 1 ? 's' : '' }}</span>
+            </div>
+          </div>
           <!-- End Title tickets -->
-          
+
           <!-- Tickets -->
           {% for ticket in myTickets %}
             {% include 'ticket/ticket_card.html.twig' %}

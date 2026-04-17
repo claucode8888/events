@@ -1,8 +1,4 @@
-{% set cols = myTickets | length == 1 ? 'lg:col-start-1 lg:col-span-8 md:col-start-1 md:col-span-8 ' : '' %}
-<div class="
-  {{ cols }}
-  col-span-12
-  p-2 mb-4">
+<div class="col-span-12 p-2 mb-4">
   <div class="bg-white rounded-xl shadow-sm w-full overflow-hidden">
     <div class="p-5 border-b border-gray-100">
       <!-- Grid layout for the 2 columns -->
@@ -12,18 +8,18 @@
         <div class="col-span-12 md:col-span-4">
           <div class="flex gap-2">
             <!-- Date badge -->
-            <div class="hidden lg:flex flex-col items-center justify-center bg-gray-100 rounded-sm p-1 w-12 self-start">
-              <span class="text-amber-400 text-xs font-semibold">
-                {{ ticket.category.event.startAt | date('M') | upper }}.
+            <div class="hidden lg:flex flex-col items-center justify-center bg-gray-100 rounded-lg p-2 w-14 self-start">
+              <span class="text-amber-500 text-xs font-semibold uppercase">
+                {{ ticket.category.event.startAt|date('M') }}
               </span>
-              <span class="text-xl font-bold text-gray-800">
-                {{ ticket.category.event.startAt | date('d') }}
+              <span class="text-2xl font-bold text-gray-800 leading-tight">
+                {{ ticket.category.event.startAt|date('d') }}
               </span>
             </div>
 
             <!-- Image -->
             <div class="flex-1">
-              {% include 'components/event/_img_event.html.twig' with {event: ticket.category.event }%}
+              {% include 'components/event/_img_event.html.twig' with {event: ticket.category.event} %}
             </div>
           </div>
         </div>
@@ -33,14 +29,14 @@
 
           <!-- Name Event -->
           <div class="mb-2">
-            <h1 class="text-xl font-bold text-gray-900 font-sans tracking-tight">
+            <h3 class="text-xl font-bold text-gray-900 font-sans tracking-tight">
               {{ ticket.category.event.name }}
-            </h1>
+            </h3>
             <p class="text-gray-500 text-sm mt-1 font-medium tracking-wide">
               {{ ticket.category.name }}
             </p>
           </div>
-          <!--  End Name Event -->
+          <!-- End Name Event -->
 
           <!-- DateTime -->
           <div class="flex items-center gap-1 text-sm text-gray-500 mb-2">
@@ -61,20 +57,20 @@
             <span class="font-bold text-gray-900">{{ ticket.booking.id }}</span> 
             for
             <span class="font-semibold">
-              ({{ ticket.category.price | format_currency('EUR', locale='en') }})
+              ({{ ticket.category.price|format_currency('EUR', locale='en') }})
             </span>
             purchased at
             <span class="font-medium">
-              {{ ticket.booking.createdAt | date('D') }}., 
-              {{ ticket.booking.createdAt | date('M') }}. 
-              {{ ticket.booking.createdAt | date('d') }}, 
-              {{ ticket.booking.createdAt | date('g:i') }}
+              {{ ticket.booking.createdAt|date('D') }}., 
+              {{ ticket.booking.createdAt|date('M') }}. 
+              {{ ticket.booking.createdAt|date('d') }}, 
+              {{ ticket.booking.createdAt|date('g:i A') }}
             </span>
           </div>
           <!-- End Booking Details -->
 
           <!-- Actions -->
-          <div class="flex justify-center gap-3 mt-4 pt-4 border-t border-gray-200">
+          <div class="flex justify-start gap-3 mt-4 pt-4 border-t border-gray-200">
             <a href="{{ path('app_event_details', { id: ticket.category.event.id }) }}" 
               class="inline-flex items-center justify-center gap-1 text-sm text-gray-700 border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 px-4 py-2 rounded-lg transition duration-200">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +89,7 @@
           </div>
         </div>
         
-      </div> <!-- End grid -->
+      </div> <!-- End Grid layout for the 2 columns -->
     </div>
   </div>
 </div>
