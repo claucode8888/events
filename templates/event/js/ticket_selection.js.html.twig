@@ -202,13 +202,15 @@
       
       const result = await response.json();
       
-      if (response.ok) {
-        checkoutBtn.textContent = '✓ Success! Redirecting...';
-
-        setTimeout(() => {
-          window.location.href = result.redirect;
-        }, 2000);
-        
+      if(result.success){
+        const paymentProcessResponse = await processPayment(result);
+        const paymentResult = await paymentProcessResponse.json();
+        if(paymentResult.success){
+          checkoutBtn.textContent = '✓ Success! Redirecting...';
+          setTimeout(() => {
+            window.location.href = result.redirect;
+          }, 2000);
+        }
       } else {
         alert(result.error);
         checkoutBtn.textContent = originalText;
@@ -220,6 +222,25 @@
       alert(`Error: ${error.message}`);
       checkoutBtn.textContent = originalText;
       checkoutBtn.disabled = false;
+    }
+  }
+
+  /** Process payment */
+  async function processPayment(data) {
+    try {
+      const response = await fetch('{{ path("app_booking_payment") }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId: data.booking_id,
+        })
+      })
+      return response;
+    } catch (error) {
+      alert(`Error: ${error.message}`);
     }
   }
 
