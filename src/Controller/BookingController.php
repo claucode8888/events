@@ -8,7 +8,6 @@ use App\Repository\TicketRepository;
 use App\Service\BookingManager;
 use App\Service\PDFService;
 use App\Service\QRService;
-use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -92,16 +91,5 @@ final class BookingController extends AbstractController
       'Content-Type' => 'application/pdf',
       'Content-Disposition' => 'attachment; filename="booking-' . $booking->getId() . '.pdf"'
     ]);
-  }
-
-  //PAYMENT CONTROLLER / MOVE OUT TO NEW CONTROLLER SHORTLY
-  #[Route('/payment', name: 'app_booking_payment', methods: ['POST'])]
-  public function makePayment(Request $request) : JsonResponse
-  {
-    $sentData = json_decode($request->getContent(), true);
-    return new JsonResponse([
-      'message' => 'Payment was successfuly.',
-      'success' => true
-      ]);
   }
 }

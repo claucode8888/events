@@ -12,18 +12,20 @@ class EmailService
   public function __construct(private MailerInterface $mailer){}
 
 
-  public function welcome(Booking $booking): void
+  public function sendBookingConfirmation(Booking $booking): void
   {
+    $event = $booking->getTickets()[0]->getCategory()->getEvent();
+    $eventName = $event->getName();
+    $subject = 'Tickets Confirmation '.$eventName;
+
     $email = new TemplatedEmail()
       ->from(new Address('no-replay@eventhub.com', 'EventHub'))
       ->to('claucode88@gmail.com')
-      ->subject('Welcome!')
-      ->htmlTemplate('email/welcome.html.twig')
+      ->subject($subject)
+      ->htmlTemplate('email/booking_confirmation.html.twig')
       ->context([
         'booking' => $booking,
-        'event' => $booking->getTickets()[0]->getCategory()->getEvent(),
-        'tickets_by_category' => '1000',
-        'total_tickets_booking' => '8000'
+        'event' => $event,
       ]);
     $this->mailer->send($email);
   }

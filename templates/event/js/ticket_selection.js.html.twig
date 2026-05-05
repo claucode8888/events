@@ -203,13 +203,15 @@
       const result = await response.json();
       
       if(result.success){
-        const paymentProcessResponse = await processPayment(result);
+        const paymentProcessResponse = await processPayment(result.booking_id);
         const paymentResult = await paymentProcessResponse.json();
         if(paymentResult.success){
           checkoutBtn.textContent = '✓ Success! Redirecting...';
           setTimeout(() => {
             window.location.href = result.redirect;
           }, 2000);
+        } else {
+          alert(paymentResult.message);
         }
       } else {
         alert(result.error);
@@ -226,21 +228,24 @@
   }
 
   /** Process payment */
-  async function processPayment(data) {
+  async function processPayment(bookingId) {
+    console.log(bookingId);
+
     try {
-      const response = await fetch('{{ path("app_booking_payment") }}', {
+      const response = await fetch('{{ path("app_payment_process") }}', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
         body: JSON.stringify({
-          bookingId: data.booking_id,
+          booking_id: bookingId
         })
       })
       return response;
     } catch (error) {
       alert(`Error: ${error.message}`);
+      throw error;
     }
   }
 
