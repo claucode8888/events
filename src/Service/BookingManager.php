@@ -26,7 +26,7 @@ class BookingManager
     $subtotal = 0;
     $booking = new Booking();
     $booking->setStatus(Booking::STATUS_PENDING);
-    $booking->setBuyer($user->getBuyer());
+    $booking->setUser($user);
 
     foreach($TCEntities as $TCEntity){
       $quantity = $tickets[$TCEntity->getId()];

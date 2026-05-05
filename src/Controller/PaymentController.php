@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\BookingRepository;
+use App\Repository\TicketRepository;
 use App\Service\EmailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,11 +15,16 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PaymentController extends AbstractController
 {
   #[Route('/process', name: 'app_payment_process', methods: ['POST'])]
-  public function processPayment(Request $request, BookingRepository $bookingRepo, EmailService $emailService) : JsonResponse
+  public function processPayment(
+    Request $request,
+    BookingRepository $bookingRepository,
+    TicketRepository $ticketRepository,
+    EmailService $emailService
+  ) : JsonResponse
   {
     $sentData = json_decode($request->getContent(), true);
 
-    $booking = $bookingRepo->find($sentData['booking_id']);
+    $booking = $bookingRepository->find($sentData['booking_id']);
 
     if(!$booking){
       return new JsonResponse([
@@ -26,6 +32,7 @@ final class PaymentController extends AbstractController
         'success' => false
       ], Response::HTTP_NOT_FOUND);
     }
+
     // Call to Payment Service 
     $paymentResult = true;
 
@@ -36,8 +43,11 @@ final class PaymentController extends AbstractController
       ]);
     }
 
+    // Get data for email
+    $queryResults = $ticketRepository->getTicketsByCategory($booking);
+    
     // Send email confirmation
-    $emailService->sendBookingConfirmation($booking);
+    $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
     
     return new JsonResponse([
       'message' => 'Payment was successfuly.',

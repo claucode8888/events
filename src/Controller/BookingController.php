@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Exception;
 use App\Entity\Booking;
-use App\Repository\TicketRepository;
 use App\Service\BookingManager;
 use App\Service\PDFService;
 use App\Service\QRService;
@@ -39,7 +38,7 @@ final class BookingController extends AbstractController
       return new JsonResponse([
         'success' => true,
         'booking_id' => $booking->getId(),
-        'redirect' => $this->generateUrl('app_booking_details', ['id' => $booking->getId()])
+        'redirect' => $this->generateUrl('app_booking_confirmation', ['id' => $booking->getId()])
         ], 
         Response::HTTP_CREATED
       );
@@ -51,15 +50,10 @@ final class BookingController extends AbstractController
     }
   }
 
-  #[Route('/details/{id}', name: 'app_booking_details', methods: ['GET'])]
-  public function details(Booking $booking, TicketRepository $ticketRepository)
+  #[Route('/confirmation/{id}', name: 'app_booking_confirmation', methods: ['GET'])]
+  public function confirmation(Booking $booking)
   {
-    $queryResults = $ticketRepository->getTicketsByCategory($booking);
-    return $this->render('booking/details.html.twig', [
-      'booking' => $booking,
-      'tickets_by_category' => $queryResults['tickets_by_category'],
-      'total_tickets_booking' => $queryResults['total_tickets']
-    ]);
+    return $this->render('booking/confirmation.html.twig', ['booking' => $booking]);
   }
 
   #[Route('/pdf/{id}', name: 'app_booking_pdf', methods: ['GET'])]

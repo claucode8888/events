@@ -41,7 +41,7 @@ class Booking extends AbstractEntity
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Buyer $buyer = null;
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -136,15 +136,15 @@ class Booking extends AbstractEntity
     {
       $this->total = $this->getSubtotal() + $this->getServiceFee();
     }
-
-    public function getBuyer(): ?Buyer
+    
+    public function getUser(): ?User
     {
-        return $this->buyer;
+        return $this->user;
     }
 
-    public function setBuyer(?Buyer $buyer): static
+    public function setUser(?User $user): static
     {
-        $this->buyer = $buyer;
+        $this->user = $user;
 
         return $this;
     }

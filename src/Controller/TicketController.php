@@ -9,7 +9,6 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -47,10 +46,6 @@ final class TicketController extends AbstractController
     if(!$user){
       throw new AccessDeniedHttpException('You must be logged in to view your tickets.');
     }
-    $buyer = $user->getBuyer();
-    if(!$buyer){
-      throw new NotFoundHttpException('Buyer object not found.');
-    }
 
     // Type of search references array
     $past = 'past';
@@ -69,8 +64,8 @@ final class TicketController extends AbstractController
     // Query on demand
     $tickets = match($search)
     {
-      $upcoming => $ticketRepository->getUpcomingTicketsByBuyer($buyer),
-      $past => $ticketRepository->getPastTicketsByBuyer($buyer),
+      $upcoming => $ticketRepository->getUpcomingTicketsByUser($user),
+      $past => $ticketRepository->getPastTicketsByUser($user),
     };
 
     return $this->render('ticket/my_tickets.html.twig', [

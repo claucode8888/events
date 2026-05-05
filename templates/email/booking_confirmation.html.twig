@@ -4,129 +4,112 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking Confirmation</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f3f4f6;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    .content {
-      padding: 32px 24px;
-    }
-    .text-center { text-align: center; }
-    .mb-1 { margin-bottom: 4px; }
-    .mb-2 { margin-bottom: 8px; }
-    .mb-3 { margin-bottom: 12px; }
-    .mb-4 { margin-bottom: 16px; }
-    .mb-6 { margin-bottom: 24px; }
-    .mt-1 { margin-top: 4px; }
-    .mt-2 { margin-top: 8px; }
-    .mt-3 { margin-top: 12px; }
-    .mt-4 { margin-top: 16px; }
-    .text-gray-500 { color: #6b7280; }
-    .text-gray-600 { color: #4b5563; }
-    .text-gray-900 { color: #111827; }
-    .text-blue-600 { color: #2563eb; }
-    .font-bold { font-weight: 700; }
-    .font-semibold { font-weight: 600; }
-    .text-sm { font-size: 14px; }
-    .text-lg { font-size: 18px; }
-    .text-xl { font-size: 20px; }
-    .text-2xl { font-size: 24px; }
-    .border-t { border-top: 1px solid #e5e7eb; }
-    .border-b { border-bottom: 1px solid #e5e7eb; }
-    .py-2 { padding-top: 8px; padding-bottom: 8px; }
-    .py-3 { padding-top: 12px; padding-bottom: 12px; }
-    .py-4 { padding-top: 16px; padding-bottom: 16px; }
-    .rounded-lg { border-radius: 12px; }
-    .w-full { width: 100%; }
-    .h-auto { height: auto; }
-    .flex { display: flex; }
-    .justify-between { justify-content: space-between; }
-    .bg-gray-50 { background-color: #f9fafb; }
-  </style>
 </head>
-<body>
-  <div class="container">
-    <!-- Event Image -->
-    {% if event.imgPath %}
-      <div style="text-align: center;">
-        <img src="{{ absolute_url(asset(uploads_events ~ '/' ~ event.imgPath)) }}" alt="{{ event.name }}" style="width: 60%; height: auto; display: inline-block;">
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px;">
+  <div style="max-width: 600px; margin: 0 auto;">
+    
+    <!-- Main Card -->
+    <div style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+      
+      <!-- Event Image -->
+      {% set event = booking.tickets.first.category.event %}
+      {% if event.imgPath %}
+      <div style="text-align: center; padding: 24px 24px 0 24px;">
+        <img src="{{ absolute_url(asset(uploads_events ~ '/' ~ event.imgPath)) }}" alt="{{ event.name }}" style="width: 60%; height: auto; border-radius: 12px;">
       </div>
-    {% endif %}
-
-    <!-- Content -->
-    <div class="content">
-      <!-- Header -->
-      <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 mb-1" style="margin: 8px 0 0 0;">{{ booking.buyer.user }} Booking Confirmed!</h1>
-        <p class="text-sm text-gray-500" style="margin: 4px 0 0 0;">Booking #{{ booking.id }}</p>
-      </div>
-
-      <!-- Event Name -->
-      <div class="text-center mb-6">
-        <h2 class="text-xl font-bold text-gray-900" style="margin: 0;">{{ event.name }}</h2>
-      </div>
-
-      <!-- Event Details -->
-      <div class="border-t border-b py-4 mb-6">
-        <div class="flex justify-between mb-3">
-          <span class="text-sm text-gray-500">Date</span>
-          <span class="text-sm font-semibold text-gray-900">{{ event.startAt|date('l, F j, Y') }}</span>
-        </div>
-        <div class="flex justify-between mb-3">
-          <span class="text-sm text-gray-500">Time</span>
-          <span class="text-sm font-semibold text-gray-900">{{ event.startAt|date('g:i A') }} - {{ event.endAt|date('g:i A') }}</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-sm text-gray-500">Location</span>
-          <span class="text-sm font-semibold text-gray-900">{{ event.location }}</span>
-        </div>
-      </div>
-
-      <!-- Tickets Summary -->
-      <div class="mb-6">
-        <h3 class="text-lg font-bold text-gray-900 mb-3">Your Tickets</h3>
-
-        <!-- Total Tickets -->
-        <div class="flex justify-between py-2">
-          <span class="text-sm text-gray-900">Total tickets
-            (
-            <span class="text-sm font-semibold text-gray-900">{{ booking.tickets.count }}</span>
-            )
-          </span>
+      {% endif %}
+      
+      <!-- Content -->
+      <div style="padding: 32px 24px;">
+        
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 24px;">
+          <div style="font-size: 48px; margin-bottom: 8px;">✅</div>
+          <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 4px 0;">
+            {{ booking.user.profile.name }}, tickets ready!
+          </h1>
+          <p style="font-size: 14px; color: #6b7280; margin: 4px 0 0 0;">Booking #{{ booking.id }} • {{ booking.createdAt|date('M j, Y g:i A') }}</p>
         </div>
 
-        <div class="border-t mt-3 pt-3">
-          <div class="flex justify-between">
-            <span class="text-sm text-gray-500">Subtotal</span>
-            <span class="text-sm text-gray-900">€{{ booking.subtotal|number_format(2) }}</span>
+        <!-- Event Info -->
+        {% if booking.tickets|length > 0 %}
+          <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">Event Info</h2>
+            <div style="margin-bottom: 12px;">
+              <div style="font-size: 13px; color: #6b7280; margin-bottom: 4px;">Event</div>
+              <div style="font-size: 14px; font-weight: 500; color: #111827;">{{ event.name }}</div>
+            </div>
+            <div style="margin-bottom: 12px;">
+              <div style="font-size: 13px; color: #6b7280; margin-bottom: 4px;">Date & Time</div>
+              <div style="font-size: 14px; font-weight: 500; color: #111827;">{{ event.startAt|date('M j, Y') }} at {{ event.startAt|date('g:i A') }}</div>
+            </div>
+            <div>
+              <div style="font-size: 13px; color: #6b7280; margin-bottom: 4px;">Location</div>
+              <div style="font-size: 14px; font-weight: 500; color: #111827;">{{ event.location }}</div>
+            </div>
           </div>
-          <div class="flex justify-between mt-2">
-            <span class="text-sm text-gray-500">Service fee</span>
-            <span class="text-sm text-gray-900">€{{ booking.serviceFee|number_format(2) }}</span>
+        {% endif %}
+        
+        <!-- Tickets by Category -->
+        <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+          <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">
+            Your Tickets
+            <span style="font-size: 14px; font-weight: 400; color: #4b5563;">({{ total_tickets_booking }})</span>
+          </h2>
+          
+          {% if tickets_by_category %}
+            {% for categoryId, category in tickets_by_category %}
+              <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+                  <div style="flex: 1;">
+                    <div style="margin-bottom: 8px;">
+                      <span style="font-size: 16px; font-weight: 600; color: #111827;">{{ category.name }}</span>
+                      <small style="font-size: 12px; color: #6b7280;">(×{{ category.category_total_tickets }})</small>
+                    </div>
+                    <div style="font-size: 13px; color: #4b5563; margin-bottom: 8px;">{{ category.event_name }}</div>
+                    <div style="font-size: 13px;">
+                      <span style="font-weight: 500; color: #111827;">€{{ category.price | number_format(2) }}</span>
+                      <span style="color: #6b7280;"> per ticket</span>
+                    </div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 16px; font-weight: 700; color: #111827;">€{{ category.total_price|number_format(2) }}</div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        
+        <!-- Payment Summary -->
+        <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+          <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">Payment Summary</h2>
+          <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+            <span style="font-size: 14px; color: #4b5563;">Subtotal</span>
+            <span style="font-size: 14px; color: #111827;">€{{ booking.subtotal|number_format(2) }}</span>
           </div>
-          <div class="flex justify-between mt-3 pt-3 border-t">
-            <span class="text-lg font-bold text-gray-900">Total paid</span>
-            <span class="text-lg font-bold text-blue-600">€{{ booking.total|number_format(2) }}</span>
+          <div style="margin-bottom: 16px; display: flex; justify-content: space-between;">
+            <span style="font-size: 14px; color: #4b5563;">Service fee</span>
+            <span style="font-size: 14px; color: #111827;">€{{ booking.serviceFee|number_format(2) }}</span>
+          </div>
+          <div style="border-top: 1px solid #e5e7eb; padding-top: 16px; display: flex; justify-content: space-between;">
+            <span style="font-size: 18px; font-weight: 700; color: #111827;">Total</span>
+            <span style="font-size: 18px; font-weight: 700; color: #2563eb;">€{{ booking.total|number_format(2) }}</span>
           </div>
         </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="text-center mt-4">
-        <p class="text-sm text-gray-500 mb-1">
-          Thank you for your purchase!
-        </p>
+        
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+          <a href="{{ path('app_my_tickets') }}" style="flex: 1; text-align: center; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 500;">
+            🎟️ My Tickets
+          </a>
+        </div>
+        
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 24px;">
+          <p style="font-size: 13px; color: #6b7280; margin: 0;">Need help? <a href="mailto:support@eventhub.com" style="color: #2563eb; text-decoration: none;">Contact support</a></p>
+        </div>
+        
       </div>
     </div>
   </div>
