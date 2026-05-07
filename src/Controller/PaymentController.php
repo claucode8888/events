@@ -43,12 +43,15 @@ final class PaymentController extends AbstractController
       ]);
     }
 
-    // Get data for email
-    $queryResults = $ticketRepository->getTicketsByCategory($booking);
-    
     // Send email confirmation
-    $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
-    
+    $queryResults = $ticketRepository->getTicketsByCategory($booking);
+    $emailSent = $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
+    if($emailSent){
+      $this->addFlash('success', 'Booking confirmed! We\'ve emailed your tickets.');
+    }else{
+      $this->addFlash('warning', 'Payment processed, but we couldn\'t send the confirmation email. Please check your booking in "My Tickets" or contact support.');
+    }
+
     return new JsonResponse([
       'message' => 'Payment was successfuly.',
       'success' => true

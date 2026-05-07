@@ -196,7 +196,6 @@
         body: JSON.stringify({
           service_fee: SERVICE_FEE,
           tickets: cart,
-          _token: '{{ csrf_token("checkout") }}'
         })
       });
       
