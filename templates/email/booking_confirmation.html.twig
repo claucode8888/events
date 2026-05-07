@@ -4,110 +4,355 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking Confirmation</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
+    .wave-container {
+      background-color: #111827;
+      color: #f3f4f6;
+      text-align: center;
+      padding: 24px 24px 16px 24px;
+    }
+    .banner-top {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .app-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    .logo-img {
+      width: 46px;
+      height: auto;
+      vertical-align: middle;
+      border: 0;
+    }
+    .wave-title {
+      font-size: 16px;
+      font-weight: 400;
+      color: #94a3b8;
+      margin: 0;
+    }
+    .wave-event {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 0 6px;
+    }
+
+    .wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 0 0 16px 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .card-body {
+      padding: 32px 24px;
+    }
+
+    .event-img-wrap {
+      text-align: center;
+      padding: 24px 24px 0 24px;
+    }
+    .event-img {
+      width: 90%;
+      height: auto;
+      border-radius: 12px;
+      border: 0;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .header-icon {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 4px 0;
+    }
+    .header-meta {
+      font-size: 14px;
+      color: #6b7280;
+      margin: 4px 0 0 0;
+    }
+
+    .section {
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 16px 0;
+    }
+    .section-subtitle {
+      font-size: 14px;
+      font-weight: 400;
+      color: #4b5563;
+    }
+    .info-row {
+      margin-bottom: 12px;
+    }
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+    .info-label {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    .info-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .ticket-card {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .ticket-card:last-child {
+      margin-bottom: 0;
+    }
+    .ticket-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .ticket-details {
+      flex: 1;
+    }
+    .ticket-name-row {
+      margin-bottom: 8px;
+    }
+    .ticket-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+    }
+    .ticket-quantity {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .ticket-event {
+      font-size: 13px;
+      color: #4b5563;
+      margin-bottom: 8px;
+    }
+    .ticket-price-row {
+      font-size: 13px;
+    }
+    .ticket-price {
+      font-weight: 500;
+      color: #111827;
+    }
+    .ticket-price-label {
+      color: #6b7280;
+    }
+    .ticket-total-col {
+      text-align: right;
+    }
+    .ticket-total {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .payment-row {
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .payment-label {
+      font-size: 14px;
+      color: #4b5563;
+    }
+    .payment-value {
+      font-size: 14px;
+      color: #111827;
+    }
+    .payment-service-row {
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .payment-divider {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .payment-total-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .payment-total-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2563eb;
+    }
+
+    .btn-wrap {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      flex: 1;
+      text-align: center;
+      background-color: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+    }
+    .footer-text {
+      font-size: 13px;
+      color: #6b7280;
+      margin: 0;
+    }
+    .footer-link {
+      color: #2563eb;
+      text-decoration: none;
+    }
+  </style>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px;">
-  <div style="max-width: 600px; margin: 0 auto;">
-    
-    <!-- Main Card -->
-    <div style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-      
+<body>
+
+  {% set event = booking.tickets.first.category.event %}
+  <!-- ===== TOP BANNER ===== -->
+  <div class="wave-container">
+    <div class="banner-top">
+      <img src="{{ absolute_url(asset('images/logo.jpg')) }}" alt="EventHub Logo" class="logo-img">
+      <span class="app-name">EventHub</span>
+    </div>
+    <p class="wave-title">
+      Your tickets for
+      <span class="wave-event">{{ event.name }}</span>
+    </p>
+  </div>
+
+  <!-- ===== MAIN CARD ===== -->
+  <div class="wrapper">
+    <div class="card">
+
       <!-- Event Image -->
-      {% set event = booking.tickets.first.category.event %}
       {% if event.imgPath %}
-      <div style="text-align: center; padding: 24px 24px 0 24px;">
-        <img src="{{ absolute_url(asset(uploads_events ~ '/' ~ event.imgPath)) }}" alt="{{ event.name }}" style="width: 60%; height: auto; border-radius: 12px;">
+      <div class="event-img-wrap">
+        <img src="{{ absolute_url(asset(uploads_events ~ '/' ~ event.imgPath)) }}" alt="{{ event.name }}" class="event-img">
       </div>
       {% endif %}
-      
+
       <!-- Content -->
-      <div style="padding: 32px 24px;">
-        
+      <div class="card-body">
+
         <!-- Header -->
-        <div style="text-align: center; margin-bottom: 24px;">
-          <div style="font-size: 48px; margin-bottom: 8px;">✅</div>
-          <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 4px 0;">
+        <div class="header">
+          <h1 class="header-title">
+            <span class="header-icon">✅</span>
             {{ booking.user.profile.name }}, tickets ready!
           </h1>
-          <p style="font-size: 14px; color: #6b7280; margin: 4px 0 0 0;">Booking #{{ booking.id }} • {{ booking.createdAt|date('M j, Y g:i A') }}</p>
+          <p class="header-meta">Booking #{{ booking.id }} • {{ booking.createdAt|date('M j, Y g:i A') }}</p>
         </div>
 
         <!-- Event Info -->
         {% if booking.tickets|length > 0 %}
-          <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-            <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">Event Info</h2>
-            <div style="margin-bottom: 12px;">
-              <div style="font-size: 13px; color: #6b7280; margin-bottom: 4px;">Event</div>
-              <div style="font-size: 14px; font-weight: 500; color: #111827;">{{ event.name }}</div>
+          <div class="section">
+            <h2 class="section-title">Event Info</h2>
+            <div class="info-row">
+              <div class="info-label">Event</div>
+              <div class="info-value">{{ event.name }}</div>
             </div>
-            <div style="margin-bottom: 12px;">
-              <div style="font-size: 13px; color: #6b7280; margin-bottom: 4px;">Date & Time</div>
-              <div style="font-size: 14px; font-weight: 500; color: #111827;">{{ event.startAt|date('M j, Y') }} at {{ event.startAt|date('g:i A') }}</div>
+            <div class="info-row">
+              <div class="info-label">Date & Time</div>
+              <div class="info-value">{{ event.startAt|date('M j, Y') }} at {{ event.startAt|date('g:i A') }}</div>
             </div>
-            <div>
-              <div style="font-size: 13px; color: #6b7280; margin-bottom: 4px;">Location</div>
-              <div style="font-size: 14px; font-weight: 500; color: #111827;">{{ event.location }}</div>
+            <div class="info-row">
+              <div class="info-label">Location</div>
+              <div class="info-value">{{ event.location }}</div>
             </div>
           </div>
         {% endif %}
-        
+
         <!-- Tickets by Category -->
-        <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-          <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">
+        <div class="section">
+          <h2 class="section-title">
             Your Tickets
-            <span style="font-size: 14px; font-weight: 400; color: #4b5563;">({{ total_tickets_booking }})</span>
+            <span class="section-subtitle">({{ total_tickets_booking }})</span>
           </h2>
-          
           {% if tickets_by_category %}
             {% for categoryId, category in tickets_by_category %}
-              <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
-                  <div style="flex: 1;">
-                    <div style="margin-bottom: 8px;">
-                      <span style="font-size: 16px; font-weight: 600; color: #111827;">{{ category.name }}</span>
-                      <small style="font-size: 12px; color: #6b7280;">(×{{ category.category_total_tickets }})</small>
+              <div class="ticket-card">
+                <div class="ticket-row">
+                  <div class="ticket-details">
+                    <div class="ticket-name-row">
+                      <span class="ticket-name">{{ category.name }}</span>
+                      <small class="ticket-quantity">(×{{ category.category_total_tickets }})</small>
                     </div>
-                    <div style="font-size: 13px; color: #4b5563; margin-bottom: 8px;">{{ category.event_name }}</div>
-                    <div style="font-size: 13px;">
-                      <span style="font-weight: 500; color: #111827;">€{{ category.price | number_format(2) }}</span>
-                      <span style="color: #6b7280;"> per ticket</span>
+                    <div class="ticket-event">{{ category.event_name }}</div>
+                    <div class="ticket-price-row">
+                      <span class="ticket-price">€{{ category.price|number_format(2) }}</span>
+                      <span class="ticket-price-label"> per ticket</span>
                     </div>
                   </div>
-                  <div style="text-align: right;">
-                    <div style="font-size: 16px; font-weight: 700; color: #111827;">€{{ category.total_price|number_format(2) }}</div>
+                  <div class="ticket-total-col">
+                    <div class="ticket-total">€{{ category.total_price|number_format(2) }}</div>
                   </div>
                 </div>
               </div>
             {% endfor %}
           {% endif %}
         </div>
-        
+
         <!-- Payment Summary -->
-        <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-          <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">Payment Summary</h2>
-          <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
-            <span style="font-size: 14px; color: #4b5563;">Subtotal</span>
-            <span style="font-size: 14px; color: #111827;">€{{ booking.subtotal|number_format(2) }}</span>
+        <div class="section">
+          <h2 class="section-title">Payment Summary</h2>
+          <div class="payment-row">
+            <span class="payment-label">Subtotal</span>
+            <span class="payment-value">€{{ booking.subtotal|number_format(2) }}</span>
           </div>
-          <div style="margin-bottom: 16px; display: flex; justify-content: space-between;">
-            <span style="font-size: 14px; color: #4b5563;">Service fee</span>
-            <span style="font-size: 14px; color: #111827;">€{{ booking.serviceFee|number_format(2) }}</span>
+          <div class="payment-service-row">
+            <span class="payment-label">Service fee</span>
+            <span class="payment-value">€{{ booking.serviceFee|number_format(2) }}</span>
           </div>
-          <div style="border-top: 1px solid #e5e7eb; padding-top: 16px; display: flex; justify-content: space-between;">
-            <span style="font-size: 18px; font-weight: 700; color: #111827;">Total</span>
-            <span style="font-size: 18px; font-weight: 700; color: #2563eb;">€{{ booking.total|number_format(2) }}</span>
+          <div class="payment-divider">
+            <span class="payment-total-label">Total</span>
+            <span class="payment-total-value">€{{ booking.total|number_format(2) }}</span>
           </div>
-        </div>
-        
-        <!-- Action Buttons -->
-        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-          <a href="{{ path('app_my_tickets') }}" style="flex: 1; text-align: center; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 500;">
-            🎟️ My Tickets
-          </a>
-        </div>
-        
-        <!-- Footer -->
-        <div style="text-align: center; margin-top: 24px;">
-          <p style="font-size: 13px; color: #6b7280; margin: 0;">Need help? <a href="mailto:support@eventhub.com" style="color: #2563eb; text-decoration: none;">Contact support</a></p>
         </div>
         
       </div>
