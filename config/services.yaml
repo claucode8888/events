@@ -10,6 +10,8 @@ parameters:
     service_fee: 4.5
     uploads_events: 'uploads/events'
     event_images_dir: '%kernel.project_dir%/public/%uploads_events%'
+    app_sender_email: 'claucode88@gmail.com'
+    app_name: 'EventHub'
     
 services:
     # default configuration for services in *this* file
