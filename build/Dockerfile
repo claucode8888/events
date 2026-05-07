@@ -40,7 +40,7 @@ ENV APP_DEBUG=0
 COPY . .
 
 # Install dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
 # Run Symfony commands manually
 RUN php bin/console cache:clear --env=prod
