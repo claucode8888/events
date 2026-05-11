@@ -46,6 +46,8 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 RUN php bin/console cache:clear --env=prod
 RUN php bin/console importmap:install --env=prod
 RUN php bin/console tailwind:build --minify
+RUN php bin/console stimulus:controller:dump --env=prod
+RUN php bin/console assets:install public --env=prod
 
 # Permissions
 RUN mkdir -p var && chmod -R 775 var
