@@ -39,13 +39,17 @@ ENV APP_DEBUG=0
 # Copy project
 COPY . .
 
-# Install dependencies
+# Install dependencies (production only)
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
-# Run Symfony commands manually
-RUN php bin/console cache:clear --env=prod
-RUN php bin/console importmap:install --env=prod
-RUN php bin/console tailwind:build --minify
+# Install required production bundles (Stimulus and Google Mailer)
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer require symfony/stimulus-bundle symfony/google-mailer --no-scripts
+
+# Run Symfony commands
+RUN php bin/console cache:clear --env=prod --no-debug && \
+    php bin/console importmap:install --env=prod && \
+    php bin/console tailwind:build --minify && \
+    php bin/console assets:install public --symlink --relative --env=prod
 
 # Permissions
 RUN mkdir -p var && chmod -R 775 var
