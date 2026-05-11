@@ -26,7 +26,7 @@ class EmailService
 
     $email = new TemplatedEmail()
       ->from(new Address($this->senderEmail, $this->appName))
-      ->to($this->senderEmail)
+      ->to($booking->getUser()->getEmail())
       ->subject($subject)
       ->htmlTemplate('email/booking_confirmation.html.twig')
       ->context([
