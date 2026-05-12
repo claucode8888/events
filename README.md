@@ -61,7 +61,6 @@ Una plataforma de tickets donde los usuarios pueden explorar eventos próximos, 
 ## Autor
 - **Claucode**
 
-- [GitHub](https://github.com/claucode8888)
 - [Email](mailto:claucode88@gmail.com)
 - [LinkedIn](https://www.linkedin.com/in/claudio-gandolffi)
 - [Portfolio](https://upbeat-energy-production.up.railway.app)
@@ -130,7 +129,6 @@ A ticket platform where users can browse upcoming events, reserve free or paid t
 ## Author
 - **Claucode**
 
-- [GitHub](https://github.com/claucode8888)
 - [Email](mailto:claucode88@gmail.com)
 - [LinkedIn](https://www.linkedin.com/in/claudio-gandolffi)
 - [Portfolio](https://upbeat-energy-production.up.railway.app)
