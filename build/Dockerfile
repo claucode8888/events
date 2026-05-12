@@ -47,7 +47,8 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer require symfony/asset-mapper
 # Run Symfony commands
 RUN php bin/console cache:clear --env=prod --no-debug && \
     php bin/console importmap:install --env=prod && \
-    php bin/console tailwind:build --minify
+    php bin/console tailwind:build --minify && \
+    php bin/console asset-map:compile --env=prod
 
 # Permissions
 RUN mkdir -p var && chmod -R 775 var
