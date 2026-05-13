@@ -19,8 +19,6 @@ final class PaymentController extends AbstractController
   public function process(
     Request $request,
     BookingRepository $bookingRepository,
-    TicketRepository $ticketRepository,
-    EmailService $emailService,
     StripePaymentService $stripePaymentService,
   ) : JsonResponse
   {
@@ -38,24 +36,6 @@ final class PaymentController extends AbstractController
     // Call to Payment Service
     $stripeSession = $stripePaymentService->createPaymentSession($booking);
 
-    // $paymentResult = true;
-
-    // if(!$paymentResult){
-    //   return new JsonResponse([
-    //     'message' => 'Payment could not be done.',
-    //     'success' => false
-    //   ]);
-    // }
-
-    // Send email confirmation
-    // $queryResults = $ticketRepository->getTicketsByCategory($booking);
-    // $emailSent = $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
-    // if($emailSent){
-    //   $this->addFlash('success', 'Booking confirmed! We\'ve emailed your tickets.');
-    // }else{
-    //   $this->addFlash('warning', 'Payment processed, but we couldn\'t send the confirmation email. Please check your booking in "My Tickets" or contact support.');
-    // }
-
     return new JsonResponse([
       'message' => 'Payment was successfuly.',
       'success' => true,
@@ -64,7 +44,12 @@ final class PaymentController extends AbstractController
   }
 
   #[Route('/success', name: 'app_payment_success')]
-  public function success(Request $request, BookingRepository $bookingRepository){
+  public function success(
+    Request $request,
+    BookingRepository $bookingRepository,
+    // TicketRepository $ticketRepository,
+    // EmailService $emailService,
+  ){
     $bookingId = $request->query->get('booking_id');
     $booking = $bookingRepository->find($bookingId);
 
@@ -72,14 +57,18 @@ final class PaymentController extends AbstractController
       throw $this->createNotFoundException('Booking not found.');
     }
 
-    return $this->render('payment/success.html.twig', ['booking' => $booking]);
+    //Send email confirmation
+    // $queryResults = $ticketRepository->getTicketsByCategory($booking);
+    // $emailSent = $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
+    $emailSent = true;
+    return $this->render('payment/success.html.twig', ['booking' => $booking, 'emailSent' => $emailSent]);
   }
 
   #[Route('/cancel', name: 'app_payment_cancel')]
   public function cancel(Request $request, BookingRepository $bookingRepository){
     $bookingId = $request->query->get('booking_id');
     $booking = $bookingRepository->find($bookingId);
-    
+
     if(!$booking){
       throw $this->createNotFoundException('Booking not found.');
     }

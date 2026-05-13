@@ -1,19 +1,56 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Payment Successful - EventHub{% endblock %}
+{% block title %}Booking Confirmation #{{ booking.id }}{% endblock %}
 
 {% block content %}
-  <div class="max-w-2xl mx-auto text-center py-16 px-4">
-    <div class="text-green-500 text-6xl mb-6">✓</div>
-    <h1 class="text-3xl font-bold mb-4">Payment Successful!</h1>
-    <p class="text-gray-400 mb-8">Your booking has been confirmed. You'll receive a confirmation email shortly.</p>
-    <div class="flex gap-4 justify-center">
-      <a href="{{ path('app_my_tickets') }}" class="btn-primary">
+  <section class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header -->
+
+    <article class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3.5">
+      <div class="flex items-center gap-2">
+        <span class="text-green-500 text-4xl">✓</span>
+        <h1 class="text-3xl font-bold text-gray-900">Payment Successful!</h1>
+      </div>
+      <span class="text-gray-400 text-base">Booking #{{ booking.id }}</span>
+      <a href="{{ path('app_my_tickets') }}" class="btn-primary ml-auto max-sm:ml-0 max-sm:w-full max-sm:text-center">
         Go to My Tickets
       </a>
-      <a href="{{ path('app_event_index') }}" class="btn-primary">
-        Browse Events
-      </a>
-    </div>
-  </div>
+    </article>
+
+    <article>
+      <p class="text-gray-400 mb-8">Your booking has been confirmed. You'll receive a confirmation email shortly.</p>
+    </article>
+
+    <hr class="border-gray-200 mb-12">
+
+    <!-- Event Name -->
+    <article class="text-center mb-12">
+      <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">You're going to</p>
+      <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ booking.tickets.first ? booking.tickets.first.category.event.name : '-' }}</h2>
+    </article>
+
+    <!-- Info Cards -->
+    <article class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+      <!-- Email -->
+      {% if emailSent %}
+        <div class="text-center p-6 bg-white rounded-xl border border-gray-200 shadow-xs">
+          <p class="text-xs uppercase tracking-wide text-gray-500 mb-2">Confirmation sent to</p>
+          <p class="text-sm font-medium text-gray-900 break-all">{{ booking.user.email }}</p>
+        </div>
+      {% endif %}
+
+      <!-- Date -->
+      <div class="text-center p-6 bg-white rounded-xl border border-gray-200 shadow-xs">
+        <p class="text-xs uppercase tracking-wide text-gray-500 mb-2">Date</p>
+        <p class="text-sm font-medium text-gray-900">{{ booking.tickets.first ? booking.tickets.first.category.event.startAt|date('l, F j, Y') : '-' }}</p>
+        <p class="text-xs text-gray-500 mt-1">{{ booking.tickets.first ? booking.tickets.first.category.event.startAt|date('g:i A') : '-' }}</p>
+      </div>
+      
+      <!-- Location -->
+      <div class="text-center p-6 bg-white rounded-xl border border-gray-200 shadow-xs">
+        <p class="text-xs uppercase tracking-wide text-gray-500 mb-2">Location</p>
+        <p class="text-sm font-medium text-gray-900">{{ booking.tickets.first ? booking.tickets.first.category.event.location : '-' }}</p>
+      </div>
+    </article>
+  </section>
 {% endblock %}
