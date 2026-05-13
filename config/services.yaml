@@ -29,3 +29,6 @@ services:
     App\Service\ImageUploader:
       arguments:
         $targetDirectory: '%event_images_dir%'
+    App\Service\StripePaymentService:
+      arguments:
+        $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'

@@ -207,7 +207,8 @@
         if(paymentResult.success){
           checkoutBtn.textContent = '✓ Success! Redirecting...';
           setTimeout(() => {
-            window.location.href = result.redirect;
+            window.location.href = paymentResult.redirect;
+            // window.location.href = result.redirect;
           }, 2000);
         } else {
           alert(paymentResult.message);
