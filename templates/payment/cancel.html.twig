@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Payment Cancelled - EventHub{% endblock %}
+
+{% block content %}
+  <div class="max-w-2xl mx-auto text-center py-16 px-4">
+    <div class="text-yellow-500 text-6xl mb-6">⚠</div>
+    <h1 class="text-3xl font-bold mb-4">Payment Cancelled</h1>
+    <p class="text-gray-400 mb-8">Your payment was not processed. Your booking is still pending — you can try again whenever you're ready.</p>
+    <div class="flex gap-4 justify-center">
+      <a href="{{ path('app_my_tickets') }}" class="btn-primary">
+        Go to My Tickets
+      </a>
+      <a href="{{ path('app_event_index') }}" class="btn-primary">
+        Browse Events
+      </a>
+    </div>
+  </div>
+{% endblock %}

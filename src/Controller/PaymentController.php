@@ -64,12 +64,26 @@ final class PaymentController extends AbstractController
   }
 
   #[Route('/success', name: 'app_payment_success')]
-  public function success(){
-    return $this->render('');
+  public function success(Request $request, BookingRepository $bookingRepository){
+    $bookingId = $request->query->get('booking_id');
+    $booking = $bookingRepository->find($bookingId);
+
+    if(!$booking){
+      throw $this->createNotFoundException('Booking not found.');
+    }
+
+    return $this->render('payment/success.html.twig', ['booking' => $booking]);
   }
 
   #[Route('/cancel', name: 'app_payment_cancel')]
-  public function cancel(){
-    return $this->render('');
+  public function cancel(Request $request, BookingRepository $bookingRepository){
+    $bookingId = $request->query->get('booking_id');
+    $booking = $bookingRepository->find($bookingId);
+    
+    if(!$booking){
+      throw $this->createNotFoundException('Booking not found.');
+    }
+
+    return $this->render('payment/cancel.html.twig', ['booking' => $booking]);
   }
 }

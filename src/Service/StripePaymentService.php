@@ -32,10 +32,10 @@ class StripePaymentService
       ]],
       'mode' => 'payment',
       'success_url' => $this->urlGenerator->generate('app_payment_success', [
-        'booking' => $booking->getId(),
+        'booking_id' => $booking->getId(),
       ], UrlGeneratorInterface::ABSOLUTE_URL),
       'cancel_url' => $this->urlGenerator->generate('app_payment_cancel', [
-        'booking' => $booking->getId(),
+        'booking_id' => $booking->getId(),
       ], UrlGeneratorInterface::ABSOLUTE_URL),
       'metadata' => [
         'booking_id' => $booking->getId(),
