@@ -32,8 +32,8 @@ RUN set -ex; \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create minimal .env
-RUN echo 'APP_ENV=prod' > /app/.env
+# Create .env
+RUN printf 'APP_ENV=prod\nAPP_DEBUG=0\nAPP_SECRET=dummy_build_secret\nAPP_SHARE_DIR=var/share\nDATABASE_URL=mysql://dummy:dummy@127.0.0.1:3306/dummy?serverVersion=8.0\nMESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0\nMAILER_DSN=null://null\nDEFAULT_URI=http://localhost\n' > /app/.env
 
 # Set environment
 ENV APP_ENV=prod
