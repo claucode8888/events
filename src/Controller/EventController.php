@@ -18,7 +18,7 @@ final class EventController extends AbstractController
     $now = new DateTime();
     $availabilityTicketsByEvent = $eventRepository->getAvailabilityByEvent();
     $categorizedEvents = $eventRepository->getAllCategorized($now);
-
+    
     return $this->render('event/index.html.twig', [
       'categorizedEvents' => $categorizedEvents,
       'availabilityTicketsByEvent' => $availabilityTicketsByEvent

@@ -18,15 +18,18 @@ class StripePaymentService
 
   public function createPaymentSession(Booking $booking): Session
   {
-    return Session::create([
+    $firstTicket = $booking->getTickets()->first();
+    $productName = $firstTicket?->getCategory()->getEvent()->getName() ?? 'Event';
+    
+    $session = Session::create([
       'payment_method_types' => ['card'],
       'line_items' => [[
         'price_data' => [
           'currency' => 'eur',
           'product_data' => [
-            'name' => $booking->getTickets()->first()->getCategory()->getEvent()->getName(),
+            'name' => $productName
           ],
-          'unit_amount' => $booking->getTotal() * 100,
+          'unit_amount' => $this->calculateStripeUnitAmount($booking->getTotal())
         ],
         'quantity' => 1,
       ]],
@@ -41,5 +44,12 @@ class StripePaymentService
         'booking_id' => $booking->getId(),
       ],
     ]);
+
+    return $session;
+  }
+
+  private function calculateStripeUnitAmount(int|float $total) : int
+  {
+    return (int) round($total * 100);
   }
 }

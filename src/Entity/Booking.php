@@ -13,8 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Booking extends AbstractEntity 
 {
     public const STATUS_PENDING = 'pending';
-    public const STATUS_COMPLETED = 'completed';
-    public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_PAID = 'paid';
     
     #[ORM\Id]
     #[ORM\GeneratedValue]

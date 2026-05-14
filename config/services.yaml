@@ -8,11 +8,16 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     service_fee: 4.5
+    # folders
     uploads_events: 'uploads/events'
     event_images_dir: '%kernel.project_dir%/public/%uploads_events%'
+    # mailer
     app_sender_email: 'noreply.eventhub.contact@gmail.com'
     app_name: 'EventHub'
-    
+    # stripe
+    stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
+    stripe_webhook_secret: '%env(STRIPE_WEBHOOK_SECRET)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -31,4 +36,7 @@ services:
         $targetDirectory: '%event_images_dir%'
     App\Service\StripePaymentService:
       arguments:
-        $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'
+        $stripeSecretKey: '%stripe_secret_key%'
+    App\Controller\StripeWebhookController:
+      arguments:
+        $stripeWebhookSecret: '%stripe_webhook_secret%'

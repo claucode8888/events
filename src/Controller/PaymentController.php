@@ -37,7 +37,7 @@ final class PaymentController extends AbstractController
     $stripeSession = $stripePaymentService->createPaymentSession($booking);
 
     return new JsonResponse([
-      'message' => 'Payment was successfuly.',
+      'message' => 'Payment was successfull.',
       'success' => true,
       'redirect' => $stripeSession->url
     ]);

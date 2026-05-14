@@ -47,7 +47,7 @@ class EventRepository extends ServiceEntityRepository
         $start = $saturday->setTime(0, 0, 0);
         $end = $sunday->setTime(23, 59, 59);
         break;
-        
+
       case 'next_week':
         $monday = $this->getNextMonday($date);
         $sunday = (clone $monday)->modify('+6 days');
@@ -55,6 +55,14 @@ class EventRepository extends ServiceEntityRepository
         $end = $sunday->setTime(23, 59, 59);
         break;
         
+      case 'this_month':
+        $nextMonday = $this->getNextMonday($date);
+        $nextSunday = (clone $nextMonday)->modify('+6 days');
+        $lastDayOfThisMonth = $this->getLastDayOfThisMonth($date);
+        $start = $nextSunday->setTime(00, 00, 00);
+        $end = $lastDayOfThisMonth->setTime(23, 59, 59);
+        break;
+
       case 'next_month':
         $firstDay = $this->getFirstDayOfNextMonth($date);
         $lastDay = $this->getLastDayOfNextMonth($date);
@@ -90,6 +98,7 @@ class EventRepository extends ServiceEntityRepository
       'today_tomorrow' => $this->getByDateRange($now, 'today_tomorrow'),
       'weekend' => $this->getByDateRange($now, 'this_weekend'),
       'next_week' => $this->getByDateRange($now, 'next_week'),
+      'this_month' => $this->getByDateRange($now, 'this_month'),
       'next_month' => $this->getByDateRange($now, 'next_month'),
       'later' => $this->getByDateRange($now, 'later'),
     ];
@@ -156,6 +165,12 @@ class EventRepository extends ServiceEntityRepository
   {
     $lastDay = clone $date;
     return $lastDay->modify('last day of next month');
+  }
+
+  private function getLastDayOfThisMonth(DateTimeInterface $date): DateTime
+  {
+    $lastDay = clone $date;
+    return $lastDay->modify('last day of this month');
   }
 
   public function getUpcoming(DateTimeInterface $from, int|bool $limit = false): array

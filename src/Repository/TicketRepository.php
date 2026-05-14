@@ -32,9 +32,11 @@ class TicketRepository extends ServiceEntityRepository
       ->join('t.category', 'category')
       ->join('category.event', 'event')
       ->andWhere('booking.user = :user')
-      ->setParameter('user', $user);
+      ->setParameter('user', $user)
+      ->andWhere('booking.status = :status')
+      ->setParameter('status', Booking::STATUS_PAID);
 
-    // Get by category time
+      // Get by category time
     if($categoryTime){
       $operator = $this->getOperator($categoryTime);
       $query = $query->andWhere('event.startAt '.$operator.' :now')
