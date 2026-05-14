@@ -48,6 +48,7 @@ final class PaymentController extends AbstractController
     Request $request,
     BookingRepository $bookingRepository,
     TicketRepository $ticketRepository,
+
     EmailService $emailService,
   ){
     $bookingId = $request->query->get('booking_id');
@@ -60,7 +61,7 @@ final class PaymentController extends AbstractController
     //Send email confirmation
     $queryResults = $ticketRepository->getTicketsByCategory($booking);
     $emailSent = $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
-    // $emailSent = true;
+    
     return $this->render('payment/success.html.twig', ['booking' => $booking, 'emailSent' => $emailSent]);
   }
 
