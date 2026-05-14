@@ -205,10 +205,9 @@
         const paymentProcessResponse = await processPayment(result.booking_id);
         const paymentResult = await paymentProcessResponse.json();
         if(paymentResult.success){
-          checkoutBtn.textContent = '✓ Success! Redirecting...';
+          checkoutBtn.textContent = '✓ Redirecting to payment...';
           setTimeout(() => {
             window.location.href = paymentResult.redirect;
-            // window.location.href = result.redirect;
           }, 2000);
         } else {
           alert(paymentResult.message);
