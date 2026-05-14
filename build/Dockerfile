@@ -32,6 +32,9 @@ RUN set -ex; \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Create minimal .env
+RUN echo 'APP_ENV=prod' > /app/.env
+
 # Set environment
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
