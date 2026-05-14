@@ -34,6 +34,10 @@ services:
     App\Service\ImageUploader:
       arguments:
         $targetDirectory: '%event_images_dir%'
+    App\Service\EmailService:
+      arguments:
+        $senderEmail: '%app_sender_email%'
+        $appName: '%app_name%'
     App\Service\StripePaymentService:
       arguments:
         $stripeSecretKey: '%stripe_secret_key%'

@@ -15,8 +15,8 @@ class EmailService
   public function __construct(
     private LoggerInterface $logger,
     private MailerInterface $mailer,
-    #[Autowire('%app_sender_email%')] private string $senderEmail,
-    #[Autowire('%app_name%')] private string $appName,
+    private string $senderEmail,
+    private string $appName,
   ){}
 
     public function sendBookingConfirmation(Booking $booking, int $totalTickets, array $ticketsByCategory) : bool

@@ -47,8 +47,8 @@ final class PaymentController extends AbstractController
   public function success(
     Request $request,
     BookingRepository $bookingRepository,
-    // TicketRepository $ticketRepository,
-    // EmailService $emailService,
+    TicketRepository $ticketRepository,
+    EmailService $emailService,
   ){
     $bookingId = $request->query->get('booking_id');
     $booking = $bookingRepository->find($bookingId);
@@ -58,9 +58,9 @@ final class PaymentController extends AbstractController
     }
 
     //Send email confirmation
-    // $queryResults = $ticketRepository->getTicketsByCategory($booking);
-    // $emailSent = $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
-    $emailSent = true;
+    $queryResults = $ticketRepository->getTicketsByCategory($booking);
+    $emailSent = $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
+    // $emailSent = true;
     return $this->render('payment/success.html.twig', ['booking' => $booking, 'emailSent' => $emailSent]);
   }
 
