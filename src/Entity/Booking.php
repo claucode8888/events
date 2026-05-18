@@ -147,4 +147,9 @@ class Booking extends AbstractEntity
 
         return $this;
     }
+
+    public function isPaid() : bool
+    {
+      return $this->getStatus() === self::STATUS_PAID;
+    }
 }
