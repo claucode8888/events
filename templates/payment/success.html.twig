@@ -32,7 +32,7 @@
     <!-- Info Cards -->
     <article class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
       <!-- Email -->
-      {% if emailSent %}
+      {% if emailSent|default(true) %}
         <div class="text-center p-6 bg-white rounded-xl border border-gray-200 shadow-xs">
           <p class="text-xs uppercase tracking-wide text-gray-500 mb-2">Confirmation sent to</p>
           <p class="text-sm font-medium text-gray-900 break-all">{{ booking.user.email }}</p>

@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\BookingRepository;
-use App\Repository\TicketRepository;
-use App\Service\EmailService;
 use App\Service\StripePaymentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,9 +45,6 @@ final class PaymentController extends AbstractController
   public function success(
     Request $request,
     BookingRepository $bookingRepository,
-    TicketRepository $ticketRepository,
-
-    EmailService $emailService,
   ){
     $bookingId = $request->query->get('booking_id');
     $booking = $bookingRepository->find($bookingId);
@@ -58,11 +53,7 @@ final class PaymentController extends AbstractController
       throw $this->createNotFoundException('Booking not found.');
     }
 
-    //Send email confirmation
-    $queryResults = $ticketRepository->getTicketsByCategory($booking);
-    $emailSent = $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
-    
-    return $this->render('payment/success.html.twig', ['booking' => $booking, 'emailSent' => $emailSent]);
+    return $this->render('payment/success.html.twig', ['booking' => $booking]);
   }
 
   #[Route('/cancel', name: 'app_payment_cancel')]
