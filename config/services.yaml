@@ -12,7 +12,7 @@ parameters:
     uploads_events: 'uploads/events'
     event_images_dir: '%kernel.project_dir%/public/%uploads_events%'
     # mailer
-    app_sender_email: 'no-reply.eventhub@claucode.cc'
+    app_sender_email: 'no-reply.eventhub@email.claucode.cc'
     app_name: 'EventHub'
     # stripe
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
