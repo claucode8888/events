@@ -53,6 +53,9 @@ RUN php bin/console cache:clear --env=prod --no-debug && \
     php bin/console tailwind:build --minify && \
     php bin/console asset-map:compile --env=prod
 
+# Run worker for async mails
+RUN php bin/console messenger:consume async --memory-limit=128M --time-limit=3600
+
 # Permissions
 RUN mkdir -p var && chmod -R 775 var
 
