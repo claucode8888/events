@@ -24,6 +24,7 @@ class BookingManager
     if(!$TCEntities) return null;
 
     $subtotal = 0;
+    $noExtraCharges = 0;
     $booking = new Booking();
     $booking->setStatus(Booking::STATUS_PENDING);
     $booking->setUser($user);
@@ -44,7 +45,10 @@ class BookingManager
       }
     }
     
-    $booking->setServiceFee($serviceFee);
+    // In case event is free, no extra charges
+    $finalServiceFee = $subtotal ? $serviceFee : $noExtraCharges;
+
+    $booking->setServiceFee($finalServiceFee);
     $booking->setSubtotal($subtotal);
     $this->em->persist($booking);
     $this->em->flush();
