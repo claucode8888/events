@@ -3,7 +3,6 @@
 namespace App\Controller\Staff;
 
 use App\Entity\Ticket;
-use App\Repository\TicketRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
