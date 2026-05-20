@@ -56,6 +56,9 @@ RUN php bin/console cache:clear --env=prod --no-debug && \
 # Permissions
 RUN mkdir -p var && chmod -R 775 var
 
+# Make worker script executable
+RUN chmod +x /app/worker.sh
+
 # Expose port
 EXPOSE 8080
 
