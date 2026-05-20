@@ -11,15 +11,31 @@ Una plataforma de tickets donde los usuarios pueden explorar eventos próximos, 
 - Explorar todos los eventos publicados
 - Ver detalles de cada evento (descripción, fecha, ubicación, precio)
 - Registro e inicio de sesión de usuarios
-- Seleccionar cantidad de tickets y comprar mediante procesamiento de pago
+- Seleccionar cantidad de tickets y comprar mediante procesamiento de pago (con confirmación por email)
 - Sección "Mis Tickets" para ver las entradas adquiridas
 - Creación de eventos exclusiva para administradores
+
+## Sistema de Emails
+
+- Utiliza Symfony Mailer con API de Resend
+- Procesamiento asíncrono mediante Symfony Messenger
+- Worker requerido en producción (servicio worker de Railway)
+- Utiliza dominio sandbox de Resend para propósitos de demostración
+
+## Sistema de Pagos
+
+- Integración con **Stripe** para procesamiento de pagos
+- Soporta tickets gratuitos y de pago
+- Flujo de compra seguro
+- Manejo de webhooks para confirmación de pagos
 
 ## Stack Tecnológico
 
 - **Backend:** PHP 8.5, Symfony 7.4
 - **Frontend:** HTML, JavaScript, Tailwind CSS 4.1.11 (symfonycast/tailwind-bundle)
 - **Base de datos:** MySQL
+- **Pagos:** Stripe API
+- **Email:** Symfony Mailer + Resend API
 - **Herramientas de desarrollo local:** Symfony CLI server, Mailpit (pruebas de correo)
 - **Producción:** Railway hosting, despliegue mediante Dockerfile
 
@@ -78,15 +94,31 @@ A ticket platform where users can browse upcoming events, reserve free or paid t
 - Browse all published events
 - View event details (description, date, location, pricing)
 - User registration and login
-- Select ticket quantity and purchase via payment processing
+- Select ticket quantity and purchase via payment processing (with email confirmation)
 - "My Tickets" section to view purchased tickets
 - Admin-only event creation
+
+## Email System
+
+- Uses Symfony Mailer with Resend API
+- Asynchronous processing via Symfony Messenger
+- Worker required in production (Railway worker service)
+- Uses Resend sandbox domain for demo purposes
+
+## Payment System
+
+- **Stripe** integration for payment processing
+- Supports free and paid tickets
+- Secure checkout flow
+- Webhook handling for payment confirmation
 
 ## Tech Stack
 
 - **Backend:** PHP 8.5, Symfony 7.4
 - **Frontend:** HTML, JavaScript, Tailwind CSS 4.1.11 (symfonycast/tailwind-bundle)
 - **Database:** MySQL
+- **Payments:** Stripe API
+- **Email:** Symfony Mailer + Resend API
 - **Local dev tools:** Symfony CLI server, Mailpit (email testing)
 - **Production:** Railway hosting, Dockerfile-based deployment
 
