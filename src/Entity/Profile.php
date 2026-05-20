@@ -65,4 +65,9 @@ class Profile
 
         return $this;
     }
+
+    public function getFullName()
+    {
+      return $this->getName().' '.$this->getLastName();
+    }
 }

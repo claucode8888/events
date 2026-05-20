@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Ticket;
 use App\Repository\TicketRepository;
+use App\Service\PDFService;
 use App\Service\QRService;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -81,6 +83,40 @@ final class TicketController extends AbstractController
   {
     return $this->render('ticket/details.html.twig', [
       'ticket' => $ticket
+    ]);
+  }
+
+  #[Route('/pdf/{id}', name: 'app_ticket_pdf', methods: ['GET'])]
+  public function generatePDF(
+      Ticket $ticket,
+      QRService $QRService,
+      PDFService $pdfService,
+      LoggerInterface $logger,
+  ): Response
+  {
+    // 1a. Generate QR code
+    $qrCode = $QRService->generateQRCode($ticket->getQrtoken());
+    $qr = 'data:image/png;base64,' . base64_encode($qrCode);
+
+    // 1b. Generate logo
+    $logoUrl = $this->getParameter('kernel.project_dir') . '/public/images/logo.jpg';
+    $logoDataUri = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoUrl));
+
+    // 2. Render HTML
+    $html = $this->renderView('ticket/ticket_pdf.html.twig', [ 'ticket' => $ticket, 'qr' => $qr, 'logo' => $logoDataUri ]);
+
+    if (empty($html)) {
+      $logger->error('Ticket PDF not generated.', ['ticket_id' => $ticket->getId()]);
+      throw new \Exception('Failed to generate PDF template');
+    }
+
+    // 3. Generate PDF
+    $pdf = $pdfService->generatePDF($html);
+    
+    // 4. Return PDF as download
+    return new Response($pdf, 200, [
+      'Content-Type' => 'application/pdf',
+      'Content-Disposition' => 'attachment; filename="ticket_' . $ticket->getId() . '.pdf"',
     ]);
   }
 }
