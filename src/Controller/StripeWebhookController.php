@@ -4,8 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Booking;
 use App\Repository\BookingRepository;
-use App\Repository\TicketRepository;
-use App\Service\EmailService;
+use App\Service\BookingEmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\SignatureVerificationException;
@@ -25,8 +24,7 @@ final class StripeWebhookController extends AbstractController
   public function handle(
     Request $request,
     BookingRepository $bookingRepository,
-    TicketRepository $ticketRepository,
-    EmailService $emailService,
+    BookingEmailService $bookingEmailService,
   ): Response
   {
     $payload = $request->getContent();
@@ -52,14 +50,13 @@ final class StripeWebhookController extends AbstractController
     $booking = $bookingRepository->find($bookingId);
 
     if ($booking && $booking->getStatus() === Booking::STATUS_PENDING) {
-
-      // Send email confirmation
-      $queryResults = $ticketRepository->getTicketsByCategory($booking);
-      $emailService->sendBookingConfirmation($booking, $queryResults['total_tickets'], $queryResults['tickets_by_category']);
-      
       // Mark Booking as paid
       $booking->setStatus(Booking::STATUS_PAID);
       $this->em->flush();
+
+      // Send email confirmation
+      $bookingEmailService->sendConfirmation($booking);
+      
     } elseif(!$booking) {
       $this->logger->warning('Stripe webhook: booking not found', ['booking_id' => $bookingId]);
     }

@@ -18,7 +18,7 @@ class EmailService
     private string $appName,
   ){}
 
-    public function sendBookingConfirmation(Booking $booking, int $totalTickets, array $ticketsByCategory) : bool
+    public function sendBookingConfirmation(Booking $booking, string $html, array $attachments = []) : bool
   {
     $eventName = $booking->getTickets()[0]->getCategory()->getEvent()->getName();
     $subject = 'Booking Confirmation '.$eventName;
@@ -27,13 +27,19 @@ class EmailService
       ->from(new Address($this->senderEmail, $this->appName))
       ->to($booking->getUser()->getEmail())
       ->subject($subject)
-      ->htmlTemplate('email/booking_confirmation.html.twig')
-      ->context([
-        'booking' => $booking,
-        'total_tickets_booking' => $totalTickets,
-        'tickets_by_category' => $ticketsByCategory,
-      ]);
+      ->html($html);
 
+    if($attachments)
+    {
+      foreach ($attachments as $attachment) {
+        $email->attach(
+          $attachment['content'],
+          $attachment['name'],
+          $attachment['type']
+        );
+      }
+    }
+    
     try {
       $this->mailer->send($email);
       return true;
