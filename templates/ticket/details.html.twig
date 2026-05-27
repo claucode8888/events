@@ -12,7 +12,6 @@
           #{{ ticket.booking.id }}
         </strong>
       </p>
-      <p class="text-gray-500 m-1 print:hidden">This is your digital ticket. Present at entrance.</p>
     </header>
     <!-- End Header -->
 
@@ -72,13 +71,19 @@
     <!-- End Event Info -->
     
     <!-- Actions -->
-    <div class="flex justify-center items-center mt-8 print:hidden">
+    <div class="flex justify-center items-center gap-2 mt-8">
       <a
         href="{{ path('app_my_tickets') }}"
         class="btn-primary text-sm py-3"
       >
         Back to My Tickets
       </a>
+      
+      <a href="{{ path('app_ticket_pdf', { id: ticket.id }) }}"
+        class="btn-primary text-sm py-3">
+        Download PDF
+      </a>
+
     </div>
     <!-- End Actions -->
   </article>
