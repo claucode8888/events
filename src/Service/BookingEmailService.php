@@ -6,19 +6,16 @@ use App\Entity\Booking;
 use App\Entity\Ticket;
 use App\Repository\TicketRepository;
 use App\Service\EmailService;
-use Psr\Log\LoggerInterface;
+use App\Service\TicketPDFService;
 use Twig\Environment;
 
 class BookingEmailService
 {
   public function __construct(
-    private LoggerInterface $logger,
     private EmailService $emailService,
     private TicketRepository $ticketRepository,
-    private Environment $twig,
-    private QRService $qrService,
-    private PDFService $pdfService,
-    private string $projectDir,
+    private TicketPDFService $ticketPDFService,
+    private Environment $twig
   ){}
 
   public function sendConfirmation(Booking $booking) : void
@@ -67,28 +64,11 @@ class BookingEmailService
 
   public function getTicketPDF(Ticket $ticket) : array
   {
-    $pdfName = 'ticket_'.strtolower($ticket->getCategory()->getEvent()->getName()).'_'. $ticket->getId();
+    $pdfName = $ticket->getPDFName();
+    $pdf = $this->ticketPDFService->generatePDF($ticket);
     
-    // 1. Generate QR code
-    $qrCode = $this->qrService->generateQRCode($ticket->getQrtoken());
-    $qr = 'data:image/png;base64,' . base64_encode($qrCode);
-
-    // 2. Generate logo
-    $logoUrl = $this->projectDir. '/public/images/logo.jpg';
-    $logoDataUri = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoUrl));
-
-    // 3. Render HTML
-    $html = $this->twig->render('ticket/ticket_pdf.html.twig', [ 'ticket' => $ticket, 'qr' => $qr, 'logo' => $logoDataUri ]);
-
-    if (empty($html)) {
-      $this->logger->error('Ticket PDF not generated.', ['ticket_id' => $ticket->getId()]);
-      return [];
-    }
-
-    // 4. Generate PDF
-    $pdfContent = $this->pdfService->generatePDF($html);
     return [
-      'content' => $pdfContent,
+      'content' => $pdf,
       'name' => $pdfName.'.pdf',
       'type' => 'application/pdf',
     ];

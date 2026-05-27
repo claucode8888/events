@@ -94,4 +94,9 @@ class Ticket
 
       return $this;
   }
+
+  public function getPDFName()
+  {
+    return 'ticket_'.strtolower($this->getCategory()->getEvent()->getName()).'_'. $this->getId();
+  }
 }

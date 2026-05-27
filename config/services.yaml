@@ -43,7 +43,7 @@ services:
     App\Service\StripePaymentService:
       arguments:
         $stripeSecretKey: '%stripe_secret_key%'
-    App\Service\BookingEmailService:
+    App\Service\TicketPDFService:
       arguments:
         $projectDir: '%project_dir%'
     App\Controller\StripeWebhookController:
