@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email verified{% endblock %}
+
+{% block body %}
+  <div class="min-h-screen flex flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col justify-center items-center">
+      {% include 'components/logo.html.twig' with { outApp: true } %}
+    </div>
+
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
+      <div class="text-center space-y-4 text-gray-300">
+        <p>Email verified successfully</p>
+        <p>Your account is now active. You can sign in and start using the platform.</p>
+        <a href="{{ path('app_login') }}"
+          class="mt-6 inline-block w-full border border-white btn-primary">
+          Go to login
+        </a>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

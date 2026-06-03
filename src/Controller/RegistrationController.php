@@ -46,15 +46,18 @@ class RegistrationController extends AbstractController
       $entityManager->flush();
 
       // Send verification email
+      $appSender = $this->getParameter('app_sender_email');
+      $appName = $this->getParameter('app_name');
+
       $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
         (new TemplatedEmail())
-          ->from(new Address('mailer@localhost.com', 'Events Mail Bot'))
+          ->from(new Address($appSender, $appName))
           ->to($user->getEmail())
           ->subject('Please confirm your email')
           ->htmlTemplate('registration/confirmation_email.html.twig')
       );
 
-      return $this->redirectToRoute('app_login');
+      return $this->redirectToRoute('app_confirmation_account_creation');
     }
 
     return $this->render('registration/register.html.twig', [
@@ -71,12 +74,25 @@ class RegistrationController extends AbstractController
       /** @var User $user */
       $user = $this->getUser();
       $this->emailVerifier->handleEmailConfirmation($request, $user);
+      
+      return $this->redirectToRoute('app_verification_success');
+
     } catch (VerifyEmailExceptionInterface $exception) {
-      $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+      $this->addFlash('error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
       return $this->redirectToRoute('app_register');
     }
-    // @TODO Change the redirect on success and handle or remove the flash message in your templates
-    $this->addFlash('success', 'Your email address has been verified.');
-    return $this->redirectToRoute('app_register');
   }
+
+  #[Route('/registration/confirmation', name: 'app_confirmation_account_creation')]
+  public function registrationConfirmation()
+  {
+    return $this->render('registration/confirmation.html.twig');
+  }
+
+  #[Route('/verification/success', name: 'app_verification_success')]
+  public function verificationSuccess()
+  {
+    return $this->render('registration/verification_success.html.twig');
+  }
+
 }

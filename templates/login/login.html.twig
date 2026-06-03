@@ -3,6 +3,9 @@
 {% block title %}Log in{% endblock %}
 
 {% block body %}
+
+  {% include 'flash_messages.html.twig' %}
+
   <div class="min-h-screen flex flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col justify-center items-center">
       {% include 'components/logo.html.twig' with { outApp: true } %}

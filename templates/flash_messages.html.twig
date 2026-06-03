@@ -1,4 +1,10 @@
-<div class="fixed top-24 right-4 left-4 md:left-auto md:w-96 z-50 space-y-2">
+{% set topDistance = app.request.attributes.get('_route') in ['app_login', 'app_register'] ?
+    'top-4'
+    :
+    'top-24'
+%}
+
+<div class="fixed {{ topDistance }} right-4 left-4 md:left-auto md:w-96 z-50 space-y-2">
   {% for label, messages in app.flashes %}
     {% for message in messages %}
       {% set color = {
